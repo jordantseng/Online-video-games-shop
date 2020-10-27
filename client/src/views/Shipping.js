@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { saveShippingAddress } from '../actions/cart';
 import FormContainer from '../components/FormContainer';
-import { saveShippingAddress } from '../actions';
 import CheckoutSteps from '../components/CheckoutSteps';
 
 const Shipping = ({ history }) => {
@@ -20,8 +20,6 @@ const Shipping = ({ history }) => {
     e.preventDefault();
 
     dispatch(saveShippingAddress({ address, city, postalCode, country }));
-
-    history.push('/payment');
   };
 
   return (

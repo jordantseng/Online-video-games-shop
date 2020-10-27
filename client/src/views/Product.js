@@ -11,23 +11,23 @@ import {
   Form,
 } from 'react-bootstrap';
 
-import { fetchProduct } from '../actions';
+import { fetchProduct } from '../actions/productList';
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
 const Product = ({ match, history }) => {
   const [qty, setQty] = useState(1);
-
-  const { loading, error, product } = useSelector((state) => state.product);
+  const { product, error } = useSelector((state) => state.productList);
   const dispatch = useDispatch();
+  const productId = match.params.id;
 
   useEffect(() => {
-    dispatch(fetchProduct(match.params.id));
-  }, [dispatch, match.params.id]);
+    dispatch(fetchProduct(productId));
+  }, [dispatch, productId]);
 
   const onAddToCartClick = () => {
-    history.push(`/cart/${match.params.id}?qty=${qty}`); // store the product id and qty in url
+    history.push(`/cart/${productId}?qty=${qty}`); // store the product id and qty in url
   };
 
   return (
@@ -35,7 +35,7 @@ const Product = ({ match, history }) => {
       <Link className="btn btn-light my-3" to="/">
         Go back
       </Link>
-      {loading ? (
+      {(!product.name || productId !== product._id) && !error ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>

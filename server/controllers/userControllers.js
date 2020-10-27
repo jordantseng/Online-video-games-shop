@@ -78,6 +78,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 // @access PRIVATE
 export const updateUserProfile = asyncHandler(async (req, res) => {
   const { name, password } = req.body;
+
   const user = await User.findById(req.user._id);
 
   if (user) {

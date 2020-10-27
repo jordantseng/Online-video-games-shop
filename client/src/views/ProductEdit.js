@@ -4,15 +4,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-import { fetchProduct, updateProduct } from '../actions';
-import { PRODUCT_UPDATE_RESET } from '../actions/types';
+import { fetchProduct, updateProduct } from '../actions/productList';
+
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
 const ProductEdit = ({ match, history }) => {
-  const dispatch = useDispatch();
-
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [image, setImage] = useState('');
@@ -21,29 +19,24 @@ const ProductEdit = ({ match, history }) => {
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState('');
   const [uploading, setUploading] = useState(false);
+  const dispatch = useDispatch();
+  const productId = match.params.id;
 
-  const { loading, product, error, success } = useSelector(
-    (state) => state.product
-  );
+  const { product, error } = useSelector((state) => state.productList);
 
   useEffect(() => {
-    if (success) {
-      dispatch({ type: PRODUCT_UPDATE_RESET });
-      history.push('/admin/productList');
+    if (!product.name || productId !== product._id) {
+      dispatch(fetchProduct(productId));
     } else {
-      if (!product.name || match.params.id !== product._id) {
-        dispatch(fetchProduct(match.params.id));
-      } else {
-        setName(product.name);
-        setPrice(product.price);
-        setImage(product.image);
-        setBrand(product.brand);
-        setCategory(product.category);
-        setCountInStock(product.countInStock);
-        setDescription(product.description);
-      }
+      setName(product.name);
+      setPrice(product.price);
+      setImage(product.image);
+      setBrand(product.brand);
+      setCategory(product.category);
+      setCountInStock(product.countInStock);
+      setDescription(product.description);
     }
-  }, [dispatch, history, match.params.id, product, success]);
+  }, [dispatch, history, productId, product]);
 
   const onSubmitClick = (e) => {
     e.preventDefault();
@@ -88,7 +81,7 @@ const ProductEdit = ({ match, history }) => {
 
       <FormContainer>
         <h1>Edit Product</h1>
-        {loading ? (
+        {(!product.name || match.params.id !== product._id) && !error ? (
           <Loader />
         ) : error ? (
           <Message vairant="danger">{error}</Message>

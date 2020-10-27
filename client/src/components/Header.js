@@ -3,11 +3,11 @@ import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 
-import { logout } from '../actions';
+import { logout } from '../actions/auth';
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.userInfo);
+  const { user } = useSelector((state) => state.auth);
 
   const onLogoutClick = () => {
     dispatch(logout());
@@ -31,6 +31,7 @@ const Header = () => {
                   <NavDropdown.Item to="/profile" as={Link}>
                     Profile
                   </NavDropdown.Item>
+
                   {user.isAdmin && (
                     <>
                       <NavDropdown.Item to="/admin/userList" as={Link}>

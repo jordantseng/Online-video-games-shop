@@ -1,9 +1,10 @@
 import {
-  CART_ADD_ITEM,
-  CART_REMOVE_ITEM,
-  CART_SAVE_PAYMENT_METHOD,
-  CART_SAVE_SHIPPING_ADDRESS,
-} from '../actions/types';
+  ADD_CART_ITEM,
+  REMOVE_CART_ITEM,
+  RESET_CART_ITEM,
+  SAVE_CART_SHIPPING_ADDRESS,
+  SAVE_CART_PAYMENT_METHOD,
+} from '../types/cart';
 
 const cartItemsFromStorage = localStorage.getItem('cartItems')
   ? JSON.parse(localStorage.getItem('cartItems'))
@@ -13,7 +14,7 @@ const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
   ? JSON.parse(localStorage.getItem('shippingAddress'))
   : { address: '', city: '', postalCode: '', country: '' };
 
-export const cartReducer = (
+const cartReducer = (
   state = {
     cartItems: cartItemsFromStorage,
     shippingAddress: shippingAddressFromStorage,
@@ -21,7 +22,7 @@ export const cartReducer = (
   action
 ) => {
   switch (action.type) {
-    case CART_ADD_ITEM:
+    case ADD_CART_ITEM:
       const item = action.payload;
       const existItem = state.cartItems.find((i) => i.product === item.product);
 
@@ -36,7 +37,7 @@ export const cartReducer = (
         return { ...state, cartItems: [...state.cartItems, item] };
       }
 
-    case CART_REMOVE_ITEM:
+    case REMOVE_CART_ITEM:
       return {
         ...state,
         cartItems: state.cartItems.filter(
@@ -44,13 +45,16 @@ export const cartReducer = (
         ),
       };
 
-    case CART_SAVE_SHIPPING_ADDRESS:
+    case RESET_CART_ITEM:
+      return { ...state, cartItems: [] };
+
+    case SAVE_CART_SHIPPING_ADDRESS:
       return {
         ...state,
         shippingAddress: action.payload,
       };
 
-    case CART_SAVE_PAYMENT_METHOD:
+    case SAVE_CART_PAYMENT_METHOD:
       return {
         ...state,
         paymentMethod: action.payload,
@@ -60,3 +64,5 @@ export const cartReducer = (
       return state;
   }
 };
+
+export default cartReducer;

@@ -3,36 +3,28 @@ import { Form, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { getUser, updateUser } from '../actions';
+import { fetchUser, updateUser } from '../actions/userList';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
-const UserEdit = ({ match, history }) => {
+const UserEdit = ({ match }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const { loading, user, error, success } = useSelector(
-    (state) => state.userList
-  );
+  const { user, error } = useSelector((state) => state.userList);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!user.name || match.params.id !== user._id) {
-      dispatch(getUser(match.params.id));
+      dispatch(fetchUser(match.params.id));
     } else {
       setName(user.name);
       setEmail(user.email);
       setIsAdmin(user.isAdmin);
     }
   }, [dispatch, match.params.id, user]);
-
-  useEffect(() => {
-    if (success) {
-      history.push('/admin/userList');
-    }
-  }, [dispatch, history, success]);
 
   const onSubmitClick = (e) => {
     e.preventDefault();
@@ -48,10 +40,10 @@ const UserEdit = ({ match, history }) => {
 
       <FormContainer>
         <h1>Edit User</h1>
-        {loading ? (
+        {(!user.name || match.params.id !== user._id) && !error ? (
           <Loader />
-        ) : error ? (
-          <Message vairant="danger">{error}</Message>
+        ) : user.error ? (
+          <Message vairant="danger">{user.error}</Message>
         ) : (
           <Form onSubmit={onSubmitClick}>
             <Form.Group controlId="name">

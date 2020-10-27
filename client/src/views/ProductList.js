@@ -3,18 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Table, Button, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import { fetchProductList, deleteProduct, createProduct } from '../actions';
+import {
+  fetchProducts,
+  createProduct,
+  deleteProduct,
+} from '../actions/productList';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { PRODUCT_CREATE_RESET } from '../actions/types';
 
-const ProductList = ({ history, match }) => {
+const ProductList = ({ history }) => {
   const dispatch = useDispatch();
-  const { loading, error, products, product } = useSelector(
-    (state) => state.productList
-  );
+  const { error, products } = useSelector((state) => state.productList);
 
-  const { user } = useSelector((state) => state.userInfo);
+  const { user } = useSelector((state) => state.auth);
 
   const onDeleteClick = (id) => {
     dispatch(deleteProduct(id));
@@ -25,18 +26,12 @@ const ProductList = ({ history, match }) => {
   };
 
   useEffect(() => {
-    dispatch({ type: PRODUCT_CREATE_RESET });
-
-    if (!user.isAdmin) {
+    if (!user || !user.isAdmin) {
       history.push('/login');
-    }
-
-    if (product) {
-      history.push(`/admin/products/${product._id}/edit`);
     } else {
-      dispatch(fetchProductList());
+      dispatch(fetchProducts());
     }
-  }, [dispatch, history, user, product]);
+  }, [dispatch, history, user]);
 
   return (
     <>
@@ -50,7 +45,7 @@ const ProductList = ({ history, match }) => {
           </Button>
         </Col>
       </Row>
-      {loading ? (
+      {products.length === 0 && !error ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>

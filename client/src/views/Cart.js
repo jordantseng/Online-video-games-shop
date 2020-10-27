@@ -11,7 +11,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { addToCart, removeFromCart } from '../actions';
+import { addToCart, removeFromCart } from '../actions/cart';
 import Message from '../components/Message';
 
 const Cart = ({ match, location, history }) => {

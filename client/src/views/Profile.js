@@ -3,40 +3,39 @@ import { Col, Row, Form, Button, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { getUserDetails, updateUserDetails, getOrderListMy } from '../actions';
+import { fetchUserDetails, updateUserDetails } from '../actions/profile';
+import { fetchMyOrders } from '../actions/order';
+import useInput from '../hooks/useInput';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 
 const Profile = ({ history }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName, bindName] = useInput('');
+  const [email, setEmail, bindEmail] = useInput('');
+  const [password, bindPassword] = useInput('');
+  const [confirmPassword, bindConfirmPassword] = useInput('');
   const [message, setMessage] = useState('');
 
   const dispatch = useDispatch();
-  const { loading, details, error, success } = useSelector(
-    (state) => state.userDetails
+  const { details, error, success, updating } = useSelector(
+    (state) => state.profile
   );
-  const { user } = useSelector((state) => state.userInfo);
-  const { loading: loadingOrders, orders, error: errorOrders } = useSelector(
-    (state) => state.orderListMy
-  );
+  const { loggedIn } = useSelector((state) => state.auth);
+  const { orders, error: errorOrders } = useSelector((state) => state.order);
 
   useEffect(() => {
-    if (!user) {
+    if (!loggedIn) {
       history.push('/login');
     } else {
-      // from my observation, this action is to prevent fetching the data every time we enter the page
       if (!details.name) {
-        dispatch(getUserDetails());
-        dispatch(getOrderListMy());
+        dispatch(fetchUserDetails());
+        dispatch(fetchMyOrders());
       } else {
         setName(details.name);
         setEmail(details.email);
       }
     }
-  }, [details.email, details.name, user, dispatch, history]);
+  }, [details.email, details.name, loggedIn, dispatch, history]);
 
   const onSubmitClick = (e) => {
     e.preventDefault(e);
@@ -44,7 +43,8 @@ const Profile = ({ history }) => {
     if (password !== confirmPassword) {
       setMessage('Password do not match');
     } else {
-      dispatch(updateUserDetails({ id: user._id, name, email }));
+      setMessage('');
+      dispatch(updateUserDetails({ name, password }));
     }
   };
 
@@ -57,15 +57,15 @@ const Profile = ({ history }) => {
         {success ? (
           <Message variant="success">Update successfully</Message>
         ) : null}
-        {loading && <Loader />}
+        {(!details.name || updating) && <Loader />}
         <Form onSubmit={onSubmitClick}>
           <Form.Group controlId="name">
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="text"
               placeholder="Enter your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}></Form.Control>
+              {...bindName}
+            />
           </Form.Group>
 
           <Form.Group controlId="email">
@@ -73,8 +73,8 @@ const Profile = ({ history }) => {
             <Form.Control
               type="email"
               placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}></Form.Control>
+              {...bindEmail}
+            />
           </Form.Group>
 
           <Form.Group controlId="password">
@@ -82,8 +82,8 @@ const Profile = ({ history }) => {
             <Form.Control
               type="password"
               placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}></Form.Control>
+              {...bindPassword}
+            />
           </Form.Group>
 
           <Form.Group controlId="confirmPassword">
@@ -91,10 +91,8 @@ const Profile = ({ history }) => {
             <Form.Control
               type="password"
               placeholder="Enter password"
-              value={confirmPassword}
-              onChange={(e) =>
-                setConfirmPassword(e.target.value)
-              }></Form.Control>
+              {...bindConfirmPassword}
+            />
           </Form.Group>
 
           <Button type="submit" variant="primary">
@@ -104,7 +102,7 @@ const Profile = ({ history }) => {
       </Col>
       <Col md={9}>
         <h2>My orders</h2>
-        {loadingOrders ? (
+        {orders.length === 0 && !errorOrders ? (
           <Loader />
         ) : errorOrders ? (
           <Message variant="danger">{error}</Message>

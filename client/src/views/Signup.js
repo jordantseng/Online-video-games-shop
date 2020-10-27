@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Col, Form, Row, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { signup } from '../actions';
+import { signup } from '../actions/auth';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
@@ -15,7 +15,7 @@ const Signup = ({ history, location }) => {
   const [message, setMessage] = useState(null);
 
   const dispatch = useDispatch();
-  const { loading, user, error } = useSelector((state) => state.userInfo);
+  const { loading, user, error } = useSelector((state) => state.auth);
 
   const redirect = location.search ? location.search.split('=')[1] : '/';
 

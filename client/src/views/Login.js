@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Col, Form, Row, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { login } from '../actions';
+
+import { login } from '../actions/auth';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
@@ -11,7 +12,7 @@ const Login = ({ history, location }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { loading, user, error } = useSelector((state) => state.userInfo);
+  const { loading, user, error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const redirect = location.search ? location.search.split('=')[1] : '/';

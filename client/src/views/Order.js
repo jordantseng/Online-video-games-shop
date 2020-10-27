@@ -5,20 +5,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { PayPalButton } from 'react-paypal-button-v2';
 import axios from 'axios';
 
-import { getOrderDetails, updateOrderToPaid } from '../actions';
+import { fetchMyOrder, updateOrderToPaid } from '../actions/order';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
 const Order = ({ match }) => {
   const dispatch = useDispatch();
-  const { loading, order, error } = useSelector((state) => state.orderDetails);
+  const { order, error } = useSelector((state) => state.order);
   const [sdkReady, setSdkReady] = useState(false);
-
-  useEffect(() => {
-    if (!order || order._id !== match.params.id) {
-      dispatch(getOrderDetails(match.params.id));
-    }
-  }, [dispatch, match.params.id, order]);
+  const orderId = match.params.id;
 
   useEffect(() => {
     const addPayPalScript = async () => {
@@ -34,16 +29,22 @@ const Order = ({ match }) => {
       document.body.appendChild(script);
     };
 
-    if (order && !order.isPaid) {
-      addPayPalScript();
+    if (!order.user || orderId !== order._id || order.paying) {
+      dispatch(fetchMyOrder(orderId));
+    } else if (!order.isPaid) {
+      if (!window.paypal) {
+        addPayPalScript();
+      } else {
+        setSdkReady(true);
+      }
     }
-  }, [order]);
+  }, [order, dispatch, orderId]);
 
   const onPayClick = (paymentResult) => {
-    dispatch(updateOrderToPaid(match.params.id, paymentResult));
+    dispatch(updateOrderToPaid(orderId, paymentResult));
   };
 
-  return loading ? (
+  return (!order.user || orderId !== order._id || order.paying) && !error ? (
     <Loader />
   ) : error ? (
     <Message>{error}</Message>
@@ -153,6 +154,7 @@ const Order = ({ match }) => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
+
               {!order.isPaid && (
                 <ListGroup.Item>
                   {!sdkReady ? (

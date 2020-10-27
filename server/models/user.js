@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
+import Order from './order.js';
 
 const { Schema, model } = mongoose;
 
@@ -18,6 +19,15 @@ const userSchema = Schema(
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
+
+// Delete user tasks when user is deleted
+userSchema.pre('remove', async function (next) {
+  const user = this;
+
+  await Order.deleteMany({ user: user._id });
+
+  next();
+});
 
 userSchema.pre('save', async function (next) {
   const user = this;

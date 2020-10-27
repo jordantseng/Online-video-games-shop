@@ -9,6 +9,27 @@ export const getOrders = asyncHandler(async (req, res) => {
   res.send(orders);
 });
 
+// @desc Update order to delivered
+// @route PUT /api/orders/:id/deliver
+// @access Private (Admin only)
+export const updateOrderToDelivered = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id).populate(
+    'user',
+    '_id name'
+  );
+
+  if (order) {
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
+    await order.save();
+
+    res.send(order);
+  } else {
+    res.status(404);
+    throw new Error('order not found');
+  }
+});
+
 // @desc create new order
 // @route POST /api/orders
 // @access Private
@@ -40,6 +61,19 @@ export const addOrderItems = asyncHandler(async (req, res) => {
 
     await order.save();
     res.status(201).send(order);
+  }
+});
+
+// @desc Get logged in user order
+// @route GET /api/orders/myorders
+// @access Private
+export const getMyOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ user: req.user._id });
+
+  if (orders) {
+    res.send(orders);
+  } else {
+    res.status(404).send('order not found');
   }
 });
 
@@ -84,33 +118,4 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Update order to delivered
-// @route PUT /api/orders/:id/deliver
-// @access Private (Admin only)
-export const updateOrderToDelivered = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id);
 
-  if (order) {
-    order.isDelivered = true;
-    order.deliveredAt = Date.now();
-    await order.save();
-
-    res.send(order);
-  } else {
-    res.status(404);
-    throw new Error('order not found');
-  }
-});
-
-// @desc Get logged in user order
-// @route GET /api/orders/myorders
-// @access Private
-export const getMyOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({ user: req.user._id });
-
-  if (orders) {
-    res.send(orders);
-  } else {
-    res.status(404).send('order not found');
-  }
-});

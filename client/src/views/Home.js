@@ -2,25 +2,23 @@ import React, { useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { fetchProductList } from '../actions';
+import { fetchProducts } from '../actions/productList';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Product from '../components/Product';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { loading, error, products } = useSelector(
-    (state) => state.productList
-  );
+  const { products, error } = useSelector((state) => state.productList);
 
   useEffect(() => {
-    dispatch(fetchProductList());
+    dispatch(fetchProducts());
   }, [dispatch]);
 
   return (
     <>
       <h1>Latest Products</h1>
-      {loading ? (
+      {products.length === 0 && !error ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>

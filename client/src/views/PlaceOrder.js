@@ -1,17 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { createOrder } from '../actions/order';
 import Message from '../components/Message';
 import CheckoutSteps from '../components/CheckoutSteps';
-import { createOrder } from '../actions';
 
-const PlaceOrder = ({ history }) => {
+const PlaceOrder = () => {
   const cart = useSelector((state) => state.cart);
-  const { order, success, loading, error } = useSelector(
-    (state) => state.order
-  );
+  const { error } = useSelector((state) => state.orderList);
   const dispatch = useDispatch();
 
   // calculate prices
@@ -25,12 +23,6 @@ const PlaceOrder = ({ history }) => {
   cart.taxPrice = +(0.15 * cart.itemsPrice).toFixed(2);
 
   cart.totalPrice = +(cart.itemsPrice + cart.shippingPrice + cart.taxPrice);
-
-  useEffect(() => {
-    if (success) {
-      history.push(`/orders/${order._id}`);
-    }
-  }, [history, success, order]);
 
   const onPlaceOrderClick = () => {
     dispatch(
@@ -141,7 +133,7 @@ const PlaceOrder = ({ history }) => {
                 <Button
                   type="button"
                   className="btn-block"
-                  disabled={cart.cartItems.length === 0 || loading}
+                  disabled={cart.cartItems.length === 0}
                   onClick={onPlaceOrderClick}>
                   Place Order
                 </Button>

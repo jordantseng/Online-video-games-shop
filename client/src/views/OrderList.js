@@ -3,20 +3,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Table, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import { fetchOrderList, updateOrderToDelivered } from '../actions';
+import { fetchOrders, updateOrderToDelivered } from '../actions/orderList';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 
 const OrderList = ({ history }) => {
   const dispatch = useDispatch();
-  const { loading, error, orders } = useSelector((state) => state.orderList);
-  const { user } = useSelector((state) => state.userInfo);
+  const { orders, error } = useSelector((state) => state.orderList);
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (user && user.isAdmin) {
-      dispatch(fetchOrderList());
-    } else {
+    if (!user || !user.isAdmin) {
       history.push('/login');
+    } else {
+      dispatch(fetchOrders());
     }
   }, [dispatch, history, user]);
 
@@ -27,7 +27,7 @@ const OrderList = ({ history }) => {
   return (
     <>
       <h1>Orders</h1>
-      {loading ? (
+      {orders.length === 0 && !error ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>
