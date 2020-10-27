@@ -35,7 +35,15 @@ const Profile = ({ history }) => {
         setEmail(details.email);
       }
     }
-  }, [details.email, details.name, loggedIn, dispatch, history]);
+  }, [
+    details.email,
+    details.name,
+    setName,
+    setEmail,
+    loggedIn,
+    dispatch,
+    history,
+  ]);
 
   const onSubmitClick = (e) => {
     e.preventDefault(e);

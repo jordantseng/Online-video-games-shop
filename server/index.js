@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import colors from 'colors';
 import path from 'path';
+import morgan from 'morgan';
 
 import { notFound, errorHandler } from './middleware/error.js';
 import connectDB from './config/db.js';
@@ -15,6 +16,10 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 // body-parser middleware
 app.use(express.json());
