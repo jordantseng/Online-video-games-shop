@@ -3,8 +3,8 @@ import { Col, Row, Form, Button, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { fetchUserDetails, updateUserDetails } from '../actions/profile';
-import { fetchMyOrders } from '../actions/order';
+import { fetchUserProfile, updateUserProfile } from '../actions/profile';
+import { fetchMyOrders } from '../actions/orders';
 import useInput from '../hooks/useInput';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -12,38 +12,39 @@ import Loader from '../components/Loader';
 const Profile = ({ history }) => {
   const [name, setName, bindName] = useInput('');
   const [email, setEmail, bindEmail] = useInput('');
-  const [password, bindPassword] = useInput('');
-  const [confirmPassword, bindConfirmPassword] = useInput('');
+  const [password, setPassword, bindPassword] = useInput('');
+  const [confirmPassword, setConfirmPassword, bindConfirmPassword] = useInput(
+    ''
+  );
   const [message, setMessage] = useState('');
 
   const dispatch = useDispatch();
-  const { details, error, success, updating } = useSelector(
+  const { loading, data: profile, error, updating, success } = useSelector(
     (state) => state.profile
   );
-  const { loggedIn } = useSelector((state) => state.auth);
-  const { orders, error: errorOrders } = useSelector((state) => state.order);
+  const { user, loggedIn } = useSelector((state) => state.auth);
+  const {
+    loading: loadingOrders,
+    data: orders,
+    error: errorOrders,
+  } = useSelector((state) => state.orders);
 
   useEffect(() => {
-    if (!loggedIn) {
-      history.push('/login');
+    if (!user && !loggedIn) {
+      history.replace('/login');
     } else {
-      if (!details.name) {
-        dispatch(fetchUserDetails());
-        dispatch(fetchMyOrders());
+      if (!profile) {
+        dispatch(fetchUserProfile());
       } else {
-        setName(details.name);
-        setEmail(details.email);
+        setName(profile.name);
+        setEmail(profile.email);
       }
     }
-  }, [
-    details.email,
-    details.name,
-    setName,
-    setEmail,
-    loggedIn,
-    dispatch,
-    history,
-  ]);
+  }, [user, loggedIn, history, profile, dispatch, setName, setEmail]);
+
+  useEffect(() => {
+    dispatch(fetchMyOrders());
+  }, [dispatch]);
 
   const onSubmitClick = (e) => {
     e.preventDefault(e);
@@ -52,7 +53,7 @@ const Profile = ({ history }) => {
       setMessage('Password do not match');
     } else {
       setMessage('');
-      dispatch(updateUserDetails({ name, password }));
+      dispatch(updateUserProfile({ name, password }));
     }
   };
 
@@ -65,7 +66,7 @@ const Profile = ({ history }) => {
         {success ? (
           <Message variant="success">Update successfully</Message>
         ) : null}
-        {(!details.name || updating) && <Loader />}
+        {(loading || updating) && <Loader />}
         <Form onSubmit={onSubmitClick}>
           <Form.Group controlId="name">
             <Form.Label>Name</Form.Label>
@@ -110,7 +111,7 @@ const Profile = ({ history }) => {
       </Col>
       <Col md={9}>
         <h2>My orders</h2>
-        {orders.length === 0 && !errorOrders ? (
+        {loadingOrders ? (
           <Loader />
         ) : errorOrders ? (
           <Message variant="danger">{error}</Message>

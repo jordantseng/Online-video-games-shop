@@ -1,40 +1,46 @@
 import {
-  FETCH_USER_DETAILS_FAIL,
-  FETCH_USER_DETAILS_SUCCESS,
-  UPDATE_USER_DETAILS_SUCCESS,
-  UPDATE_USER_DETAILS_FAIL,
-  UPDATE_USER_DETAILS_REQUEST,
-  UPDATE_USER_DETAILS_RESET,
-  RESET_USER_DETAILS,
+  FETCH_USER_PROFILE_REQUEST,
+  FETCH_USER_PROFILE_FAIL,
+  FETCH_USER_PROFILE_SUCCESS,
+  UPDATE_USER_PROFILE_REQUEST,
+  UPDATE_USER_PROFILE_SUCCESS,
+  UPDATE_USER_PROFILE_FAIL,
+  RESET_UPDATE_USER_PROFILE,
+  RESET_USER_PROFILE,
 } from '../types/profile';
 
-const profileReducer = (state = { details: {} }, action) => {
+const initialState = { loading: true };
+
+const profileReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_USER_DETAILS_SUCCESS:
-      return { ...state, details: action.payload };
+    case FETCH_USER_PROFILE_REQUEST:
+      return { loading: true };
 
-    case FETCH_USER_DETAILS_FAIL:
-      return { ...state, error: action.payload };
+    case FETCH_USER_PROFILE_SUCCESS:
+      return { loading: false, data: action.payload };
 
-    case UPDATE_USER_DETAILS_REQUEST:
+    case FETCH_USER_PROFILE_FAIL:
+      return { ...state, loading: false, error: action.payload };
+
+    case UPDATE_USER_PROFILE_REQUEST:
       return { ...state, updating: true };
 
-    case UPDATE_USER_DETAILS_SUCCESS:
+    case UPDATE_USER_PROFILE_SUCCESS:
       return {
         ...state,
-        details: action.payload,
+        data: action.payload,
         updating: false,
         success: true,
       };
 
-    case UPDATE_USER_DETAILS_FAIL:
+    case UPDATE_USER_PROFILE_FAIL:
       return { ...state, error: action.payload };
 
-    case UPDATE_USER_DETAILS_RESET:
-      return { ...state, success: null };
+    case RESET_UPDATE_USER_PROFILE:
+      return { ...state, updating: undefined, success: undefined };
 
-    case RESET_USER_DETAILS:
-      return { ...state, details: {} };
+    case RESET_USER_PROFILE:
+      return initialState;
 
     default:
       return state;

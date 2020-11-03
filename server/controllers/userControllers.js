@@ -106,9 +106,21 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 // @route GET /api/users
 // @access PRIVATE (ADMIN ONLY)
 export const getAllUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({});
+  const pageSize = 2;
+  const pageNumber = +req.query.pageNumber || 1;
 
-  res.send(users);
+  const count = await User.countDocuments();
+
+  const users = await User.find({})
+    .limit(pageSize)
+    .skip(pageSize * (pageNumber - 1));
+
+  const page = {
+    current: pageNumber,
+    total: Math.ceil(count / pageSize),
+  };
+
+  res.send({ users, page });
 });
 
 // @desc delete user

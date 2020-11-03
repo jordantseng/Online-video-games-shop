@@ -4,28 +4,33 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-import { fetchProduct, updateProduct } from '../actions/productList';
+import { fetchProduct, updateProduct } from '../actions/product';
 
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
-const ProductEdit = ({ match, history }) => {
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [image, setImage] = useState('');
-  const [brand, setBrand] = useState('');
-  const [category, setCategory] = useState('');
-  const [countInStock, setCountInStock] = useState(0);
-  const [description, setDescription] = useState('');
+import useInput from '../hooks/useInput';
+
+const ProductEdit = ({ match }) => {
+  const [name, setName, bindName] = useInput('');
+  const [price, setPrice, bindPrice] = useInput('');
+  const [image, setImage, bindImage] = useInput('');
+  const [brand, setBrand, bindBrand] = useInput('');
+  const [category, setCategory, bindCategory] = useInput('');
+  const [countInStock, setCountInStock, bindCountInStock] = useInput(0);
+  const [description, setDescription, bindDescription] = useInput('');
+
   const [uploading, setUploading] = useState(false);
   const dispatch = useDispatch();
   const productId = match.params.id;
 
-  const { product, error } = useSelector((state) => state.productList);
+  const { loading, data: product, error, updated } = useSelector(
+    (state) => state.product
+  );
 
   useEffect(() => {
-    if (!product.name || productId !== product._id) {
+    if (!product || productId !== product._id) {
       dispatch(fetchProduct(productId));
     } else {
       setName(product.name);
@@ -36,13 +41,24 @@ const ProductEdit = ({ match, history }) => {
       setCountInStock(product.countInStock);
       setDescription(product.description);
     }
-  }, [dispatch, history, productId, product]);
+  }, [
+    product,
+    productId,
+    dispatch,
+    setName,
+    setPrice,
+    setImage,
+    setBrand,
+    setCategory,
+    setCountInStock,
+    setDescription,
+  ]);
 
   const onSubmitClick = (e) => {
     e.preventDefault();
 
     dispatch(
-      updateProduct(match.params.id, {
+      updateProduct(productId, {
         name,
         price,
         image,
@@ -80,8 +96,9 @@ const ProductEdit = ({ match, history }) => {
       </Link>
 
       <FormContainer>
+        {updated && <Message variant="success">Updated Successfully</Message>}
         <h1>Edit Product</h1>
-        {(!product.name || match.params.id !== product._id) && !error ? (
+        {loading ? (
           <Loader />
         ) : error ? (
           <Message vairant="danger">{error}</Message>
@@ -92,8 +109,7 @@ const ProductEdit = ({ match, history }) => {
               <Form.Control
                 type="text"
                 placeholder="Enter your name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}></Form.Control>
+                {...bindName}></Form.Control>
             </Form.Group>
 
             <Form.Group controlId="price">
@@ -101,8 +117,7 @@ const ProductEdit = ({ match, history }) => {
               <Form.Control
                 type="text"
                 placeholder="Enter price"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}></Form.Control>
+                {...bindPrice}></Form.Control>
             </Form.Group>
 
             <Form.Group controlId="image">
@@ -110,8 +125,7 @@ const ProductEdit = ({ match, history }) => {
               <Form.Control
                 type="text"
                 placeholder="Enter image"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}></Form.Control>
+                {...bindImage}></Form.Control>
               <Form.File
                 id="image-file"
                 label="Choose file"
@@ -125,8 +139,7 @@ const ProductEdit = ({ match, history }) => {
               <Form.Control
                 type="text"
                 placeholder="Enter brand"
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}></Form.Control>
+                {...bindBrand}></Form.Control>
             </Form.Group>
 
             <Form.Group controlId="category">
@@ -134,8 +147,7 @@ const ProductEdit = ({ match, history }) => {
               <Form.Control
                 type="text"
                 placeholder="Enter category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}></Form.Control>
+                {...bindCategory}></Form.Control>
             </Form.Group>
 
             <Form.Group controlId="countInStock">
@@ -143,10 +155,7 @@ const ProductEdit = ({ match, history }) => {
               <Form.Control
                 type="text"
                 placeholder="Enter count in stock"
-                value={countInStock}
-                onChange={(e) =>
-                  setCountInStock(e.target.value)
-                }></Form.Control>
+                {...bindCountInStock}></Form.Control>
             </Form.Group>
 
             <Form.Group controlId="description">
@@ -154,8 +163,7 @@ const ProductEdit = ({ match, history }) => {
               <Form.Control
                 type="text"
                 placeholder="Enter description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}></Form.Control>
+                {...bindDescription}></Form.Control>
             </Form.Group>
 
             <Button type="submit" variant="primary">

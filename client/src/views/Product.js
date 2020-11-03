@@ -12,36 +12,42 @@ import {
 } from 'react-bootstrap';
 
 import useInput from '../hooks/useInput';
-import { fetchProduct, createProductReview } from '../actions/productList';
+import { fetchProduct, createProductReview } from '../actions/product';
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { RESET_PRODUCT } from '../types/productList';
+import Meta from '../components/Meta';
 
 const Product = ({ match, history }) => {
   const [qty, setQty] = useState(1);
   const [rating, setRating, bindRating] = useInput(0);
   const [comment, setComment, bindComment] = useInput('');
 
-  const { product } = useSelector((state) => state.productList);
-  const { user, loggedIn } = useSelector((state) => state.auth);
+  const {
+    loading,
+    loadingReview,
+    data: product,
+    error,
+    errorReview,
+  } = useSelector((state) => state.product);
+  const { loggedIn } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
   const productId = match.params.id;
 
   useEffect(() => {
-    if (!product.reviewCreated) {
+    if (!product || productId !== product._id) {
       dispatch(fetchProduct(productId));
     } else {
       setRating(0);
       setComment('');
-      dispatch({ type: RESET_PRODUCT });
     }
-  }, [dispatch, productId, product.reviewCreated]);
+  }, [dispatch, product, setRating, setComment, productId]);
 
   const onAddToCartClick = () => {
-    history.push(`/cart/${productId}?qty=${qty}`); // store the product id and qty in url
+    // store the product id and qty in url
+    history.push(`/cart/${productId}?qty=${qty}`);
   };
 
   const onReviewSubmitClick = (e) => {
@@ -55,12 +61,17 @@ const Product = ({ match, history }) => {
       <Link className="btn btn-light my-3" to="/">
         Go back
       </Link>
-      {(!product.name || productId !== product._id) && !product.fetchError ? (
+      {loading ? (
         <Loader />
-      ) : product.fetchError ? (
-        <Message variant="danger">{product.fetchError}</Message>
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
       ) : (
         <>
+          <Meta
+            title={product.name}
+            description="We sell the best products for cheap"
+            keywords="electronics"
+          />
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />
@@ -139,22 +150,25 @@ const Product = ({ match, history }) => {
           <Row>
             <Col md={6}>
               <h2>Reviews</h2>
-              {product.reviewError && (
-                <Message variant="danger">{product.reviewError}</Message>
+              {errorReview && <Message variant="danger">{errorReview}</Message>}
+              {!loadingReview && product.reviews.length === 0 && (
+                <Message>No Reviews</Message>
               )}
-              {product.reviews.length === 0 && <Message>No Reviews</Message>}
               <ListGroup variant="flush">
-                {product.reviews.map((review) => (
-                  <ListGroup.Item key={review._id}>
-                    <strong>{review.name}</strong>
-                    <Rating value={review.rating} />
-                    <p>{review.createdAt.substring(0, 10)}</p>
-                    <p>{review.comment}</p>
-                  </ListGroup.Item>
-                ))}
+                {loadingReview ? (
+                  <Loader />
+                ) : (
+                  product.reviews.map((review) => (
+                    <ListGroup.Item key={review._id}>
+                      <strong>{review.name}</strong>
+                      <Rating value={review.rating} />
+                      <p>{review.createdAt.substring(0, 10)}</p>
+                      <p>{review.comment}</p>
+                    </ListGroup.Item>
+                  ))
+                )}
                 <ListGroup.Item>
                   <h2>Write a Customer Review</h2>
-                  {}
                   {loggedIn ? (
                     <Form onSubmit={onReviewSubmitClick}>
                       <Form.Group controlId="rating">

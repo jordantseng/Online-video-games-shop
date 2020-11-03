@@ -9,7 +9,7 @@ import CheckoutSteps from '../components/CheckoutSteps';
 
 const PlaceOrder = () => {
   const cart = useSelector((state) => state.cart);
-  const { error } = useSelector((state) => state.orderList);
+  const { error } = useSelector((state) => state.order);
   const dispatch = useDispatch();
 
   // calculate prices

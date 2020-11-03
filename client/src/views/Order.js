@@ -11,7 +11,9 @@ import Message from '../components/Message';
 
 const Order = ({ match }) => {
   const dispatch = useDispatch();
-  const { order, error } = useSelector((state) => state.order);
+  const { loading, paying, data: order, error } = useSelector(
+    (state) => state.order
+  );
   const [sdkReady, setSdkReady] = useState(false);
   const orderId = match.params.id;
 
@@ -29,7 +31,7 @@ const Order = ({ match }) => {
       document.body.appendChild(script);
     };
 
-    if (!order.user || orderId !== order._id || order.paying) {
+    if (!order || orderId !== order._id) {
       dispatch(fetchMyOrder(orderId));
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -44,7 +46,7 @@ const Order = ({ match }) => {
     dispatch(updateOrderToPaid(orderId, paymentResult));
   };
 
-  return (!order.user || orderId !== order._id || order.paying) && !error ? (
+  return loading || paying ? (
     <Loader />
   ) : error ? (
     <Message>{error}</Message>

@@ -2,16 +2,32 @@ import asyncHandler from 'express-async-handler';
 import Product from '../models/product.js';
 
 export const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
+  const match = {};
+  const pageSize = 4;
+  const current = +req.query.pageNumber || 1;
 
-  res.send(products);
+  if (req.query.keyword) {
+    match.name = { $regex: req.query.keyword, $options: 'i' };
+  }
+
+  const count = await Product.countDocuments({ ...match });
+  const products = await Product.find({ ...match })
+    .limit(pageSize)
+    .skip(pageSize * (current - 1));
+
+  const page = {
+    current,
+    total: Math.ceil(count / pageSize),
+  };
+
+  res.send({ products, page });
 });
 
 export const getProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
   if (product) {
-    res.send(product);
+    return res.send(product);
   } else {
     res.status(404);
     throw new Error('Product not found');
@@ -113,4 +129,13 @@ export const createProductReview = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error('Product not found');
   }
+});
+
+// @desc Get top rated products
+// @route GET /api/products/top
+// @access Public
+export const getTopProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+
+  res.send(products);
 });

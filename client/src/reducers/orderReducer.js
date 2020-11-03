@@ -1,32 +1,29 @@
 import { CREATE_ORDER_FAIL, CREATE_ORDER_SUCCESS } from '../types/cart';
 import {
-  FETCH_MY_ORDERS_SUCCESS,
-  FETCH_MY_ORDERS_FAIL,
-  FETCH_MY_ORDER_FAIL,
+  FETCH_MY_ORDER_REQUEST,
   FETCH_MY_ORDER_SUCCESS,
-  RESET_MY_ORDERS_DETAILS,
-} from '../types/order';
-import {
+  FETCH_MY_ORDER_FAIL,
+  UPDATE_ORDER_PAY_REQUEST,
   UPDATE_ORDER_PAY_SUCCESS,
   UPDATE_ORDER_PAY_FAIL,
-} from '../types/orderList';
+  RESET_MY_ORDER,
+} from '../types/order';
 
-const orderReducer = (state = { orders: [], order: {} }, action) => {
+const initialState = { loading: true };
+const orderReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_MY_ORDERS_SUCCESS:
-      return { ...state, orders: action.payload };
-
-    case FETCH_MY_ORDERS_FAIL:
-      return { ...state, error: action.payload };
+    case FETCH_MY_ORDER_REQUEST:
+      return { ...state, loading: true };
 
     case FETCH_MY_ORDER_SUCCESS:
       return {
         ...state,
-        order: { ...action.payload, paying: undefined },
+        loading: false,
+        data: action.payload,
       };
 
     case FETCH_MY_ORDER_FAIL:
-      return { ...state, error: action.payload };
+      return { ...state, loading: false, error: action.payload };
 
     case CREATE_ORDER_SUCCESS:
       return { ...state };
@@ -34,14 +31,17 @@ const orderReducer = (state = { orders: [], order: {} }, action) => {
     case CREATE_ORDER_FAIL:
       return { ...state, error: action.payload };
 
+    case UPDATE_ORDER_PAY_REQUEST:
+      return { ...state, paying: true };
+
     case UPDATE_ORDER_PAY_SUCCESS:
-      return { ...state, order: { ...action.payload, paying: true } };
+      return { ...state, data: action.payload, paying: false };
 
     case UPDATE_ORDER_PAY_FAIL:
       return { ...state, error: action.payload };
 
-    case RESET_MY_ORDERS_DETAILS:
-      return { orders: [], order: {} };
+    case RESET_MY_ORDER:
+      return initialState;
 
     default:
       return state;

@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { logout } from './actions/auth';
 import history from './history';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -22,16 +24,49 @@ import ProductEdit from './views/ProductEdit';
 import OrderList from './views/OrderList';
 
 const App = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+
+  const checkTokenAlive = () => {
+    if (user && new Date(user.expirationDate) > new Date(new Date())) {
+      const tokenExpirationTimer = setTimeout(() => {
+        dispatch(logout());
+      }, (new Date(user.expirationDate).getTime() - new Date().getTime()) / 1000);
+
+      return () => {
+        clearTimeout(tokenExpirationTimer);
+      };
+    } else if (user && new Date(user.expirationDate) < new Date(new Date())) {
+      dispatch(logout());
+    }
+  };
+
+  useEffect(() => {
+    checkTokenAlive();
+  }, []);
+
   return (
     <Router history={history}>
       <Header />
       <main className="py-3">
         <Container>
           <Switch>
+            <Route
+              path="/admin/orderList/page/:pageNumber"
+              component={OrderList}
+            />
             <Route path="/admin/orderList" component={OrderList} />
             <Route path="/admin/products/:id/edit" component={ProductEdit} />
+            <Route
+              path="/admin/productList/page/:pageNumber"
+              component={ProductList}
+            />
             <Route path="/admin/productList" component={ProductList} />
             <Route path="/admin/users/:id/edit" component={UserEdit} />
+            <Route
+              path="/admin/userList/page/:pageNumber"
+              component={UserList}
+            />
             <Route path="/admin/userList" component={UserList} />
             <Route path="/orders/:id" component={Order} />
             <Route path="/placeorder" component={PlaceOrder} />
@@ -42,6 +77,9 @@ const App = () => {
             <Route path="/profile" component={Profile} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
+            <Route path="/search/:keyword/page/:pageNumber" component={Home} />
+            <Route path="/search/:keyword" component={Home} />
+            <Route path="/page/:pageNumber" component={Home} />
             <Route path="/" exact component={Home} />
             <Redirect to="/" />
           </Switch>

@@ -5,8 +5,22 @@ import Order from '../models/order.js';
 // @route GET /api/orders
 // @access Private (Admin only)
 export const getOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({}).populate('user', 'id name');
-  res.send(orders);
+  const pageSize = 5;
+  const current = +req.query.pageNumber || 1;
+
+  const count = await Order.countDocuments();
+
+  const orders = await Order.find({})
+    .limit(pageSize)
+    .skip(pageSize * (current - 1))
+    .populate('user', 'id name');
+
+  const page = {
+    current,
+    total: Math.ceil(count / pageSize),
+  };
+
+  res.send({ orders, page });
 });
 
 // @desc Update order to delivered
@@ -117,5 +131,3 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
     throw new Error('order not found');
   }
 });
-
-

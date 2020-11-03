@@ -3,19 +3,25 @@ import { combineReducers } from 'redux';
 import authReducer from './authReducer';
 import profileReducer from './profileReducer';
 import cartReducer from './cartReducers';
-import productListReducer from './productListReducers';
-import orderListReducer from './orderListReducer';
-import userListReducer from './userListReducers';
+import carouselReducer from './carouselReducer';
+import productReducer from './productReducers';
+import productsReducer from './productsReducer';
+import userReducer from './userReducers';
+import usersReducer from './usersReducer';
 import orderReducer from './orderReducer';
+import ordersReducer from './ordersReducer';
 
 const reducers = combineReducers({
   auth: authReducer,
   profile: profileReducer,
-  order: orderReducer,
   cart: cartReducer,
-  productList: productListReducer,
-  userList: userListReducer,
-  orderList: orderListReducer,
+  carousel: carouselReducer,
+  product: productReducer,
+  products: productsReducer,
+  user: userReducer,
+  users: usersReducer,
+  order: orderReducer,
+  orders: ordersReducer,
 });
 
 export default reducers;

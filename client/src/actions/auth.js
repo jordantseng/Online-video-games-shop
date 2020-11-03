@@ -7,16 +7,20 @@ import {
   LOGOUT_SUCCESS,
 } from '../types/auth';
 import history from '../history';
-import { RESET_MY_ORDERS_DETAILS } from '../types/order';
-import { RESET_USER_DETAILS } from '../types/profile';
+import { RESET_MY_ORDER } from '../types/order';
+import { RESET_MY_ORDERS } from '../types/orders';
+import { RESET_USER_PROFILE } from '../types/profile';
 
 export const login = (email, password) => async (dispatch) => {
   try {
     const { data } = await axios.post('/api/users/login', { email, password });
 
-    dispatch({ type: LOGIN_SUCCESS, payload: data });
+    // expire in 1 hr
+    const expirationDate = new Date(new Date().getTime() + 60 * 60 * 1000);
 
-    localStorage.setItem('auth', JSON.stringify(data));
+    dispatch({ type: LOGIN_SUCCESS, payload: { ...data, expirationDate } });
+
+    localStorage.setItem('auth', JSON.stringify({ ...data, expirationDate }));
   } catch (error) {
     dispatch({
       type: LOGIN_FAIL,
@@ -31,8 +35,9 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   localStorage.removeItem('auth');
 
-  dispatch({ type: RESET_MY_ORDERS_DETAILS });
-  dispatch({ type: RESET_USER_DETAILS });
+  dispatch({ type: RESET_MY_ORDERS });
+  dispatch({ type: RESET_MY_ORDER });
+  dispatch({ type: RESET_USER_PROFILE });
   dispatch({ type: LOGOUT_SUCCESS });
 
   history.push('/login');

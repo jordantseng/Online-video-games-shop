@@ -1,29 +1,29 @@
 import {
-  // FETCH_USER_DETAILS_REQUEST,
-  FETCH_USER_DETAILS_SUCCESS,
-  FETCH_USER_DETAILS_FAIL,
-  UPDATE_USER_DETAILS_SUCCESS,
-  UPDATE_USER_DETAILS_FAIL,
-  UPDATE_USER_DETAILS_REQUEST,
-  UPDATE_USER_DETAILS_RESET,
+  FETCH_USER_PROFILE_REQUEST,
+  FETCH_USER_PROFILE_SUCCESS,
+  FETCH_USER_PROFILE_FAIL,
+  UPDATE_USER_PROFILE_REQUEST,
+  UPDATE_USER_PROFILE_SUCCESS,
+  UPDATE_USER_PROFILE_FAIL,
+  RESET_UPDATE_USER_PROFILE,
 } from '../types/profile';
 
 import axios from 'axios';
 
-export const fetchUserDetails = () => async (dispatch, getState) => {
-  try {
-    // dispatch({ type: FETCH_USER_DETAILS_REQUEST });
+export const fetchUserProfile = () => async (dispatch, getState) => {
+  dispatch({ type: FETCH_USER_PROFILE_REQUEST });
 
+  try {
     const { data } = await axios.get(`/api/users/profile`, {
       headers: {
         Authorization: `Bearer ${getState().auth.user.token}`,
       },
     });
 
-    dispatch({ type: FETCH_USER_DETAILS_SUCCESS, payload: data });
+    dispatch({ type: FETCH_USER_PROFILE_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
-      type: FETCH_USER_DETAILS_FAIL,
+      type: FETCH_USER_PROFILE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -32,21 +32,22 @@ export const fetchUserDetails = () => async (dispatch, getState) => {
   }
 };
 
-export const updateUserDetails = (formValues) => async (dispatch, getState) => {
-  dispatch({ type: UPDATE_USER_DETAILS_REQUEST });
+export const updateUserProfile = (formValues) => async (dispatch, getState) => {
+  dispatch({ type: UPDATE_USER_PROFILE_REQUEST });
+
   try {
     const { data } = await axios.put('/api/users/profile', formValues, {
       headers: { Authorization: `Bearer ${getState().auth.user.token}` },
     });
 
-    dispatch({ type: UPDATE_USER_DETAILS_SUCCESS, payload: data });
+    dispatch({ type: UPDATE_USER_PROFILE_SUCCESS, payload: data });
 
     setTimeout(() => {
-      dispatch({ type: UPDATE_USER_DETAILS_RESET });
-    }, 1000);
+      dispatch({ type: RESET_UPDATE_USER_PROFILE });
+    }, 1500);
   } catch (error) {
     dispatch({
-      type: UPDATE_USER_DETAILS_FAIL,
+      type: UPDATE_USER_PROFILE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

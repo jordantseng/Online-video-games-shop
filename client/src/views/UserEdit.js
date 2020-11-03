@@ -3,7 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { fetchUser, updateUser } from '../actions/userList';
+import { fetchUser, updateUser } from '../actions/user';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
@@ -13,18 +13,21 @@ const UserEdit = ({ match }) => {
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const { user, error } = useSelector((state) => state.userList);
+  const { loading, data: user, updated, error } = useSelector(
+    (state) => state.user
+  );
   const dispatch = useDispatch();
+  const userId = match.params.id;
 
   useEffect(() => {
-    if (!user.name || match.params.id !== user._id) {
-      dispatch(fetchUser(match.params.id));
+    if (!user || userId !== user._id) {
+      dispatch(fetchUser(userId));
     } else {
       setName(user.name);
       setEmail(user.email);
       setIsAdmin(user.isAdmin);
     }
-  }, [dispatch, match.params.id, user]);
+  }, [dispatch, userId, user]);
 
   const onSubmitClick = (e) => {
     e.preventDefault();
@@ -39,11 +42,12 @@ const UserEdit = ({ match }) => {
       </Link>
 
       <FormContainer>
+        {updated && <Message variant="success">Updated Successfully</Message>}
         <h1>Edit User</h1>
-        {(!user.name || match.params.id !== user._id) && !error ? (
+        {loading ? (
           <Loader />
-        ) : user.error ? (
-          <Message vairant="danger">{user.error}</Message>
+        ) : error ? (
+          <Message vairant="danger">{error}</Message>
         ) : (
           <Form onSubmit={onSubmitClick}>
             <Form.Group controlId="name">

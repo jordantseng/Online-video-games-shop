@@ -2,8 +2,10 @@ import React from 'react';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import { logout } from '../actions/auth';
+import SearchBox from './SearchBox';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -22,6 +24,7 @@ const Header = () => {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
+            <Route render={(props) => <SearchBox {...props} />} />
             <Nav className="ml-auto">
               <Nav.Link to="/cart" as={NavLink}>
                 <i className="fas fa-shopping-cart"></i>Cart
