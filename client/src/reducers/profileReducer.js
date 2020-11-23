@@ -6,18 +6,18 @@ import {
   UPDATE_USER_PROFILE_SUCCESS,
   UPDATE_USER_PROFILE_FAIL,
   RESET_UPDATE_USER_PROFILE,
-  RESET_USER_PROFILE,
+  RESET_PROFILE,
 } from '../types/profile';
 
-const initialState = { loading: true };
+const initialState = { data: null, loading: true };
 
 const profileReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_USER_PROFILE_REQUEST:
-      return { loading: true };
+      return { ...state, loading: true };
 
     case FETCH_USER_PROFILE_SUCCESS:
-      return { loading: false, data: action.payload };
+      return { ...state, loading: false, data: action.payload };
 
     case FETCH_USER_PROFILE_FAIL:
       return { ...state, loading: false, error: action.payload };
@@ -39,7 +39,7 @@ const profileReducer = (state = initialState, action) => {
     case RESET_UPDATE_USER_PROFILE:
       return { ...state, updating: undefined, success: undefined };
 
-    case RESET_USER_PROFILE:
+    case RESET_PROFILE:
       return initialState;
 
     default:

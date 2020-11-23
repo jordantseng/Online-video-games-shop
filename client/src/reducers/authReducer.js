@@ -1,6 +1,8 @@
 import {
+  LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
+  SIGNUP_REQUEST,
   SIGNUP_SUCCESS,
   SIGNUP_FAIL,
   LOGOUT_SUCCESS,
@@ -12,27 +14,34 @@ const userInfoFromStorage = localStorage.getItem('auth')
 
 const initialState = {
   user: userInfoFromStorage,
-  loggedIn: userInfoFromStorage ? true : null,
 };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
+    case LOGIN_REQUEST:
+      return { ...state, loading: true };
 
-    
     case LOGIN_SUCCESS:
-      return { ...state, user: action.payload, loggedIn: true };
+      return { ...state, loading: false, user: action.payload };
 
     case LOGIN_FAIL:
-      return { ...state, error: action.payload, loggedIn: null };
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case SIGNUP_REQUEST:
+      return { ...state, loading: true };
 
     case SIGNUP_SUCCESS:
-      return { ...state, user: action.payload, loggedIn: true };
+      return { ...state, loading: false, user: action.payload };
 
     case SIGNUP_FAIL:
-      return { ...state, error: action.payload, loggedIn: null };
+      return { ...state, loading: false, error: action.payload };
 
     case LOGOUT_SUCCESS:
-      return { user: null, loggedIn: false };
+      return { user: null };
 
     default:
       return state;

@@ -82,10 +82,23 @@ export const addOrderItems = asyncHandler(async (req, res) => {
 // @route GET /api/orders/myorders
 // @access Private
 export const getMyOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({ user: req.user._id });
+  const pageSize = 5;
+  const current = +req.query.pageNumber || 1;
+
+  const count = await Order.find({ user: req.user._id }).countDocuments();
+
+  const orders = await Order.find({ user: req.user._id })
+    .populate('user', 'name')
+    .limit(pageSize)
+    .skip(pageSize * (current - 1));
+
+  const page = {
+    current,
+    total: Math.ceil(count / pageSize),
+  };
 
   if (orders) {
-    res.send(orders);
+    res.send({ orders, page });
   } else {
     res.status(404).send('order not found');
   }
@@ -111,7 +124,10 @@ export const getOrder = asyncHandler(async (req, res) => {
 // @route GET /api/orders/:id/pay
 // @access Private
 export const updateOrderToPaid = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id);
+  const order = await Order.findById(req.params.id).populate(
+    'user',
+    'name email'
+  );
 
   if (order) {
     order.isPaid = true;
@@ -124,8 +140,8 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
       email_address: req.body.payer.email_address,
     };
 
-    const updatedOrder = await order.save();
-    res.send(updatedOrder);
+    await order.save();
+    res.send(order);
   } else {
     res.status(404);
     throw new Error('order not found');

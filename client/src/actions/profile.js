@@ -16,7 +16,7 @@ export const fetchUserProfile = () => async (dispatch, getState) => {
   try {
     const { data } = await axios.get(`/api/users/profile`, {
       headers: {
-        Authorization: `Bearer ${getState().auth.user.token}`,
+        Authorization: `Bearer ${getState().auth.user.token.id}`,
       },
     });
 
@@ -37,7 +37,7 @@ export const updateUserProfile = (formValues) => async (dispatch, getState) => {
 
   try {
     const { data } = await axios.put('/api/users/profile', formValues, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token}` },
+      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
     });
 
     dispatch({ type: UPDATE_USER_PROFILE_SUCCESS, payload: data });

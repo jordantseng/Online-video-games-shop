@@ -1,15 +1,15 @@
 import { CREATE_ORDER_FAIL, CREATE_ORDER_SUCCESS } from '../types/cart';
 import {
-  FETCH_MY_ORDER_REQUEST,
-  FETCH_MY_ORDER_SUCCESS,
-  FETCH_MY_ORDER_FAIL,
   UPDATE_ORDER_PAY_REQUEST,
   UPDATE_ORDER_PAY_SUCCESS,
   UPDATE_ORDER_PAY_FAIL,
-  RESET_MY_ORDER,
+  FETCH_MY_ORDER_REQUEST,
+  FETCH_MY_ORDER_SUCCESS,
+  FETCH_MY_ORDER_FAIL,
+  RESET_ORDER,
 } from '../types/order';
 
-const initialState = { loading: true };
+const initialState = { data: null, loading: true };
 const orderReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_MY_ORDER_REQUEST:
@@ -40,7 +40,7 @@ const orderReducer = (state = initialState, action) => {
     case UPDATE_ORDER_PAY_FAIL:
       return { ...state, error: action.payload };
 
-    case RESET_MY_ORDER:
+    case RESET_ORDER:
       return initialState;
 
     default:

@@ -19,7 +19,7 @@ export const fetchMyOrder = (id) => async (dispatch, getState) => {
 
   try {
     const { data } = await axios.get(`/api/orders/${id}`, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token}` },
+      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
     });
 
     dispatch({ type: FETCH_MY_ORDER_SUCCESS, payload: data });
@@ -37,7 +37,7 @@ export const fetchMyOrder = (id) => async (dispatch, getState) => {
 export const createOrder = (order) => async (dispatch, getState) => {
   try {
     const { data } = await axios.post('/api/orders', order, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token}` },
+      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
     });
 
     dispatch({ type: CREATE_ORDER_SUCCESS });
@@ -62,7 +62,7 @@ export const updateOrderToPaid = (id, paymentResult) => async (
 
   try {
     const { data } = await axios.put(`/api/orders/${id}/pay`, paymentResult, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token}` },
+      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
     });
     
     dispatch({ type: UPDATE_ORDER_PAY_SUCCESS, payload: data });

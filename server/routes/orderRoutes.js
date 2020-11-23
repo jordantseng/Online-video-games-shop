@@ -7,7 +7,8 @@ import {
   getOrders,
   updateOrderToDelivered,
 } from '../controllers/orderControllers.js';
-import auth, { admin } from '../middleware/auth.js';
+import auth from '../middleware/auth.js';
+import admin from '../middleware/admin.js';
 
 const router = express.Router();
 

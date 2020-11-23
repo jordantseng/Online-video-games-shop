@@ -10,6 +10,7 @@ import userReducer from './userReducers';
 import usersReducer from './usersReducer';
 import orderReducer from './orderReducer';
 import ordersReducer from './ordersReducer';
+import myOrdersReducer from './myOrdersReducer';
 
 const reducers = combineReducers({
   auth: authReducer,
@@ -22,6 +23,7 @@ const reducers = combineReducers({
   users: usersReducer,
   order: orderReducer,
   orders: ordersReducer,
+  myOrders: myOrdersReducer,
 });
 
 export default reducers;

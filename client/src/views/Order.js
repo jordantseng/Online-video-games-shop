@@ -18,6 +18,8 @@ const Order = ({ match }) => {
   const orderId = match.params.id;
 
   useEffect(() => {
+    
+
     const addPayPalScript = async () => {
       // to add a script tag that paypal needed
       const { data: clientId } = await axios.get('/api/config/paypal');
@@ -55,7 +57,7 @@ const Order = ({ match }) => {
       <h1>Order {order._id}</h1>
       <Row>
         <Col md={8}>
-          <ListGroup variant="flush">
+          <ListGroup variant='flush'>
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
@@ -73,9 +75,9 @@ const Order = ({ match }) => {
                 {order.shippingAddress.country}
               </p>
               {order.isDelivered ? (
-                <Message variant="success">Paid on {order.deliveredAt}</Message>
+                <Message variant='success'>Paid on {order.deliveredAt}</Message>
               ) : (
-                <Message variant="danger">Not delivered</Message>
+                <Message variant='danger'>Not delivered</Message>
               )}
             </ListGroup.Item>
 
@@ -86,9 +88,9 @@ const Order = ({ match }) => {
                 {order.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Message variant="success">Paid on {order.paidAt}</Message>
+                <Message variant='success'>Paid on {order.paidAt}</Message>
               ) : (
-                <Message variant="danger">Not paid</Message>
+                <Message variant='danger'>Not paid</Message>
               )}
             </ListGroup.Item>
 
@@ -97,13 +99,13 @@ const Order = ({ match }) => {
               {order.orderItems.length === 0 ? (
                 <Message>Order is empty</Message>
               ) : (
-                <ListGroup variant="flush">
+                <ListGroup variant='flush'>
                   {order.orderItems.map((item, index) => (
                     <ListGroup.Item key={index}>
                       <Row>
                         <Col md={1}>
                           <Image
-                            src={item.image}
+                            src={`/api/products/${item.product}/image`}
                             alt={item.name}
                             fluid
                             rounded
@@ -128,7 +130,7 @@ const Order = ({ match }) => {
 
         <Col md={4}>
           <Card>
-            <ListGroup variant="flush">
+            <ListGroup variant='flush'>
               <ListGroup.Item>
                 <h2>Order Summary</h2>
               </ListGroup.Item>

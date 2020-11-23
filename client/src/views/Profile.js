@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Form, Button, Table } from 'react-bootstrap';
+import { Col, Row, Form, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 
 import { fetchUserProfile, updateUserProfile } from '../actions/profile';
-import { fetchMyOrders } from '../actions/orders';
+import { fetchMyOrders } from '../actions/myOrders';
 import useInput from '../hooks/useInput';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import OrderTable from '../components/OrderTable';
+import Paginate from '../components/Paginate';
 
-const Profile = ({ history }) => {
+const Profile = ({ history, location }) => {
   const [name, setName, bindName] = useInput('');
   const [email, setEmail, bindEmail] = useInput('');
   const [password, setPassword, bindPassword] = useInput('');
@@ -19,18 +21,22 @@ const Profile = ({ history }) => {
   const [message, setMessage] = useState('');
 
   const dispatch = useDispatch();
+
   const { loading, data: profile, error, updating, success } = useSelector(
     (state) => state.profile
   );
-  const { user, loggedIn } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const {
-    loading: loadingOrders,
-    data: orders,
+    loading: loadingMyOrders,
+    data: myOrders,
+    page,
     error: errorOrders,
-  } = useSelector((state) => state.orders);
+  } = useSelector((state) => state.myOrders);
+
+  const pageNumber = location.pathname.split('page/')[1];
 
   useEffect(() => {
-    if (!user && !loggedIn) {
+    if (!user) {
       history.replace('/login');
     } else {
       if (!profile) {
@@ -40,11 +46,11 @@ const Profile = ({ history }) => {
         setEmail(profile.email);
       }
     }
-  }, [user, loggedIn, history, profile, dispatch, setName, setEmail]);
+  }, [user, history, profile, dispatch, setName, setEmail]);
 
   useEffect(() => {
-    dispatch(fetchMyOrders());
-  }, [dispatch]);
+    dispatch(fetchMyOrders(pageNumber));
+  }, [dispatch, pageNumber]);
 
   const onSubmitClick = (e) => {
     e.preventDefault(e);
@@ -111,53 +117,24 @@ const Profile = ({ history }) => {
       </Col>
       <Col md={9}>
         <h2>My orders</h2>
-        {loadingOrders ? (
+        {loadingMyOrders ? (
           <Loader />
         ) : errorOrders ? (
           <Message variant="danger">{error}</Message>
         ) : (
-          <Table striped bordered hover responsive className="table-sm">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>DATE</th>
-                <th>TOTAL</th>
-                <th>PAID</th>
-                <th>DELIVERED</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <tr key={order._id}>
-                  <td>{order._id}</td>
-                  <td>{order.createdAt.substring(0, 10)}</td>
-                  <td>{order.totalPrice}</td>
-                  <td>
-                    {order.isPaid ? (
-                      order.paidAt.substring(0, 10)
-                    ) : (
-                      <i className="fas fa-times" style={{ color: 'red' }}></i>
-                    )}
-                  </td>
-                  <td>
-                    {order.isDelivered ? (
-                      order.deliveredAt.substring(0, 10)
-                    ) : (
-                      <i className="fas fa-times" style={{ color: 'red' }}></i>
-                    )}
-                  </td>
-                  <td>
-                    <Link to={`/orders/${order._id}`}>
-                      <Button className="btn-sm" variant="light">
-                        Details
-                      </Button>
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+          <Router history={history}>
+            <Switch>
+              <Route
+                path="/profile/page/:pageNumber"
+                render={() => <OrderTable orders={myOrders} user={user} />}
+              />
+              <Route
+                path="/profile"
+                render={() => <OrderTable orders={myOrders} user={user} />}
+              />
+            </Switch>
+            <Paginate path="/profile" pages={page.total} page={page.current} />
+          </Router>
         )}
       </Col>
     </Row>

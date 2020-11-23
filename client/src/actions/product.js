@@ -36,7 +36,7 @@ export const updateProduct = (id, formValues) => async (dispatch, getState) => {
 
   try {
     const { data } = await axios.put(`/api/products/${id}`, formValues, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token}` },
+      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
     });
 
     dispatch({ type: UPDATE_PRODUCT_SUCCESS, payload: data });
@@ -67,7 +67,7 @@ export const createProductReview = (id, formValues) => async (
       `/api/products/${id}/reviews`,
       formValues,
       {
-        headers: { Authorization: `Bearer ${getState().auth.user.token}` },
+        headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
       }
     );
 
@@ -80,5 +80,9 @@ export const createProductReview = (id, formValues) => async (
           ? error.response.data.message
           : error.response,
     });
+
+    setTimeout(() => {
+      dispatch({ type: RESET_PRODUCT });
+    }, 1500);
   }
 };

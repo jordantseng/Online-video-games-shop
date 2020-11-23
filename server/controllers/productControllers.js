@@ -1,6 +1,18 @@
 import asyncHandler from 'express-async-handler';
 import Product from '../models/product.js';
 
+// @desc Get top rated products
+// @route GET /api/products/top
+// @access Public
+export const getTopProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+
+  res.send(products);
+});
+
+// @desc Get products
+// @route POST /api/products
+// @access Public
 export const getProducts = asyncHandler(async (req, res) => {
   const match = {};
   const pageSize = 4;
@@ -23,6 +35,9 @@ export const getProducts = asyncHandler(async (req, res) => {
   res.send({ products, page });
 });
 
+// @desc Get product
+// @route GET /api/products/:id
+// @access Public
 export const getProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
@@ -34,19 +49,10 @@ export const getProduct = asyncHandler(async (req, res) => {
   }
 });
 
-export const deleteProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
-
-  if (product) {
-    await product.remove();
-    res.send(product);
-  } else {
-    res.status(404);
-    throw new Error('Product not found');
-  }
-});
-
-export const createProducts = asyncHandler(async (req, res) => {
+// @desc Create product
+// @route POST /api/products
+// @access Private/Admin
+export const createProduct = asyncHandler(async (req, res) => {
   const product = new Product({
     name: 'sample',
     price: 0,
@@ -63,6 +69,9 @@ export const createProducts = asyncHandler(async (req, res) => {
   res.status(201).send(product);
 });
 
+// @desc Update product
+// @route PUT /api/products/:id
+// @access Private/Admin
 export const updateProduct = asyncHandler(async (req, res) => {
   const {
     name,
@@ -79,12 +88,26 @@ export const updateProduct = asyncHandler(async (req, res) => {
     product.name = name;
     product.price = price;
     product.decription = description;
-    product.image = image;
     product.brand = brand;
     product.category = category;
     product.countInStock = countInStock;
 
     await product.save();
+    res.send(product);
+  } else {
+    res.status(404);
+    throw new Error('Product not found');
+  }
+});
+
+// @desc Delete product
+// @route DELETE /api/products/:id
+// @access Private/Admin
+export const deleteProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    await product.remove();
     res.send(product);
   } else {
     res.status(404);
@@ -131,11 +154,30 @@ export const createProductReview = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Get top rated products
-// @route GET /api/products/top
-// @access Public
-export const getTopProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+// @desc upload product image
+// @route POST /api/products/:id/image
+// access Private
+export const uploadProductImage = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
 
-  res.send(products);
+  product.image = req.file.buffer;
+
+  await product.save();
+
+  res.send();
+});
+
+// @desc get product image
+// @route GET /api/products/:id/image
+// @desc Public
+export const getProductImage = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (!product || !product.image) {
+    res.status(404);
+    throw new Error('Image not found');
+  } else {
+    res.set('Content-Type', 'image/jpg');
+    res.send(product.image);
+  }
 });

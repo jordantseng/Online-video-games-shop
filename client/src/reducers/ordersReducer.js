@@ -5,11 +5,8 @@ import {
   UPDATE_ORDER_DELIVER_REQUEST,
   UPDATE_ORDER_DELIVER_SUCCESS,
   UPDATE_ORDER_DELIVER_FAIL,
-  FETCH_MY_ORDERS_REQUEST,
-  FETCH_MY_ORDERS_SUCCESS,
-  FETCH_MY_ORDERS_FAIL,
-  RESET_MY_ORDERS,
 } from '../types/orders';
+import { RESET_MY_ORDERS } from '../types/myOrders';
 
 const initialState = { loading: true };
 
@@ -45,15 +42,6 @@ const ordersReducers = (state = initialState, action) => {
       };
 
     case UPDATE_ORDER_DELIVER_FAIL:
-      return { ...state, loading: false, error: action.payload };
-
-    case FETCH_MY_ORDERS_REQUEST:
-      return { loading: true };
-
-    case FETCH_MY_ORDERS_SUCCESS:
-      return { ...state, loading: false, data: action.payload };
-
-    case FETCH_MY_ORDERS_FAIL:
       return { ...state, loading: false, error: action.payload };
 
     case RESET_MY_ORDERS:

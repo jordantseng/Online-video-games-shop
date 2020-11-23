@@ -1,4 +1,3 @@
-
 import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
@@ -23,8 +22,7 @@ const productSchema = Schema({
     required: true,
   },
   image: {
-    type: String,
-    required: true,
+    type: Buffer,
   },
   brand: {
     type: String,

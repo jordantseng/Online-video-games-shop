@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
+
 import bcrypt from 'bcryptjs';
 import Order from './order.js';
 
@@ -16,8 +18,20 @@ const userSchema = Schema(
   }
 );
 
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+userSchema.methods.generateToken = function () {
+  const user = this;
+
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: '1hr',
+  });
+
+  return token;
+};
+
+userSchema.methods.matchPassword = async function (password) {
+  const user = this;
+
+  return await bcrypt.compare(password, user.password);
 };
 
 // Delete user tasks when user is deleted

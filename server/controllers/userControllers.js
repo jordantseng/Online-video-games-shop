@@ -1,7 +1,6 @@
 import asyncHandler from 'express-async-handler';
 
 import User from '../models/user.js';
-import generateToken from '../utils/generateToken.js';
 
 // @desc signup
 // @route POST /api/users
@@ -24,7 +23,7 @@ export const createUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      token: generateToken(user._id), // for client saving
+      token: { id: user.generateToken(), expiresIn: 3600 }, // for client saving
     });
   } else {
     res.status(400);
@@ -40,18 +39,24 @@ export const authUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email });
 
-  if (user && (await user.matchPassword(password))) {
-    res.send({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      token: generateToken(user._id), // for client saving
-    });
-  } else {
-    res.status(401);
+  if (!user) {
+    res.status(404);
     throw new Error('Invalid email or password');
   }
+
+  const isMatch = await user.matchPassword(password);
+
+  if (!isMatch) {
+    throw new Error('Invalid email or password');
+  }
+
+  res.send({
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    token: { id: user.generateToken(), expiresIn: 3600 },
+  });
 });
 
 // @desc get single user profile
@@ -94,7 +99,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
-      token: generateToken(updatedUser._id),
+      token: { id: user.generateToken(), expiresIn: 3600 },
     });
   } else {
     res.status(404);

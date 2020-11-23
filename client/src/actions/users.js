@@ -14,7 +14,7 @@ export const fetchUsers = (pageNumber) => async (dispatch, getState) => {
 
   try {
     const { data } = await axios.get(`/api/users?pageNumber=${pageNumber}`, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token}` },
+      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
     });
 
     dispatch({ type: FETCH_USERS_SUCCESS, payload: data });
@@ -37,7 +37,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
     dispatch({ type: DELETE_USER_REQUEST, payload: id });
 
     await axios.delete(`/api/users/${id}`, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token}` },
+      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
     });
     dispatch({ type: DELETE_USER_SUCCESS });
   } catch (error) {

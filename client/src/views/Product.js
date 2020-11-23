@@ -30,7 +30,7 @@ const Product = ({ match, history }) => {
     error,
     errorReview,
   } = useSelector((state) => state.product);
-  const { loggedIn } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
@@ -58,26 +58,30 @@ const Product = ({ match, history }) => {
 
   return (
     <>
-      <Link className="btn btn-light my-3" to="/">
+      <Link className='btn btn-light my-3' to='/'>
         Go back
       </Link>
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Message variant='danger'>{error}</Message>
       ) : (
         <>
           <Meta
             title={product.name}
-            description="We sell the best products for cheap"
-            keywords="electronics"
+            description='We sell the best products for cheap'
+            keywords='electronics'
           />
           <Row>
             <Col md={6}>
-              <Image src={product.image} alt={product.name} fluid />
+              <Image
+                src={`/api/products/${product._id}/image`}
+                alt={product.name}
+                fluid
+              />
             </Col>
             <Col md={3}>
-              <ListGroup variant="flush">
+              <ListGroup variant='flush'>
                 <ListGroup.Item>
                   <h3>{product.name}</h3>
                 </ListGroup.Item>
@@ -95,7 +99,7 @@ const Product = ({ match, history }) => {
             </Col>
             <Col md={3}>
               <Card>
-                <ListGroup varient="flush">
+                <ListGroup varient='flush'>
                   <ListGroup.Item>
                     <Row>
                       <Col>Price:</Col>
@@ -119,7 +123,7 @@ const Product = ({ match, history }) => {
                         <Col>Qty</Col>
                         <Col>
                           <Form.Control
-                            as="select"
+                            as='select'
                             value={qty}
                             onChange={(e) => setQty(e.target.value)}>
                             {[...Array(product.countInStock).keys()].map(
@@ -136,8 +140,8 @@ const Product = ({ match, history }) => {
                   )}
                   <ListGroup.Item>
                     <Button
-                      className="btn-block"
-                      type="button"
+                      className='btn-block'
+                      type='button'
                       disabled={product.countInStock < 1}
                       onClick={onAddToCartClick}>
                       Add To Cart
@@ -150,11 +154,11 @@ const Product = ({ match, history }) => {
           <Row>
             <Col md={6}>
               <h2>Reviews</h2>
-              {errorReview && <Message variant="danger">{errorReview}</Message>}
+              {errorReview && <Message variant='danger'>{errorReview}</Message>}
               {!loadingReview && product.reviews.length === 0 && (
                 <Message>No Reviews</Message>
               )}
-              <ListGroup variant="flush">
+              <ListGroup variant='flush'>
                 {loadingReview ? (
                   <Loader />
                 ) : (
@@ -169,33 +173,33 @@ const Product = ({ match, history }) => {
                 )}
                 <ListGroup.Item>
                   <h2>Write a Customer Review</h2>
-                  {loggedIn ? (
+                  {user ? (
                     <Form onSubmit={onReviewSubmitClick}>
-                      <Form.Group controlId="rating">
+                      <Form.Group controlId='rating'>
                         <Form.Label>Rating</Form.Label>
-                        <Form.Control as="select" {...bindRating}>
-                          <option value="">Select...</option>
-                          <option value="1">1 - Poor</option>
-                          <option value="2">2 - Fair</option>
-                          <option value="3">3 - Good</option>
-                          <option value="4">4 - Very Good</option>
-                          <option value="5">5 - Excellent</option>
+                        <Form.Control as='select' {...bindRating}>
+                          <option value=''>Select...</option>
+                          <option value='1'>1 - Poor</option>
+                          <option value='2'>2 - Fair</option>
+                          <option value='3'>3 - Good</option>
+                          <option value='4'>4 - Very Good</option>
+                          <option value='5'>5 - Excellent</option>
                         </Form.Control>
                       </Form.Group>
                       <Form.Group>
                         <Form.Label>Comment</Form.Label>
                         <Form.Control
-                          as="textarea"
-                          row="3"
+                          as='textarea'
+                          row='3'
                           {...bindComment}></Form.Control>
                       </Form.Group>
-                      <Button type="submit" varaint="primary">
+                      <Button type='submit' varaint='primary'>
                         Submit
                       </Button>
                     </Form>
                   ) : (
                     <Message>
-                      Please <Link to="/login">sign in</Link> to write a review
+                      Please <Link to='/login'>sign in</Link> to write a review
                     </Message>
                   )}
                 </ListGroup.Item>

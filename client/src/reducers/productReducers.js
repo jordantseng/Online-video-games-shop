@@ -11,12 +11,12 @@ import {
   RESET_PRODUCT,
 } from '../types/product';
 
-const initialState = { loading: true };
+const initialState = { data: null, loading: true };
 
 const productReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_PRODUCT_REQUEST:
-      return { loading: true };
+      return { ...state, loading: true };
 
     case FETCH_PRODUCT_SUCCESS:
       return { ...state, loading: false, data: action.payload };
@@ -57,7 +57,12 @@ const productReducer = (state = initialState, action) => {
       };
 
     case RESET_PRODUCT:
-      return { ...state, updated: undefined };
+      return {
+        ...state,
+        loadingReview: undefined,
+        errorReview: undefined,
+        updated: undefined,
+      };
 
     default:
       return state;
