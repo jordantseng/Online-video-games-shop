@@ -9,10 +9,25 @@ const Product = ({ product }) => {
     <Card className='my-3 p-3 rounded'>
       <Card.Body>
         <Link to={`/products/${product._id}`}>
-          {/* <Card.Img src={product.image} variant="top" /> */}
-          <Card.Img src={`/api/products/${product._id}/image`} variant='top' />
+          <div>
+            <Card.Img
+              src={`/api/products/${product._id}/image`}
+              variant='top'
+              style={{
+                height: '180px',
+                objectFit: 'contain',
+              }}
+            />
+          </div>
           <Card.Title as='div'>
-            <strong>{product.name}</strong>
+            <p
+              style={{
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+              }}>
+              <strong>{product.name}</strong>
+            </p>
           </Card.Title>
         </Link>
         <Card.Text as='div'>

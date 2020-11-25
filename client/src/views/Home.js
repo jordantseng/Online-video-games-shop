@@ -2,50 +2,52 @@ import React, { useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { fetchProducts } from '../actions/products';
+import { fetchPopularProducts } from '../actions/popular';
+
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Product from '../components/Product';
-import Paginate from '../components/Paginate';
-import ProductCarousel from '../components/ProductCarousel';
+import EventCarousel from '../components/EventCarousel';
 import Meta from '../components/Meta';
 
 const Home = ({ match }) => {
   const dispatch = useDispatch();
-  const { loading, data: products, page, error } = useSelector(
-    (state) => state.products
-  );
 
-  const keyword = match.params.keyword;
-  const pageNumber = match.params.pageNumber || 1;
+  const {
+    loading: popularLoading,
+    data: popularProducts,
+    error: popularError,
+  } = useSelector((state) => state.popular);
 
   useEffect(() => {
-    dispatch(fetchProducts(keyword, pageNumber));
-  }, [dispatch, keyword, pageNumber]);
+    dispatch(fetchPopularProducts());
+  }, [dispatch]);
 
   return (
     <>
       <Meta
-        title="Home"
-        description="We sell the best products for cheap"
-        keywords="electronics"
+        title='Home'
+        description='We sell the best products for cheap'
+        keywords='electronics'
       />
-      {!keyword && <ProductCarousel />}
-      <h1>Latest Products</h1>
-      {loading ? (
+
+      <EventCarousel />
+      {/* <h1>Latest Products</h1> */}
+
+      {popularLoading ? (
         <Loader />
-      ) : error ? (
-        <Message variant="danger">{error}</Message>
+      ) : popularError ? (
+        <Message variant='danger'>{popularError}</Message>
       ) : (
         <>
+          <h1>Popular Products</h1>
           <Row>
-            {products.map((product) => (
+            {popularProducts.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                 <Product product={product} />
               </Col>
             ))}
           </Row>
-          <Paginate pages={page.total} page={page.current} keyword={keyword} />
         </>
       )}
     </>

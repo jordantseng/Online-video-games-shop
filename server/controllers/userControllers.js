@@ -88,9 +88,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 
   if (user) {
     user.name = name || user.name;
-    if (password) {
-      user.password = password;
-    }
+    user.password = password || user.password;
 
     const updatedUser = await user.save();
 

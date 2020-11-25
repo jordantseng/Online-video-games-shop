@@ -17,33 +17,48 @@ const Header = () => {
 
   return (
     <header>
-      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+      <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect>
         <Container>
-          <Navbar.Brand to="/" as={Link}>
-            proShop
+          <Navbar.Brand to='/' as={Link}>
+            Video Game e-shop
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Route render={(props) => <SearchBox {...props} />} />
-            <Nav className="ml-auto">
-              <Nav.Link to="/cart" as={NavLink}>
-                <i className="fas fa-shopping-cart"></i>Cart
+          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          <Navbar.Collapse id='navbarColor01'>
+            <Nav>
+              <Nav.Link to='/products' as={NavLink}>
+                All Products
+              </Nav.Link>
+              <Nav.Link to='/search?category=switch' as={NavLink}>
+                Switch
+              </Nav.Link>
+              <Nav.Link to='/search?category=ps4' as={NavLink}>
+                PS4
+              </Nav.Link>
+              <Nav.Link to='/search?category=ps5' as={NavLink}>
+                PS5
+              </Nav.Link>
+            </Nav>
+            <Nav className='ml-auto'>
+              <Nav.Link to='/cart' as={NavLink}>
+                <i className='fas fa-shopping-cart'></i>Cart
               </Nav.Link>
               {user ? (
-                <NavDropdown title={user.name} id="username">
-                  <NavDropdown.Item to="/profile" as={Link}>
+                <NavDropdown title={user.name} id='username'>
+                  <NavDropdown.Item to='/profile' as={Link}>
                     Profile
                   </NavDropdown.Item>
-
                   {user.isAdmin && (
                     <>
-                      <NavDropdown.Item to="/admin/userList" as={Link}>
+                      <NavDropdown.Item to='/admin/eventList' as={Link}>
+                        Events
+                      </NavDropdown.Item>
+                      <NavDropdown.Item to='/admin/userList' as={Link}>
                         Users
                       </NavDropdown.Item>
-                      <NavDropdown.Item to="/admin/productList" as={Link}>
+                      <NavDropdown.Item to='/admin/productList' as={Link}>
                         Products
                       </NavDropdown.Item>
-                      <NavDropdown.Item to="/admin/orderList" as={Link}>
+                      <NavDropdown.Item to='/admin/orderList' as={Link}>
                         Orders
                       </NavDropdown.Item>
                     </>
@@ -53,10 +68,11 @@ const Header = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
-                <Nav.Link to="/login" as={Link}>
-                  <i className="fas fa-user">Sign In</i>
+                <Nav.Link to='/login' as={Link}>
+                  <i className='fas fa-user'>Sign In</i>
                 </Nav.Link>
               )}
+              <Route render={(props) => <SearchBox {...props} />} />
             </Nav>
           </Navbar.Collapse>
         </Container>

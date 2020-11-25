@@ -47,7 +47,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
         error:
           error.response && error.response.data.message
             ? error.response.data.message
-            : error.message,
+            : error.response,
         users: prevUsers,
       },
     });

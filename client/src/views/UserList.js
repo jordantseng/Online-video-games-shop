@@ -37,9 +37,9 @@ const UserList = ({ history, match }) => {
         <Loader />
       ) : (
         <>
-          {error && <Message variant="danger">{error}</Message>}
+          {error && <Message variant='danger'>{error}</Message>}
           {users && (
-            <Table striped bordered hover responsive className="table-sm">
+            <Table striped bordered hover responsive className='table-sm'>
               <thead>
                 <tr>
                   <th>ID</th>
@@ -60,25 +60,25 @@ const UserList = ({ history, match }) => {
                     <td>
                       {user.isAdmin ? (
                         <i
-                          className="fas fa-check"
+                          className='fas fa-check'
                           style={{ color: 'green' }}></i>
                       ) : (
                         <i
-                          className="fas fa-times"
+                          className='fas fa-times'
                           style={{ color: 'red' }}></i>
                       )}
                     </td>
                     <td>
                       <Link to={`/admin/users/${user._id}/edit`}>
-                        <Button variant="light" className="btn-sm">
-                          <i className="fas fa-edit"></i>
+                        <Button variant='light' className='btn-sm'>
+                          <i className='fas fa-edit'></i>
                         </Button>
                       </Link>
                       <Button
-                        variant="danger"
-                        className="btn-sm"
+                        variant='danger'
+                        className='btn-sm'
                         onClick={() => onDeleteClick(user._id)}>
-                        <i className="fas fa-trash"></i>
+                        <i className='fas fa-trash'></i>
                       </Button>
                     </td>
                   </tr>
@@ -88,7 +88,7 @@ const UserList = ({ history, match }) => {
           )}
           <Paginate
             isAdmin={true}
-            path="/admin/userList"
+            path='/admin/userList'
             pages={page.total}
             page={page.current}
           />

@@ -23,6 +23,9 @@ import UserEdit from './views/UserEdit';
 import ProductList from './views/ProductList';
 import ProductEdit from './views/ProductEdit';
 import OrderList from './views/OrderList';
+import Products from './views/Products';
+import EventList from './views/EventList';
+import EventEdit from './views/EventEdit';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -73,18 +76,25 @@ const App = () => {
               component={UserList}
             />
             <Route path='/admin/userList' component={UserList} />
+            <Route path='/admin/eventList/:id' component={EventEdit} />
+            <Route path='/admin/eventList' component={EventList} />
             <Route path='/orders/:id' component={Order} />
             <Route path='/placeorder' component={PlaceOrder} />
             <Route path='/payment' component={Payment} />
             <Route path='/shipping' component={Shipping} />
             <Route path='/cart/:id?' component={Cart} />
-            <Route path='/products/:id' component={Product} />
             <Route path='/profile' component={Profile} />
             <Route path='/login' component={Login} />
             <Route path='/signup' component={Signup} />
-            <Route path='/search/:keyword/page/:pageNumber' component={Home} />
-            <Route path='/search/:keyword' component={Home} />
-            <Route path='/page/:pageNumber' component={Home} />
+            <Route
+              path='/search/:keyword/page/:pageNumber'
+              component={Products}
+            />
+            <Route path='/search/:keyword' component={Products} />
+            <Route path='/search' component={Products} />
+            <Route path='/products/page/:pageNumber' component={Products} />
+            <Route path='/products/:id' component={Product} />
+            <Route path='/products' component={Products} />
             <Route path='/' exact component={Home} />
             <Redirect to='/' />
           </Switch>

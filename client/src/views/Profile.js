@@ -67,50 +67,50 @@ const Profile = ({ history, location }) => {
     <Row>
       <Col md={3}>
         <h1>User Profile</h1>
-        {error ? <Message variant="danger">{error}</Message> : null}
-        {message ? <Message variant="danger">{message}</Message> : null}
+        {error ? <Message variant='danger'>{error}</Message> : null}
+        {message ? <Message variant='danger'>{message}</Message> : null}
         {success ? (
-          <Message variant="success">Update successfully</Message>
+          <Message variant='success'>Update successfully</Message>
         ) : null}
         {(loading || updating) && <Loader />}
         <Form onSubmit={onSubmitClick}>
-          <Form.Group controlId="name">
+          <Form.Group controlId='name'>
             <Form.Label>Name</Form.Label>
             <Form.Control
-              type="text"
-              placeholder="Enter your name"
+              type='text'
+              placeholder='Enter your name'
               {...bindName}
             />
           </Form.Group>
 
-          <Form.Group controlId="email">
+          <Form.Group controlId='email'>
             <Form.Label>Email</Form.Label>
             <Form.Control
-              type="email"
-              placeholder="Enter email"
+              type='email'
+              placeholder='Enter email'
               {...bindEmail}
             />
           </Form.Group>
 
-          <Form.Group controlId="password">
+          <Form.Group controlId='password'>
             <Form.Label>Password</Form.Label>
             <Form.Control
-              type="password"
-              placeholder="Enter password"
+              type='password'
+              placeholder='Enter password'
               {...bindPassword}
             />
           </Form.Group>
 
-          <Form.Group controlId="confirmPassword">
+          <Form.Group controlId='confirmPassword'>
             <Form.Label>Confrim Password</Form.Label>
             <Form.Control
-              type="password"
-              placeholder="Enter password"
+              type='password'
+              placeholder='Enter password'
               {...bindConfirmPassword}
             />
           </Form.Group>
 
-          <Button type="submit" variant="primary">
+          <Button type='submit' variant='primary'>
             Update
           </Button>
         </Form>
@@ -120,20 +120,20 @@ const Profile = ({ history, location }) => {
         {loadingMyOrders ? (
           <Loader />
         ) : errorOrders ? (
-          <Message variant="danger">{error}</Message>
+          <Message variant='danger'>{error}</Message>
         ) : (
           <Router history={history}>
             <Switch>
               <Route
-                path="/profile/page/:pageNumber"
+                path='/profile/page/:pageNumber'
                 render={() => <OrderTable orders={myOrders} user={user} />}
               />
               <Route
-                path="/profile"
+                path='/profile'
                 render={() => <OrderTable orders={myOrders} user={user} />}
               />
             </Switch>
-            <Paginate path="/profile" pages={page.total} page={page.current} />
+            <Paginate path='/profile' pages={page.total} page={page.current} />
           </Router>
         )}
       </Col>

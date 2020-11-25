@@ -11,12 +11,16 @@ import {
   DELETE_PRODUCT_REQUEST,
 } from '../types/products';
 
-export const fetchProducts = (keyword = '', pageNumber) => async (dispatch) => {
+export const fetchProducts = (
+  keyword = '',
+  category = '',
+  pageNumber
+) => async (dispatch) => {
   dispatch({ type: FETCH_PRODUCTS_REQUEST });
 
   try {
     const { data } = await axios.get(
-      `/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
+      `/api/products?keyword=${keyword}&category=${category}&pageNumber=${pageNumber}`
     );
 
     dispatch({ type: FETCH_PRODUCTS_SUCCESS, payload: data });

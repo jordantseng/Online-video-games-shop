@@ -15,8 +15,12 @@ export const getTopProducts = asyncHandler(async (req, res) => {
 // @access Public
 export const getProducts = asyncHandler(async (req, res) => {
   const match = {};
-  const pageSize = 4;
+  const pageSize = 9;
   const current = +req.query.pageNumber || 1;
+
+  if (req.query.category) {
+    match.category = { $regex: req.query.category, $options: 'i' };
+  }
 
   if (req.query.keyword) {
     match.name = { $regex: req.query.keyword, $options: 'i' };
@@ -73,21 +77,13 @@ export const createProduct = asyncHandler(async (req, res) => {
 // @route PUT /api/products/:id
 // @access Private/Admin
 export const updateProduct = asyncHandler(async (req, res) => {
-  const {
-    name,
-    price,
-    description,
-    image,
-    brand,
-    category,
-    countInStock,
-  } = req.body;
+  const { name, price, description, brand, category, countInStock } = req.body;
 
   const product = await Product.findById(req.params.id);
   if (product) {
     product.name = name;
     product.price = price;
-    product.decription = description;
+    product.description = description;
     product.brand = brand;
     product.category = category;
     product.countInStock = countInStock;

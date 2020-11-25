@@ -33,19 +33,19 @@ const ProductList = ({ history, match, location }) => {
     if (!user || !user.isAdmin) {
       history.replace('/login');
     } else {
-      dispatch(fetchProducts('', pageNumber));
+      dispatch(fetchProducts('', '', pageNumber));
     }
   }, [dispatch, history, user, pageNumber]);
 
   return (
     <>
-      <Row className="align-items-center">
+      <Row className='align-items-center'>
         <Col>
           <h1>Products</h1>
         </Col>
-        <Col className="text-right">
-          <Button className="my-3" onClick={onCreateClick}>
-            <i className="fas fa-plus"></i> Create Product
+        <Col className='text-right'>
+          <Button className='my-3' onClick={onCreateClick}>
+            <i className='fas fa-plus'></i> Create Product
           </Button>
         </Col>
       </Row>
@@ -53,10 +53,10 @@ const ProductList = ({ history, match, location }) => {
         <Loader />
       ) : (
         <>
-          {error && <Message variant="danger">{error}</Message>}
+          {error && <Message variant='danger'>{error}</Message>}
           {products && (
             <>
-              <Table striped bordered hover responsive className="table-sm">
+              <Table striped bordered hover responsive className='table-sm'>
                 <thead>
                   <tr>
                     <th>ID</th>
@@ -77,15 +77,15 @@ const ProductList = ({ history, match, location }) => {
                       <td>{product.brand}</td>
                       <td>
                         <Link to={`/admin/products/${product._id}/edit`}>
-                          <Button variant="light" className="btn-sm">
-                            <i className="fas fa-edit"></i>
+                          <Button variant='light' className='btn-sm'>
+                            <i className='fas fa-edit'></i>
                           </Button>
                         </Link>
                         <Button
-                          variant="danger"
-                          className="btn-sm"
+                          variant='danger'
+                          className='btn-sm'
                           onClick={() => onDeleteClick(product._id)}>
-                          <i className="fas fa-trash"></i>
+                          <i className='fas fa-trash'></i>
                         </Button>
                       </td>
                     </tr>
@@ -94,7 +94,7 @@ const ProductList = ({ history, match, location }) => {
               </Table>
               <Paginate
                 isAdmin={true}
-                path="/admin/productList"
+                path='/admin/productList'
                 page={page.current}
                 pages={page.total}
               />

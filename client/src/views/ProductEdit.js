@@ -129,7 +129,7 @@ const ProductEdit = ({ match }) => {
 
             <Form.Group controlId='image'>
               <Form.Label>
-                Image
+                <div>Image</div>
                 <Image
                   ref={previewImage}
                   src={`/api/products/${productId}/image`}
@@ -147,18 +147,25 @@ const ProductEdit = ({ match }) => {
 
             <Form.Group controlId='brand'>
               <Form.Label>Brand</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter brand'
-                {...bindBrand}></Form.Control>
+
+              <Form.Control as='select' {...bindBrand}>
+                <option value='Sony'>Sony</option>
+                <option value='Nintendo'>Nintendo</option>
+                <option value='Others'>Others</option>
+              </Form.Control>
             </Form.Group>
 
             <Form.Group controlId='category'>
               <Form.Label>Cateogry</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter category'
-                {...bindCategory}></Form.Control>
+              <Form.Control as='select' {...bindCategory}>
+                <option value='PS4 console'>PS4 console</option>
+                <option value='PS5 console'>PS5 console</option>
+                <option value='Switch'>Switch console</option>
+                <option value='PS4 games'>PS4 games</option>
+                <option value='PS5 games'>PS5 games</option>
+                <option value='Switch games'>Switch games</option>
+                <option value='Others'>Others</option>
+              </Form.Control>
             </Form.Group>
 
             <Form.Group controlId='countInStock'>
@@ -172,7 +179,8 @@ const ProductEdit = ({ match }) => {
             <Form.Group controlId='description'>
               <Form.Label>Description</Form.Label>
               <Form.Control
-                type='text'
+                as='textarea'
+                rows='5'
                 placeholder='Enter description'
                 {...bindDescription}></Form.Control>
             </Form.Group>

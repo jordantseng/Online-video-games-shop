@@ -7,6 +7,7 @@ import {
   UPDATE_USER_PROFILE_FAIL,
   RESET_UPDATE_USER_PROFILE,
 } from '../types/profile';
+import { LOGIN_SUCCESS } from '../types/auth';
 
 import axios from 'axios';
 
@@ -41,6 +42,12 @@ export const updateUserProfile = (formValues) => async (dispatch, getState) => {
     });
 
     dispatch({ type: UPDATE_USER_PROFILE_SUCCESS, payload: data });
+
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: { ...getState().auth.user, name: data.name },
+    });
+    localStorage.setItem('auth', JSON.stringify(getState().auth.user));
 
     setTimeout(() => {
       dispatch({ type: RESET_UPDATE_USER_PROFILE });

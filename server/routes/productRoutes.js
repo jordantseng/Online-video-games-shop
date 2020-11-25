@@ -28,7 +28,7 @@ const upload = multer({
 
 router.route('/').get(getProducts).post(auth, admin, createProduct);
 
-router.route('/top').get(getTopProducts);
+router.route('/popular').get(getTopProducts);
 
 router
   .route('/:id')
