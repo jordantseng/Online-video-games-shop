@@ -58,9 +58,6 @@ const Product = ({ match, history }) => {
 
   return (
     <>
-      <Link className='btn btn-light my-3' to='/'>
-        Go back
-      </Link>
       {loading ? (
         <Loader />
       ) : error ? (
@@ -72,12 +69,16 @@ const Product = ({ match, history }) => {
             description='We sell the best products for cheap'
             keywords='electronics'
           />
+          <Link className='btn btn-light my-3' to='/'>
+            Go back
+          </Link>
           <Row>
-            <Col md={6}>
+            <Col md={6} style={{ display: 'flex' }}>
               <Image
                 src={`/api/products/${product._id}/image`}
                 alt={product.name}
                 fluid
+                style={{ margin: 'auto', height: '25rem' }}
               />
             </Col>
             <Col md={3}>
@@ -156,7 +157,7 @@ const Product = ({ match, history }) => {
               <h2>Reviews</h2>
               {errorReview && <Message variant='danger'>{errorReview}</Message>}
               {!loadingReview && product.reviews.length === 0 && (
-                <Message>No Reviews</Message>
+                <Message variant='primary'>No Reviews</Message>
               )}
               <ListGroup variant='flush'>
                 {loadingReview ? (
@@ -171,9 +172,16 @@ const Product = ({ match, history }) => {
                     </ListGroup.Item>
                   ))
                 )}
+              </ListGroup>
+              <h2>Write a Customer Review</h2>
+              {!user && (
+                <Message variant='primary'>
+                  Please <Link to='/login'>sign in</Link> to write a review
+                </Message>
+              )}
+              <ListGroup variant='flush'>
                 <ListGroup.Item>
-                  <h2>Write a Customer Review</h2>
-                  {user ? (
+                  {user && (
                     <Form onSubmit={onReviewSubmitClick}>
                       <Form.Group controlId='rating'>
                         <Form.Label>Rating</Form.Label>
@@ -197,10 +205,6 @@ const Product = ({ match, history }) => {
                         Submit
                       </Button>
                     </Form>
-                  ) : (
-                    <Message>
-                      Please <Link to='/login'>sign in</Link> to write a review
-                    </Message>
                   )}
                 </ListGroup.Item>
               </ListGroup>

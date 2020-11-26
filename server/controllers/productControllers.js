@@ -10,6 +10,21 @@ export const getTopProducts = asyncHandler(async (req, res) => {
   res.send(products);
 });
 
+// @desc Get latest products (sorted by createdAtDate)
+// @route GET /api/products/latest
+// @access Public
+
+export const getLatestProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({ createdAt: -1 }).limit(4);
+
+  if (!products) {
+    res.status(404);
+    res.send('Latest products not found');
+  }
+
+  res.send(products);
+});
+
 // @desc Get products
 // @route POST /api/products
 // @access Public

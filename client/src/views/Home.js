@@ -3,14 +3,16 @@ import { Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchPopularProducts } from '../actions/popular';
+import { fetchLatestProducts } from '../actions/latestProducts';
 
-import Loader from '../components/Loader';
+import CardLoader from '../components/CardLoader';
 import Message from '../components/Message';
 import Product from '../components/Product';
 import EventCarousel from '../components/EventCarousel';
+import SearchBox from '../components/SearchBox';
 import Meta from '../components/Meta';
 
-const Home = ({ match }) => {
+const Home = () => {
   const dispatch = useDispatch();
 
   const {
@@ -19,8 +21,15 @@ const Home = ({ match }) => {
     error: popularError,
   } = useSelector((state) => state.popular);
 
+  const {
+    loading: latestLoading,
+    data: latestProducts,
+    error: latestError,
+  } = useSelector((state) => state.latestProducts);
+
   useEffect(() => {
     dispatch(fetchPopularProducts());
+    dispatch(fetchLatestProducts());
   }, [dispatch]);
 
   return (
@@ -31,11 +40,28 @@ const Home = ({ match }) => {
         keywords='electronics'
       />
 
+      <SearchBox />
       <EventCarousel />
-      {/* <h1>Latest Products</h1> */}
+
+      {latestLoading ? (
+        <CardLoader />
+      ) : latestError ? (
+        <Message variant='danger'>{latestError}</Message>
+      ) : (
+        <>
+          <h1>Latest Products</h1>
+          <Row>
+            {latestProducts.map((product) => (
+              <Col key={product._id} sm={12} md={6} xl={3}>
+                <Product product={product} />
+              </Col>
+            ))}
+          </Row>
+        </>
+      )}
 
       {popularLoading ? (
-        <Loader />
+        <CardLoader />
       ) : popularError ? (
         <Message variant='danger'>{popularError}</Message>
       ) : (

@@ -72,7 +72,6 @@ const Header = () => {
                   <i className='fas fa-user'>Sign In</i>
                 </Nav.Link>
               )}
-              <Route render={(props) => <SearchBox {...props} />} />
             </Nav>
           </Navbar.Collapse>
         </Container>

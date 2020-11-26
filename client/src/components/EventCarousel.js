@@ -4,7 +4,7 @@ import { Carousel, Image } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchEvents } from '../actions/events';
-import Loader from './Loader';
+
 import Message from './Message';
 
 const EventCarousel = () => {
@@ -15,9 +15,7 @@ const EventCarousel = () => {
     dispatch(fetchEvents());
   }, [dispatch]);
 
-  return loading ? (
-    <Loader />
-  ) : error ? (
+  return loading ? null : error ? (
     <Message variant='danger'>{error}</Message>
   ) : (
     <Carousel pause='hover' className='bg-dark'>

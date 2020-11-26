@@ -15,9 +15,7 @@ export const fetchEvents = () => async (dispatch, getState) => {
   dispatch({ type: FETCH_EVENTS_REQUEST });
 
   try {
-    const { data } = await axios.get('/api/events', {
-      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
-    });
+    const { data } = await axios.get('/api/events');
 
     dispatch({ type: FETCH_EVENTS_SUCCESS, payload: data });
   } catch (error) {

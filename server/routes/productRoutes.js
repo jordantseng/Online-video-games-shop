@@ -1,5 +1,4 @@
 import express from 'express';
-import multer from 'multer';
 import {
   createProduct,
   deleteProduct,
@@ -10,25 +9,19 @@ import {
   getTopProducts,
   uploadProductImage,
   getProductImage,
+  getLatestProducts,
 } from '../controllers/productControllers.js';
 import auth from '../middleware/auth.js';
 import admin from '../middleware/admin.js';
+import uploadImg from '../middleware/uploadImg.js';
 
 const router = express.Router();
-
-const upload = multer({
-  limits: { fileSize: 1000000 }, // maximum: 1MB
-  fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-      return cb(new Error('Please upload an image'));
-    }
-    cb(null, true);
-  },
-});
 
 router.route('/').get(getProducts).post(auth, admin, createProduct);
 
 router.route('/popular').get(getTopProducts);
+
+router.route('/latest').get(getLatestProducts);
 
 router
   .route('/:id')
@@ -41,6 +34,6 @@ router.route('/:id/reviews').post(auth, createProductReview);
 router
   .route('/:id/image')
   .get(getProductImage)
-  .post(auth, upload.single('productImg'), uploadProductImage);
+  .post(auth, uploadImg.single('productImg'), uploadProductImage);
 
 export default router;
