@@ -1,4 +1,5 @@
 import asyncHandler from 'express-async-handler';
+import sharp from 'sharp';
 import Event from '../models/event.js';
 
 // @desc get all events
@@ -7,11 +8,12 @@ import Event from '../models/event.js';
 export const getEvents = asyncHandler(async (req, res) => {
   const events = await Event.find({});
 
-  const count = await Event.countDocuments();
-
   res.send(events);
 });
 
+// @desc get event
+// @route GET /api/events/:id
+// @access PRIVATE (ADMIN ONLY)
 export const getEvent = asyncHandler(async (req, res) => {
   const event = await Event.findById(req.params.id);
 
@@ -40,10 +42,10 @@ export const createEvent = asyncHandler(async (req, res) => {
 });
 
 // @desc edit event
-// @route PUT /api/events/:id
+// @route PATCH /api/events/:id
 // @access PRIVATE (ADMIN ONLY)
 export const editEvent = asyncHandler(async (req, res) => {
-  const { title, description, redirectUrl } = req.body;
+  const { redirectUrl } = req.body;
 
   const event = await Event.findById(req.params.id);
 
@@ -52,14 +54,15 @@ export const editEvent = asyncHandler(async (req, res) => {
     throw new Error('Event not found');
   }
 
-  event.title = title || event.tile;
-  event.description = description;
   event.redirectUrl = redirectUrl;
 
   if (req.file && req.file.buffer) {
-    event.image = req.file.buffer;
-  } else {
-    event.image = event.image;
+    const buffer = await sharp(req.file.buffer)
+      .resize({ width: 1200, height: 560 })
+      .png()
+      .toBuffer();
+
+    event.image = buffer;
   }
 
   await event.save();
@@ -93,7 +96,7 @@ export const getProductImage = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error('Image not found');
   } else {
-    res.set('Content-Type', 'image/jpg');
+    res.set('Content-Type', 'image/png');
     res.send(event.image);
   }
 });

@@ -2,10 +2,9 @@ import React from 'react';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
-import { Route } from 'react-router-dom';
 
 import { logout } from '../actions/auth';
-import SearchBox from './SearchBox';
+import SearchBox from '../components/SearchBox';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -25,22 +24,20 @@ const Header = () => {
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='navbarColor01'>
             <Nav>
-              <Nav.Link to='/products' as={NavLink}>
+              <Nav.Link to='/products' as={NavLink} exact>
                 All Products
               </Nav.Link>
-              <Nav.Link to='/search?category=switch' as={NavLink}>
+              <Nav.Link to='/products/category/switch' as={NavLink}>
                 Switch
               </Nav.Link>
-              <Nav.Link to='/search?category=ps4' as={NavLink}>
+              <Nav.Link to='/products/category/ps4' as={NavLink}>
                 PS4
               </Nav.Link>
-              <Nav.Link to='/search?category=ps5' as={NavLink}>
+              <Nav.Link to='/products/category/ps5' as={NavLink}>
                 PS5
               </Nav.Link>
-            </Nav>
-            <Nav className='ml-auto'>
               <Nav.Link to='/cart' as={NavLink}>
-                <i className='fas fa-shopping-cart'></i>Cart
+                Cart
               </Nav.Link>
               {user ? (
                 <NavDropdown title={user.name} id='username'>
@@ -69,9 +66,12 @@ const Header = () => {
                 </NavDropdown>
               ) : (
                 <Nav.Link to='/login' as={Link}>
-                  <i className='fas fa-user'>Sign In</i>
+                  <i className='fas fa-user'>Login</i>
                 </Nav.Link>
               )}
+            </Nav>
+            <Nav className='ml-auto'>
+              <SearchBox />
             </Nav>
           </Navbar.Collapse>
         </Container>

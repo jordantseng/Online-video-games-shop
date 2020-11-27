@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../axios';
 import history from '../history';
 import {
   CREATE_ORDER_SUCCESS,
@@ -18,9 +18,7 @@ export const fetchMyOrder = (id) => async (dispatch, getState) => {
   dispatch({ type: FETCH_MY_ORDER_REQUEST });
 
   try {
-    const { data } = await axios.get(`/api/orders/${id}`, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
-    });
+    const { data } = await axios.get(`/api/orders/${id}`);
 
     dispatch({ type: FETCH_MY_ORDER_SUCCESS, payload: data });
   } catch (error) {
@@ -36,9 +34,7 @@ export const fetchMyOrder = (id) => async (dispatch, getState) => {
 
 export const createOrder = (order) => async (dispatch, getState) => {
   try {
-    const { data } = await axios.post('/api/orders', order, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
-    });
+    const { data } = await axios.post('/api/orders', order);
 
     dispatch({ type: CREATE_ORDER_SUCCESS });
 
@@ -61,10 +57,8 @@ export const updateOrderToPaid = (id, paymentResult) => async (
   dispatch({ type: UPDATE_ORDER_PAY_REQUEST });
 
   try {
-    const { data } = await axios.put(`/api/orders/${id}/pay`, paymentResult, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
-    });
-    
+    const { data } = await axios.put(`/api/orders/${id}/pay`, paymentResult);
+
     dispatch({ type: UPDATE_ORDER_PAY_SUCCESS, payload: data });
     dispatch({ type: RESET_CART_ITEM });
     localStorage.removeItem('cartItems');

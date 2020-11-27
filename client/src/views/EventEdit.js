@@ -2,15 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+
 import { fetchEvent, updateEvent } from '../actions/event';
+import useInput from '../hooks/useInput';
+
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
 const EventEdit = ({ match }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [redirectUrl, setRedirectUrl] = useState('');
-  const [eventImg, setEventImg] = useState('');
+  const [redirectUrl, setRedirectUrl, bindRedirectUrl] = useInput('');
+  const [eventImg, setEventImg] = useState(null);
   const dispatch = useDispatch();
   const { loading, data: event, error } = useSelector((state) => state.event);
 
@@ -21,22 +22,18 @@ const EventEdit = ({ match }) => {
     if (!event || event._id !== eventId) {
       dispatch(fetchEvent(eventId));
     } else {
-      setTitle(event.title);
-      setDescription(event.description);
       setRedirectUrl(event.redirectUrl);
       setEventImg(event.image);
     }
-  }, [dispatch, event, eventId]);
+  }, [dispatch, event, eventId, setRedirectUrl, setEventImg]);
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(
-      updateEvent(eventId, { title, description, redirectUrl, eventImg })
-    );
+    dispatch(updateEvent(eventId, { redirectUrl, eventImg }));
   };
 
-  const onUploadFile = (e) => {
+  const onSelectFile = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
 
@@ -64,27 +61,8 @@ const EventEdit = ({ match }) => {
           {!error && event && (
             <Form onSubmit={onSubmit}>
               <Form.Group>
-                <Form.Label>Title</Form.Label>
-                <Form.Control
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </Form.Group>
-
-              <Form.Group>
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </Form.Group>
-
-              <Form.Group>
                 <Form.Label>RedirectUrl</Form.Label>
-                <Form.Control
-                  value={redirectUrl}
-                  onChange={(e) => setRedirectUrl(e.target.value)}
-                />
+                <Form.Control {...bindRedirectUrl} />
               </Form.Group>
 
               <Form.Group controlId='image'>
@@ -101,7 +79,7 @@ const EventEdit = ({ match }) => {
                   id='image-file'
                   label='Choose file'
                   custom
-                  onChange={onUploadFile}></Form.File>
+                  onChange={onSelectFile}></Form.File>
               </Form.Group>
 
               <Button variant='primary' type='submit'>

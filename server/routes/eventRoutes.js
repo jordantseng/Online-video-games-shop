@@ -20,7 +20,7 @@ router
 router
   .route('/:id')
   .get(auth, admin, getEvent)
-  .put(auth, admin, uploadImg.single('eventImg'), editEvent)
+  .patch(auth, admin, uploadImg.single('eventImg'), editEvent)
   .delete(auth, admin, deleteEvent);
 
 router.route('/:id/image').get(getProductImage);

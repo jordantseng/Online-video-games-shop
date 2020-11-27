@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../axios';
 import {
   FETCH_LATEST_PRODUCTS_REQUEST,
   FETCH_LATEST_PRODUCTS_SUCCESS,

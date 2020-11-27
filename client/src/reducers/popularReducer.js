@@ -2,7 +2,7 @@ import {
   FETCH_POPULAR_PRODUCTS_REQUEST,
   FETCH_POPULAR_PRODUCTS_SUCCESS,
   FETCH_POPULAR_PRODUCTS_FAIL,
-} from '../types/popular';
+} from '../types/popularProducts';
 
 const initialState = { data: null, loading: true };
 

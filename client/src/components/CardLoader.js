@@ -13,9 +13,14 @@ const CardLoader = ({ count = 4 }) => {
       <Row>
         {Array(count)
           .fill()
-          .map(() => {
+          .map((item, index) => {
             return (
-              <Col sm={12} md={6} xl={3} style={{ marginBottom: '1rem' }}>
+              <Col
+                sm={12}
+                md={6}
+                xl={3}
+                style={{ marginBottom: '1rem' }}
+                key={index}>
                 <Skeleton height='15rem' />
                 <div style={{ marginTop: '1rem' }}>
                   <Skeleton width='12rem' />

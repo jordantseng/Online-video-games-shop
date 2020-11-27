@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import useInput from '../hooks/useInput';
+
 import { fetchUser, updateUser } from '../actions/user';
+
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
 const UserEdit = ({ match }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [name, setName, bindName] = useInput('');
+  const [email, setEmail, bindEmail] = useInput('');
+  const [isAdmin, setIsAdmin] = useInput(false);
 
   const { loading, data: user, updated, error } = useSelector(
     (state) => state.user
@@ -27,7 +30,7 @@ const UserEdit = ({ match }) => {
       setEmail(user.email);
       setIsAdmin(user.isAdmin);
     }
-  }, [dispatch, userId, user]);
+  }, [dispatch, userId, user, setName, setEmail, setIsAdmin]);
 
   const onSubmitClick = (e) => {
     e.preventDefault();
@@ -37,49 +40,49 @@ const UserEdit = ({ match }) => {
 
   return (
     <>
-      <Link to="/admin/userList" className="btn btn-light my-3">
+      <Link to='/admin/userList' className='btn btn-light my-3'>
         Go back
       </Link>
 
       <FormContainer>
-        {updated && <Message variant="success">Updated Successfully</Message>}
-        <h1>Edit User</h1>
+        {updated && <Message variant='success'>Updated Successfully</Message>}
         {loading ? (
           <Loader />
         ) : error ? (
-          <Message vairant="danger">{error}</Message>
+          <Message vairant='danger'>{error}</Message>
         ) : (
-          <Form onSubmit={onSubmitClick}>
-            <Form.Group controlId="name">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter your name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}></Form.Control>
-            </Form.Group>
+          <>
+            <h1>Edit User</h1>
+            <Form onSubmit={onSubmitClick}>
+              <Form.Group controlId='name'>
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type='text'
+                  placeholder='Enter your name'
+                  {...bindName}></Form.Control>
+              </Form.Group>
 
-            <Form.Group controlId="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}></Form.Control>
-            </Form.Group>
+              <Form.Group controlId='email'>
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type='email'
+                  placeholder='Enter email'
+                  {...bindEmail}></Form.Control>
+              </Form.Group>
 
-            <Form.Group controlId="isAdmin">
-              <Form.Check
-                type="checkbox"
-                label="Is Admin"
-                checked={isAdmin}
-                onChange={(e) => setIsAdmin(e.target.checked)}></Form.Check>
-            </Form.Group>
+              <Form.Group controlId='isAdmin'>
+                <Form.Check
+                  type='checkbox'
+                  label='Is Admin'
+                  checked={isAdmin}
+                  onChange={(e) => setIsAdmin(e.target.checked)}></Form.Check>
+              </Form.Group>
 
-            <Button type="submit" variant="primary">
-              Update
-            </Button>
-          </Form>
+              <Button type='submit' variant='primary'>
+                Update
+              </Button>
+            </Form>
+          </>
         )}
       </FormContainer>
     </>

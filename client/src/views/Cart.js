@@ -40,16 +40,21 @@ const Cart = ({ match, location, history }) => {
         <h1>Shopping Cart</h1>
         {cartItems.length === 0 ? (
           <Message>
-            Your cart is empty <Link to="/">Go back</Link>
+            Your cart is empty <Link to='/'>Go back</Link>
           </Message>
         ) : (
-          <ListGroup variant="flush">
+          <ListGroup variant='flush'>
             {cartItems.map((item) => {
               return (
                 <ListGroup.Item key={item.product}>
                   <Row>
                     <Col md={2}>
-                      <Image src={item.image} alt={item.name} fluid rounded />
+                      <Image
+                        src={`/api/products/${item.product}/image`}
+                        alt={item.name}
+                        fluid
+                        rounded
+                      />
                     </Col>
                     <Col md={3}>
                       <Link to={`/products/${item.product}`}>{item.name}</Link>
@@ -57,7 +62,7 @@ const Cart = ({ match, location, history }) => {
                     <Col md={2}>${item.price}</Col>
                     <Col md={2}>
                       <Form.Control
-                        as="select"
+                        as='select'
                         value={item.qty}
                         onChange={(e) =>
                           dispatch(addToCart(item.product, +e.target.value))
@@ -71,10 +76,10 @@ const Cart = ({ match, location, history }) => {
                     </Col>
                     <Col>
                       <Button
-                        type="button"
-                        variant="ligth"
+                        type='button'
+                        variant='ligth'
                         onClick={() => removeFromCartClick(item.product)}>
-                        <i className="fas fa-trash"></i>
+                        <i className='fas fa-trash'></i>
                       </Button>
                     </Col>
                   </Row>
@@ -86,7 +91,7 @@ const Cart = ({ match, location, history }) => {
       </Col>
       <Col md={4}>
         <Card>
-          <ListGroup variant="flsuh">
+          <ListGroup variant='flsuh'>
             <ListGroup.Item>
               <h2>
                 Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
@@ -99,8 +104,8 @@ const Cart = ({ match, location, history }) => {
             </ListGroup.Item>
             <ListGroup.Item>
               <Button
-                type="button"
-                className="btn-block"
+                type='button'
+                className='btn-block'
                 disabled={cartItems.length < 1}
                 onClick={() => onCheckOutClick()}>
                 Procced To Checkout

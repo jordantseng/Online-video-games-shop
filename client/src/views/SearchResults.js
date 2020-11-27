@@ -8,17 +8,17 @@ import Message from '../components/Message';
 import Products from '../components/Products';
 import Paginate from '../components/Paginate';
 
-const AllProducts = ({ match }) => {
+const SearchResults = ({ match }) => {
   const dispatch = useDispatch();
   const { loading, data: products, page, error } = useSelector(
     (state) => state.products
   );
-  const pageNumber = match.params.pageNumber;
-  const category = match.params.category;
+  const pageNumber = match.params.pageNumber || 1;
+  const keyword = match.params.keyword;
 
   useEffect(() => {
-    dispatch(fetchProducts(undefined, category, pageNumber));
-  }, [dispatch, category, pageNumber]);
+    dispatch(fetchProducts(keyword, undefined, pageNumber));
+  }, [dispatch, keyword, pageNumber]);
 
   return (
     <div>
@@ -28,14 +28,19 @@ const AllProducts = ({ match }) => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
-          <h1>{category ? category : 'All products'}</h1>
+          <h1>Search Results</h1>
           <div>Total items: {page.totalItems}</div>
           <Products products={products} />
-          <Paginate pages={page.total} page={page.current} path='/products' />
+          <Paginate
+            pages={page.total}
+            page={page.current}
+            keyword={keyword}
+            path='/products'
+          />
         </>
       )}
     </div>
   );
 };
 
-export default AllProducts;
+export default SearchResults;

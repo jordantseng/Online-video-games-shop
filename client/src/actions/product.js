@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../axios';
 
 import history from '../history';
 import {
@@ -35,9 +35,7 @@ export const updateProduct = (id, formValues) => async (dispatch, getState) => {
   dispatch({ type: UPDATE_PRODUCT_REQUEST });
 
   try {
-    const { data } = await axios.put(`/api/products/${id}`, formValues, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
-    });
+    const { data } = await axios.put(`/api/products/${id}`, formValues);
 
     dispatch({ type: UPDATE_PRODUCT_SUCCESS, payload: data });
 
@@ -65,10 +63,7 @@ export const createProductReview = (id, formValues) => async (
   try {
     const { data } = await axios.post(
       `/api/products/${id}/reviews`,
-      formValues,
-      {
-        headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
-      }
+      formValues
     );
 
     dispatch({ type: CREATE_PRODUCT_REVIEW_SUCCESS, payload: data });

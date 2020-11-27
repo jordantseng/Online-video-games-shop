@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from '../axios';
 import {
   FETCH_POPULAR_PRODUCTS_REQUEST,
   FETCH_POPULAR_PRODUCTS_SUCCESS,
   FETCH_POPULAR_PRODUCTS_FAIL,
-} from '../types/popular';
+} from '../types/popularProducts';
 
 export const fetchPopularProducts = () => async (dispatch) => {
   dispatch({ type: FETCH_POPULAR_PRODUCTS_REQUEST });

@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios from '../axios';
+
 import {
   FETCH_EVENTS_REQUEST,
   FETCH_EVENTS_SUCCESS,
@@ -33,11 +34,7 @@ export const createEvent = () => async (dispatch, getState) => {
   dispatch({ type: CREATE_EVENT_REQUEST });
 
   try {
-    const { data } = await axios.post(
-      '/api/events',
-      {},
-      { headers: { Authorization: `Bearer ${getState().auth.user.token.id}` } }
-    );
+    const { data } = await axios.post('/api/events', {});
 
     dispatch({ type: CREATE_EVENT_SUCCESS, payload: data });
   } catch (error) {
@@ -58,9 +55,7 @@ export const deleteEvent = (id) => async (dispatch, getState) => {
   dispatch({ type: DELETE_EVENT_REQUEST, payload: id });
 
   try {
-    await axios.delete(`/api/events/${id}`, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
-    });
+    await axios.delete(`/api/events/${id}`);
 
     dispatch({ type: DELETE_EVENT_SUCCESS });
   } catch (error) {

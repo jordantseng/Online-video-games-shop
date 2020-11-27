@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react';
-import { Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { fetchPopularProducts } from '../actions/popular';
+import { fetchPopularProducts } from '../actions/popularProducts';
 import { fetchLatestProducts } from '../actions/latestProducts';
 
 import CardLoader from '../components/CardLoader';
 import Message from '../components/Message';
-import Product from '../components/Product';
 import EventCarousel from '../components/EventCarousel';
-import SearchBox from '../components/SearchBox';
+
+import Products from '../components/Products';
 import Meta from '../components/Meta';
 
 const Home = () => {
@@ -19,7 +18,7 @@ const Home = () => {
     loading: popularLoading,
     data: popularProducts,
     error: popularError,
-  } = useSelector((state) => state.popular);
+  } = useSelector((state) => state.popularProducts);
 
   const {
     loading: latestLoading,
@@ -34,13 +33,8 @@ const Home = () => {
 
   return (
     <>
-      <Meta
-        title='Home'
-        description='We sell the best products for cheap'
-        keywords='electronics'
-      />
+      <Meta title='Home' description='We sell the best products for cheap' />
 
-      <SearchBox />
       <EventCarousel />
 
       {latestLoading ? (
@@ -50,13 +44,7 @@ const Home = () => {
       ) : (
         <>
           <h1>Latest Products</h1>
-          <Row>
-            {latestProducts.map((product) => (
-              <Col key={product._id} sm={12} md={6} xl={3}>
-                <Product product={product} />
-              </Col>
-            ))}
-          </Row>
+          <Products products={latestProducts} />
         </>
       )}
 
@@ -67,13 +55,7 @@ const Home = () => {
       ) : (
         <>
           <h1>Popular Products</h1>
-          <Row>
-            {popularProducts.map((product) => (
-              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
-              </Col>
-            ))}
-          </Row>
+          <Products products={popularProducts} />
         </>
       )}
     </>

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../axios';
 import {
   FETCH_MY_ORDERS_REQUEST,
   FETCH_MY_ORDERS_SUCCESS,
@@ -8,8 +8,8 @@ import {
 export const fetchMyOrders = (pageNumber) => async (dispatch, getState) => {
   dispatch({ type: FETCH_MY_ORDERS_REQUEST });
   try {
-    const { data } = await axios.get(`/api/orders/myorders?pageNumber=${pageNumber}`, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
+    const { data } = await axios.get(`/api/orders/myorders`, {
+      params: { pageNumber },
     });
 
     dispatch({ type: FETCH_MY_ORDERS_SUCCESS, payload: data });

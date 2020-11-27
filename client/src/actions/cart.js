@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../axios';
 import history from '../history';
 import {
   ADD_CART_ITEM,

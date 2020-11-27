@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../axios';
 
 import {
   FETCH_USERS_REQUEST,
@@ -13,8 +13,8 @@ export const fetchUsers = (pageNumber) => async (dispatch, getState) => {
   dispatch({ type: FETCH_USERS_REQUEST });
 
   try {
-    const { data } = await axios.get(`/api/users?pageNumber=${pageNumber}`, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
+    const { data } = await axios.get(`/api/users`, {
+      params: { pageNumber },
     });
 
     dispatch({ type: FETCH_USERS_SUCCESS, payload: data });
@@ -36,9 +36,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: DELETE_USER_REQUEST, payload: id });
 
-    await axios.delete(`/api/users/${id}`, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
-    });
+    await axios.delete(`/api/users/${id}`);
     dispatch({ type: DELETE_USER_SUCCESS });
   } catch (error) {
     dispatch({

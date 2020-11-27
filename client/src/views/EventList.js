@@ -15,10 +15,12 @@ const EventList = ({ history }) => {
   useEffect(() => {
     if (!user || !user.isAdmin) {
       history.replace('/login');
-    } else {
+    }
+
+    if (!events) {
       dispatch(fetchEvents());
     }
-  }, [dispatch, history, user]);
+  }, [dispatch, history, user, events]);
 
   const onDeleteClick = (id) => {
     dispatch(deleteEvent(id));
@@ -35,7 +37,7 @@ const EventList = ({ history }) => {
       ) : (
         <>
           {error && <Message variant='danger'>{error}</Message>}
-          {!error && user && (
+          {events && (
             <>
               <Row className='align-items-center'>
                 <Col>
@@ -51,8 +53,6 @@ const EventList = ({ history }) => {
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>TITLE</th>
-                    <th>DESCRIPTION</th>
                     <th>REDIRECT URL</th>
                     <th>ACTIONS</th>
                   </tr>
@@ -61,12 +61,10 @@ const EventList = ({ history }) => {
                   {events.map((event) => (
                     <tr key={event._id}>
                       <td>{event._id}</td>
-                      <td>{event.title}</td>
-                      <td>{event.description}</td>
                       <td>{event.redirectUrl}</td>
                       <td>
                         <Link to={`/admin/eventList/${event._id}/edit`}>
-                          <Button variant='light' className='btn-sm'>
+                          <Button variant='light' className='mr-2 btn-sm'>
                             <i className='fas fa-edit'></i>
                           </Button>
                         </Link>

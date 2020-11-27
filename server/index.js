@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import colors from 'colors';
+// import colors from 'colors';
 import path from 'path';
 import morgan from 'morgan';
 
@@ -34,6 +34,7 @@ app.get('/api/config/paypal', (req, res) =>
 );
 
 const __dirname = path.resolve();
+
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/client/build')));
 
@@ -52,7 +53,5 @@ app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
-  console.log(
-    `Server running in ${process.env.NODE_ENV} mode on port ${port}`.yellow.bold
-  );
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port}`);
 });

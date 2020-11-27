@@ -26,11 +26,11 @@ export const getLatestProducts = asyncHandler(async (req, res) => {
 });
 
 // @desc Get products
-// @route POST /api/products
+// @route POST /api/products?keyword=&category=&pageNumber=
 // @access Public
 export const getProducts = asyncHandler(async (req, res) => {
   const match = {};
-  const pageSize = 9;
+  const pageSize = 12;
   const current = +req.query.pageNumber || 1;
 
   if (req.query.category) {
@@ -49,6 +49,7 @@ export const getProducts = asyncHandler(async (req, res) => {
   const page = {
     current,
     total: Math.ceil(count / pageSize),
+    totalItems: count,
   };
 
   res.send({ products, page });

@@ -1,3 +1,4 @@
+import axios from '../axios';
 import {
   FETCH_USER_PROFILE_REQUEST,
   FETCH_USER_PROFILE_SUCCESS,
@@ -9,17 +10,11 @@ import {
 } from '../types/profile';
 import { LOGIN_SUCCESS } from '../types/auth';
 
-import axios from 'axios';
-
 export const fetchUserProfile = () => async (dispatch, getState) => {
   dispatch({ type: FETCH_USER_PROFILE_REQUEST });
 
   try {
-    const { data } = await axios.get(`/api/users/profile`, {
-      headers: {
-        Authorization: `Bearer ${getState().auth.user.token.id}`,
-      },
-    });
+    const { data } = await axios.get(`/api/users/profile`, {});
 
     dispatch({ type: FETCH_USER_PROFILE_SUCCESS, payload: data });
   } catch (error) {
@@ -37,9 +32,7 @@ export const updateUserProfile = (formValues) => async (dispatch, getState) => {
   dispatch({ type: UPDATE_USER_PROFILE_REQUEST });
 
   try {
-    const { data } = await axios.put('/api/users/profile', formValues, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
-    });
+    const { data } = await axios.put('/api/users/profile', formValues);
 
     dispatch({ type: UPDATE_USER_PROFILE_SUCCESS, payload: data });
 

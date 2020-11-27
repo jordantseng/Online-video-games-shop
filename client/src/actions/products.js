@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios from '../axios';
+
 import {
   FETCH_PRODUCTS_REQUEST,
   FETCH_PRODUCTS_SUCCESS,
@@ -14,14 +15,14 @@ import {
 export const fetchProducts = (
   keyword = '',
   category = '',
-  pageNumber
+  pageNumber = 1
 ) => async (dispatch) => {
   dispatch({ type: FETCH_PRODUCTS_REQUEST });
 
   try {
-    const { data } = await axios.get(
-      `/api/products?keyword=${keyword}&category=${category}&pageNumber=${pageNumber}`
-    );
+    const { data } = await axios.get(`/api/products`, {
+      params: { keyword, category, pageNumber },
+    });
 
     dispatch({ type: FETCH_PRODUCTS_SUCCESS, payload: data });
   } catch (error) {
@@ -39,13 +40,7 @@ export const createProduct = () => async (dispatch, getState) => {
   dispatch({ type: CREATE_PRODUCT_REQUEST });
 
   try {
-    const { data } = await axios.post(
-      '/api/products',
-      {},
-      {
-        headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
-      }
-    );
+    const { data } = await axios.post('/api/products', {});
 
     dispatch({
       type: CREATE_PRODUCT_SUCCESS,
@@ -69,9 +64,7 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
   dispatch({ type: DELETE_PRODUCT_REQUEST, payload: id });
 
   try {
-    await axios.delete(`/api/products/${id}`, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
-    });
+    await axios.delete(`/api/products/${id}`);
 
     dispatch({ type: DELETE_PRODUCT_SUCCESS });
   } catch (error) {

@@ -8,6 +8,7 @@ import {
   DELETE_EVENT_REQUEST,
   DELETE_EVENT_SUCCESS,
   DELETE_EVENT_FAIL,
+  RESET_EVENTS,
 } from '../types/events';
 
 const initialState = {
@@ -58,6 +59,9 @@ const eventsReducer = (state = initialState, action) => {
         data: action.payload.events,
         error: action.payload.error,
       };
+
+    case RESET_EVENTS:
+      return { loading: true, data: null };
 
     default:
       return state;

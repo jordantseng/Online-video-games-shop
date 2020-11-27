@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../axios';
 import {
   FETCH_ORDERS_REQUEST,
   FETCH_ORDERS_SUCCESS,
@@ -12,8 +12,8 @@ export const fetchOrders = (pageNumber) => async (dispatch, getState) => {
   dispatch({ type: FETCH_ORDERS_REQUEST });
 
   try {
-    const { data } = await axios.get(`/api/orders?pageNumber=${pageNumber}`, {
-      headers: { Authorization: `Bearer ${getState().auth.user.token.id}` },
+    const { data } = await axios.get(`/api/orders`, {
+      params: { pageNumber },
     });
 
     dispatch({ type: FETCH_ORDERS_SUCCESS, payload: data });
@@ -32,11 +32,7 @@ export const updateOrderToDelivered = (id) => async (dispatch, getState) => {
   dispatch({ type: UPDATE_ORDER_DELIVER_REQUEST });
 
   try {
-    const { data } = await axios.put(
-      `/api/orders/${id}/deliver`,
-      {},
-      { headers: { Authorization: `Bearer ${getState().auth.user.token.id}` } }
-    );
+    const { data } = await axios.put(`/api/orders/${id}/deliver`, {});
 
     dispatch({ type: UPDATE_ORDER_DELIVER_SUCCESS, payload: data });
   } catch (error) {
