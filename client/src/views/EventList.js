@@ -13,7 +13,7 @@ const EventList = ({ history }) => {
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!user || !user.isAdmin) {
+    if (!user && !user.isAdmin) {
       history.replace('/login');
     }
 

@@ -44,7 +44,8 @@ export const getProducts = asyncHandler(async (req, res) => {
   const count = await Product.countDocuments({ ...match });
   const products = await Product.find({ ...match })
     .limit(pageSize)
-    .skip(pageSize * (current - 1));
+    .skip(pageSize * (current - 1))
+    .select('-image');
 
   const page = {
     current,
@@ -59,7 +60,7 @@ export const getProducts = asyncHandler(async (req, res) => {
 // @route GET /api/products/:id
 // @access Public
 export const getProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const product = await Product.findById(req.params.id).select('-image');
 
   if (product) {
     return res.send(product);

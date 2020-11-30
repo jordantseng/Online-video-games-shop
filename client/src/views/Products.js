@@ -5,14 +5,15 @@ import { fetchProducts } from '../actions/products';
 
 import CardLoader from '../components/CardLoader';
 import Message from '../components/Message';
-import Products from '../components/Products';
+import ProductCards from '../components/ProductCards';
 import Paginate from '../components/Paginate';
 
-const AllProducts = ({ match }) => {
+const Products = ({ match }) => {
   const dispatch = useDispatch();
   const { loading, data: products, page, error } = useSelector(
     (state) => state.products
   );
+
   const pageNumber = match.params.pageNumber;
   const category = match.params.category;
 
@@ -30,12 +31,11 @@ const AllProducts = ({ match }) => {
         <>
           <h1>{category ? category : 'All products'}</h1>
           <div>Total items: {page.totalItems}</div>
-          <Products products={products} />
+          <ProductCards products={products} />
           <Paginate pages={page.total} page={page.current} path='/products' />
         </>
       )}
     </div>
   );
 };
-
-export default AllProducts;
+export default Products;

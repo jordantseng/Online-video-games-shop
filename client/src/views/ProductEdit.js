@@ -24,7 +24,7 @@ const ProductEdit = ({ match }) => {
   const dispatch = useDispatch();
   const productId = match.params.id;
 
-  const { loading, data: product, error, updated } = useSelector(
+  const { loading, data: product, error } = useSelector(
     (state) => state.product
   );
   const { user } = useSelector((state) => state.auth);
@@ -103,7 +103,6 @@ const ProductEdit = ({ match }) => {
       </Link>
 
       <FormContainer>
-        {updated && <Message variant='success'>Updated Successfully</Message>}
         <h1>Edit Product</h1>
         {loading ? (
           <Loader />

@@ -27,7 +27,7 @@ const OrderTable = ({ orders, user }) => {
               <th>TOTAL</th>
               <th>PAID</th>
               <th>DELIVERED</th>
-              <th></th>
+              <th>ACTIONS</th>
             </tr>
           </thead>
           <tbody>

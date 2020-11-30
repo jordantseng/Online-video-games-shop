@@ -16,9 +16,7 @@ const UserEdit = ({ match }) => {
   const [email, setEmail, bindEmail] = useInput('');
   const [isAdmin, setIsAdmin] = useInput(false);
 
-  const { loading, data: user, updated, error } = useSelector(
-    (state) => state.user
-  );
+  const { loading, data: user, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const userId = match.params.id;
 
@@ -45,7 +43,6 @@ const UserEdit = ({ match }) => {
       </Link>
 
       <FormContainer>
-        {updated && <Message variant='success'>Updated Successfully</Message>}
         {loading ? (
           <Loader />
         ) : error ? (

@@ -21,10 +21,12 @@ const UserList = ({ history, match }) => {
   useEffect(() => {
     if (!user && !user.isAdmin) {
       history.replace('/login');
-    } else {
+    }
+
+    if (!users) {
       dispatch(fetchUsers(pageNumber));
     }
-  }, [dispatch, history, user, userUpdate, pageNumber]);
+  }, [dispatch, history, users, user, userUpdate, pageNumber]);
 
   const onDeleteClick = (userId) => {
     dispatch(deleteUser(userId));

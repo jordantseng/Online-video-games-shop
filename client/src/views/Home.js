@@ -8,7 +8,7 @@ import CardLoader from '../components/CardLoader';
 import Message from '../components/Message';
 import EventCarousel from '../components/EventCarousel';
 
-import Products from '../components/Products';
+import ProductCards from '../components/ProductCards';
 import Meta from '../components/Meta';
 
 const Home = () => {
@@ -27,9 +27,14 @@ const Home = () => {
   } = useSelector((state) => state.latestProducts);
 
   useEffect(() => {
-    dispatch(fetchPopularProducts());
-    dispatch(fetchLatestProducts());
-  }, [dispatch]);
+    if (!popularProducts) {
+      dispatch(fetchPopularProducts());
+    }
+
+    if (!latestProducts) {
+      dispatch(fetchLatestProducts());
+    }
+  }, [dispatch, popularProducts, latestProducts]);
 
   return (
     <>
@@ -44,7 +49,7 @@ const Home = () => {
       ) : (
         <>
           <h1>Latest Products</h1>
-          <Products products={latestProducts} />
+          <ProductCards products={latestProducts} />
         </>
       )}
 
@@ -55,7 +60,7 @@ const Home = () => {
       ) : (
         <>
           <h1>Popular Products</h1>
-          <Products products={popularProducts} />
+          <ProductCards products={popularProducts} />
         </>
       )}
     </>

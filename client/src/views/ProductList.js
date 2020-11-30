@@ -32,10 +32,12 @@ const ProductList = ({ history, match, location }) => {
   useEffect(() => {
     if (!user || !user.isAdmin) {
       history.replace('/login');
-    } else {
+    }
+
+    if (!products) {
       dispatch(fetchProducts('', '', pageNumber));
     }
-  }, [dispatch, history, user, pageNumber]);
+  }, [dispatch, history, user, pageNumber, products]);
 
   return (
     <>

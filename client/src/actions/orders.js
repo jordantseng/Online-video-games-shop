@@ -28,20 +28,26 @@ export const fetchOrders = (pageNumber) => async (dispatch, getState) => {
   }
 };
 
+// optimistic update
 export const updateOrderToDelivered = (id) => async (dispatch, getState) => {
-  dispatch({ type: UPDATE_ORDER_DELIVER_REQUEST });
+  const prevOrders = getState().orders.data;
+
+  dispatch({ type: UPDATE_ORDER_DELIVER_REQUEST, payload: id });
 
   try {
-    const { data } = await axios.put(`/api/orders/${id}/deliver`, {});
+    await axios.put(`/api/orders/${id}/deliver`, {});
 
-    dispatch({ type: UPDATE_ORDER_DELIVER_SUCCESS, payload: data });
+    dispatch({ type: UPDATE_ORDER_DELIVER_SUCCESS });
   } catch (error) {
     dispatch({
       type: UPDATE_ORDER_DELIVER_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.response,
+      payload: {
+        error:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.response,
+        prevOrders: prevOrders,
+      },
     });
   }
 };

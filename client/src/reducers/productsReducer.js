@@ -8,6 +8,7 @@ import {
   DELETE_PRODUCT_REQUEST,
   DELETE_PRODUCT_SUCCESS,
   DELETE_PRODUCT_FAIL,
+  RESET_PRODUCTS,
 } from '../types/products';
 
 const initialState = {
@@ -63,6 +64,9 @@ const productsReducer = (state = initialState, action) => {
         data: action.payload.prevProducts,
         error: action.payload.error,
       };
+
+    case RESET_PRODUCTS:
+      return { data: null, loading: true };
 
     default:
       return state;

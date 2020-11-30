@@ -12,8 +12,10 @@ const EventCarousel = () => {
   const { loading, data: events, error } = useSelector((state) => state.events);
 
   useEffect(() => {
-    dispatch(fetchEvents());
-  }, [dispatch]);
+    if (!events) {
+      dispatch(fetchEvents());
+    }
+  }, [dispatch, events]);
 
   return loading ? null : error ? (
     <Message variant='danger'>{error}</Message>

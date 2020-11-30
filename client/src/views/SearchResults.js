@@ -5,7 +5,7 @@ import { fetchProducts } from '../actions/products';
 
 import CardLoader from '../components/CardLoader';
 import Message from '../components/Message';
-import Products from '../components/Products';
+import ProductCards from '../components/ProductCards';
 import Paginate from '../components/Paginate';
 
 const SearchResults = ({ match }) => {
@@ -30,7 +30,7 @@ const SearchResults = ({ match }) => {
         <>
           <h1>Search Results</h1>
           <div>Total items: {page.totalItems}</div>
-          <Products products={products} />
+          <ProductCards products={products} />
           <Paginate
             pages={page.total}
             page={page.current}

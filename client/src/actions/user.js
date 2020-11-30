@@ -7,8 +7,8 @@ import {
   UPDATE_USER_REQUEST,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAIL,
-  RESET_USER,
 } from '../types/user';
+import { RESET_USERS } from '../types/users';
 
 export const fetchUser = (id) => async (dispatch, getState) => {
   dispatch({ type: FETCH_USER_REQUEST });
@@ -40,10 +40,8 @@ export const updateUser = (id, formValues) => async (dispatch, getState) => {
 
     dispatch({ type: UPDATE_USER_SUCCESS, payload: data });
 
-    setTimeout(() => {
-      dispatch({ type: RESET_USER });
-      history.push('/admin/userList');
-    }, 1500);
+    dispatch({ type: RESET_USERS });
+    history.push('/admin/userList');
   } catch (error) {
     dispatch({
       type: UPDATE_USER_FAIL,

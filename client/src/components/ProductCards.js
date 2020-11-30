@@ -1,9 +1,9 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 
-import Product from '../components/Product';
+import Product from './Product';
 
-const Products = ({ products }) => {
+const ProductCards = ({ products }) => {
   return (
     <>
       <Row>
@@ -17,4 +17,4 @@ const Products = ({ products }) => {
   );
 };
 
-export default Products;
+export default ProductCards;

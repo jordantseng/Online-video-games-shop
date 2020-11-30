@@ -29,20 +29,26 @@ const ordersReducers = (state = initialState, action) => {
     case UPDATE_ORDER_DELIVER_REQUEST:
       return {
         ...state,
-        loading: true,
-      };
-
-    case UPDATE_ORDER_DELIVER_SUCCESS:
-      return {
-        ...state,
-        loading: false,
         data: state.data.map((order) =>
-          order._id === action.payload._id ? action.payload : order
+          order._id === action.payload
+            ? {
+                ...order,
+                isDelivered: true,
+                deliveredAt: new Date().toISOString(),
+              }
+            : order
         ),
       };
 
+    case UPDATE_ORDER_DELIVER_SUCCESS:
+      return { ...state };
+
     case UPDATE_ORDER_DELIVER_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return {
+        ...state,
+        error: action.payload.error,
+        data: action.payload.prevOrders,
+      };
 
     case RESET_MY_ORDERS:
       return initialState;

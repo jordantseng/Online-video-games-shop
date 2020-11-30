@@ -13,6 +13,7 @@ import {
   CREATE_PRODUCT_REVIEW_FAIL,
   RESET_PRODUCT,
 } from '../types/product';
+import { RESET_PRODUCTS } from '../types/products';
 
 export const fetchProduct = (id) => async (dispatch) => {
   dispatch({ type: FETCH_PRODUCT_REQUEST });
@@ -39,10 +40,14 @@ export const updateProduct = (id, formValues) => async (dispatch, getState) => {
 
     dispatch({ type: UPDATE_PRODUCT_SUCCESS, payload: data });
 
-    setTimeout(() => {
-      dispatch({ type: RESET_PRODUCT });
-      history.push('/admin/productList');
-    }, 1500);
+    // setTimeout(() => {
+    //   dispatch({ type: RESET_PRODUCT });
+    //   history.push('/admin/productList');
+    // }, 1500);
+
+    dispatch({ type: RESET_PRODUCTS });
+
+    history.push('/admin/productList');
   } catch (error) {
     dispatch({
       type: UPDATE_PRODUCT_FAIL,

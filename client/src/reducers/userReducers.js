@@ -5,7 +5,6 @@ import {
   UPDATE_USER_REQUEST,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAIL,
-  RESET_USER,
 } from '../types/user';
 
 const initialState = { loading: true };
@@ -29,7 +28,6 @@ const userReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         data: action.payload,
-        updated: true,
       };
 
     case UPDATE_USER_FAIL:
@@ -38,9 +36,6 @@ const userReducer = (state = initialState, action) => {
         loading: false,
         userError: action.payload,
       };
-
-    case RESET_USER:
-      return { ...state, updated: undefined };
 
     default:
       return state;

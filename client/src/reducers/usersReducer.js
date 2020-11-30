@@ -5,6 +5,7 @@ import {
   DELETE_USER_REQUEST,
   DELETE_USER_SUCCESS,
   DELETE_USER_FAIL,
+  RESET_USERS,
 } from '../types/users';
 
 const initialState = { data: null, loading: true };
@@ -12,7 +13,7 @@ const initialState = { data: null, loading: true };
 const usersReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_USERS_REQUEST:
-      return { loading: true };
+      return { ...state, loading: true };
 
     case FETCH_USERS_SUCCESS:
       return {
@@ -40,6 +41,9 @@ const usersReducer = (state = initialState, action) => {
         data: action.payload.users,
         error: action.payload.error,
       };
+
+    case RESET_USERS:
+      return { data: null, loading: true };
 
     default:
       return state;

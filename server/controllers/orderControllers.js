@@ -5,7 +5,7 @@ import Order from '../models/order.js';
 // @route GET /api/orders
 // @access Private (Admin only)
 export const getOrders = asyncHandler(async (req, res) => {
-  const pageSize = 5;
+  const pageSize = 10;
   const current = +req.query.pageNumber || 1;
 
   const count = await Order.countDocuments();
@@ -48,6 +48,8 @@ export const updateOrderToDelivered = asyncHandler(async (req, res) => {
 // @route POST /api/orders
 // @access Private
 export const addOrderItems = asyncHandler(async (req, res) => {
+  console.log(req.body);
+
   const {
     orderItems,
     shippingAddress,
