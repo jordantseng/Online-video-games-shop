@@ -1,14 +1,13 @@
 import axios from '../axios';
 import history from '../history';
-import {
-  CREATE_ORDER_SUCCESS,
-  CREATE_ORDER_FAIL,
-  RESET_CART_ITEM,
-} from '../types/cart';
+import { RESET_CART_ITEM } from '../types/cart';
 import {
   FETCH_MY_ORDER_REQUEST,
   FETCH_MY_ORDER_SUCCESS,
   FETCH_MY_ORDER_FAIL,
+  CREATE_ORDER_REQUEST,
+  CREATE_ORDER_SUCCESS,
+  CREATE_ORDER_FAIL,
   UPDATE_ORDER_PAY_REQUEST,
   UPDATE_ORDER_PAY_SUCCESS,
   UPDATE_ORDER_PAY_FAIL,
@@ -33,10 +32,14 @@ export const fetchMyOrder = (id) => async (dispatch, getState) => {
 };
 
 export const createOrder = (order) => async (dispatch, getState) => {
+  dispatch({ type: CREATE_ORDER_REQUEST });
   try {
     const { data } = await axios.post('/api/orders', order);
 
     dispatch({ type: CREATE_ORDER_SUCCESS });
+
+    dispatch({ type: RESET_CART_ITEM });
+    localStorage.removeItem('cartItems');
 
     history.push(`/orders/${data._id}`);
   } catch (error) {
@@ -60,8 +63,6 @@ export const updateOrderToPaid = (id, paymentResult) => async (
     const { data } = await axios.put(`/api/orders/${id}/pay`, paymentResult);
 
     dispatch({ type: UPDATE_ORDER_PAY_SUCCESS, payload: data });
-    dispatch({ type: RESET_CART_ITEM });
-    localStorage.removeItem('cartItems');
   } catch (error) {
     dispatch({
       type: UPDATE_ORDER_PAY_FAIL,

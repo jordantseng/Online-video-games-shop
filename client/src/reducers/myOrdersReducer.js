@@ -9,7 +9,7 @@ const initialState = { data: null, loading: true };
 const myOrdersReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_MY_ORDERS_REQUEST:
-      return { loading: true };
+      return { ...state, loading: true };
 
     case FETCH_MY_ORDERS_SUCCESS:
       return {

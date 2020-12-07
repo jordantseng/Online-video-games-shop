@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { Row, Col, Image } from 'react-bootstrap';
+import { Row, Col, Button, Image } from 'react-bootstrap';
+
+import history from '../history';
 
 import { fetchProduct } from '../actions/product';
+
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Meta from '../components/Meta';
@@ -35,8 +37,6 @@ const Product = ({ match }) => {
     <>
       {loading ? (
         <Loader />
-      ) : error ? (
-        <Message variant='danger'>{error}</Message>
       ) : (
         <>
           <Meta
@@ -44,13 +44,17 @@ const Product = ({ match }) => {
             description='We sell the best products for cheap'
             keywords='electronics'
           />
+          {error && <Message variant='danger'>{error}</Message>}
           <Row>
-            <Link className='btn btn-light my-3' to='/'>
+            <Button
+              className='my-3'
+              variant='secondary'
+              onClick={() => history.goBack()}>
               Go back
-            </Link>
+            </Button>
           </Row>
           <Row>
-            <Col md={6} style={{ display: 'flex' }}>
+            <Col md={6}>
               <Image
                 src={`/api/products/${product._id}/image`}
                 alt={product.name}

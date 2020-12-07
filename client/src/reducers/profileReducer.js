@@ -23,13 +23,13 @@ const profileReducer = (state = initialState, action) => {
       return { ...state, loading: false, error: action.payload };
 
     case UPDATE_USER_PROFILE_REQUEST:
-      return { ...state, updating: true };
+      return { ...state, loading: true };
 
     case UPDATE_USER_PROFILE_SUCCESS:
       return {
         ...state,
         data: action.payload,
-        updating: false,
+        loading: false,
         success: true,
       };
 
@@ -37,7 +37,7 @@ const profileReducer = (state = initialState, action) => {
       return { ...state, error: action.payload };
 
     case RESET_UPDATE_USER_PROFILE:
-      return { ...state, updating: undefined, success: undefined };
+      return { ...state, success: undefined };
 
     case RESET_PROFILE:
       return initialState;

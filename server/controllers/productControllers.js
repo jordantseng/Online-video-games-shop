@@ -1,11 +1,15 @@
 import asyncHandler from 'express-async-handler';
 import Product from '../models/product.js';
+import sharp from 'sharp';
 
 // @desc Get top rated products
 // @route GET /api/products/top
 // @access Public
 export const getTopProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+  const products = await Product.find({})
+    .select('-image')
+    .sort({ rating: -1 })
+    .limit(4);
 
   res.send(products);
 });
@@ -13,13 +17,17 @@ export const getTopProducts = asyncHandler(async (req, res) => {
 // @desc Get latest products (sorted by createdAtDate)
 // @route GET /api/products/latest
 // @access Public
-
 export const getLatestProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({}).sort({ createdAt: -1 }).limit(4);
+  const products = await Product.find({})
+    .select('-image')
+    .sort({ releaseDate: -1 })
+    .limit(4);
+
+  console.log(products);
 
   if (!products) {
     res.status(404);
-    res.send('Latest products not found');
+    throw new Error('Latest products not found');
   }
 
   res.send(products);
@@ -62,18 +70,20 @@ export const getProducts = asyncHandler(async (req, res) => {
 export const getProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id).select('-image');
 
-  if (product) {
-    return res.send(product);
-  } else {
+  if (!product) {
     res.status(404);
     throw new Error('Product not found');
   }
+
+  res.send(product);
 });
 
 // @desc Create product
 // @route POST /api/products
 // @access Private/Admin
 export const createProduct = asyncHandler(async (req, res) => {
+  console.log(Date());
+
   const product = new Product({
     name: 'sample',
     price: 0,
@@ -84,7 +94,10 @@ export const createProduct = asyncHandler(async (req, res) => {
     countInStock: 0,
     numReviews: 0,
     description: 'sample',
+    releaseDate: new Date().toISOString(),
   });
+
+  console.log(product);
 
   await product.save();
   res.status(201).send(product);
@@ -94,23 +107,51 @@ export const createProduct = asyncHandler(async (req, res) => {
 // @route PUT /api/products/:id
 // @access Private/Admin
 export const updateProduct = asyncHandler(async (req, res) => {
-  const { name, price, description, brand, category, countInStock } = req.body;
+  const {
+    name,
+    price,
+    description,
+    brand,
+    category,
+    countInStock,
+    releaseDate,
+    isPreOrder,
+  } = req.body;
 
-  const product = await Product.findById(req.params.id);
-  if (product) {
-    product.name = name;
-    product.price = price;
-    product.description = description;
-    product.brand = brand;
-    product.category = category;
-    product.countInStock = countInStock;
+  const product = await Product.findById(req.params.id).select('-image');
 
-    await product.save();
-    res.send(product);
-  } else {
+  if (!product) {
     res.status(404);
     throw new Error('Product not found');
   }
+
+  product.name = name;
+  product.price = price;
+  product.description = description;
+  product.brand = brand;
+  product.category = category;
+  product.countInStock = countInStock;
+  product.releaseDate = releaseDate;
+  product.isPreOrder = isPreOrder;
+
+  if (req.file && req.file.buffer) {
+    const buffer = await sharp(req.file.buffer).png().toBuffer();
+
+    product.image = buffer;
+  }
+
+  await product.save();
+
+  res.send({
+    name,
+    price,
+    description,
+    brand,
+    category,
+    countInStock,
+    releaseDate,
+    isPreOrder,
+  });
 });
 
 // @desc Delete product

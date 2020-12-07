@@ -13,10 +13,9 @@ const OrderList = ({ history, match }) => {
     (state) => state.orders
   );
   const { user } = useSelector((state) => state.auth);
-  const pageNumber = match.params.pageNumber || 1;
-
+  const pageNumber = match.params.pageNumber;
   useEffect(() => {
-    if (!user || !user.isAdmin) {
+    if (!user || (user && !user.isAdmin)) {
       history.replace('/login');
     } else {
       dispatch(fetchOrders(pageNumber));
@@ -25,16 +24,16 @@ const OrderList = ({ history, match }) => {
 
   return (
     <>
-      <h1>Orders</h1>
       {loading ? (
         <Loader />
       ) : (
         <>
-          {error && <Message variant="danger">{error}</Message>}
+          {error && <Message variant='danger'>{error}</Message>}
+          <h1>Orders</h1>
           <OrderTable orders={orders} user={user} />
           <Paginate
             isAdmin={true}
-            path="/admin/orderList"
+            path='/admin/orderList'
             page={page.current}
             pages={page.total}
           />

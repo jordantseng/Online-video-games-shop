@@ -13,7 +13,6 @@ import {
   CREATE_PRODUCT_REVIEW_FAIL,
   RESET_PRODUCT,
 } from '../types/product';
-import { RESET_PRODUCTS } from '../types/products';
 
 export const fetchProduct = (id) => async (dispatch) => {
   dispatch({ type: FETCH_PRODUCT_REQUEST });
@@ -36,18 +35,37 @@ export const updateProduct = (id, formValues) => async (dispatch, getState) => {
   dispatch({ type: UPDATE_PRODUCT_REQUEST });
 
   try {
-    const { data } = await axios.put(`/api/products/${id}`, formValues);
+    const {
+      name,
+      price,
+      description,
+      brand,
+      category,
+      countInStock,
+      releaseDate,
+      image,
+      isPreOrder,
+    } = formValues;
 
-    dispatch({ type: UPDATE_PRODUCT_SUCCESS, payload: data });
+    const formData = new FormData();
 
-    // setTimeout(() => {
-    //   dispatch({ type: RESET_PRODUCT });
-    //   history.push('/admin/productList');
-    // }, 1500);
+    formData.append('name', name);
+    formData.append('price', price);
+    formData.append('description', description);
+    formData.append('brand', brand);
+    formData.append('category', category);
+    formData.append('countInStock', countInStock);
+    formData.append('releaseDate', releaseDate);
+    formData.append('isPreOrder', isPreOrder);
+    if (image) {
+      formData.append('productImg', image);
+    }
 
-    dispatch({ type: RESET_PRODUCTS });
+    const { data } = await axios.put(`/api/products/${id}`, formData);
 
     history.push('/admin/productList');
+
+    dispatch({ type: UPDATE_PRODUCT_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
       type: UPDATE_PRODUCT_FAIL,

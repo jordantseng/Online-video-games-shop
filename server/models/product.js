@@ -5,7 +5,7 @@ const reviewSchema = Schema(
   {
     name: { type: String, required: true },
     rating: { type: Number, required: true },
-    comment: { type: String, required: true },
+    comment: { type: String },
     user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
   },
   { timestamps: true }
@@ -59,6 +59,11 @@ const productSchema = Schema(
       type: Number,
       required: true,
       default: 0,
+    },
+    isPreOrder: { type: Boolean, default: false },
+    releaseDate: {
+      type: Date,
+      required: true,
     },
   },
   { timestamps: true }

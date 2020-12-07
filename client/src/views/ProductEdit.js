@@ -1,26 +1,48 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Form, Button, Image } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+
+import { Formik, Form } from 'formik';
+import { productFormValidationSchema } from '../validations';
 
 import { fetchProduct, updateProduct } from '../actions/product';
 
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Input from '../components/Input';
+import ImageInput from '../components/ImageInput';
 
-import useInput from '../hooks/useInput';
+const initialValues = {
+  name: '',
+  price: '',
+  brand: 'sony',
+  category: 'ps4 console',
+  countInStock: '',
+  description: '',
+  releaseDate: new Date().toISOString().split('T')[0],
+};
 
-const ProductEdit = ({ match }) => {
-  const [name, setName, bindName] = useInput('');
-  const [price, setPrice, bindPrice] = useInput('');
-  const [brand, setBrand, bindBrand] = useInput('');
-  const [category, setCategory, bindCategory] = useInput('');
-  const [countInStock, setCountInStock, bindCountInStock] = useInput(0);
-  const [description, setDescription, bindDescription] = useInput('');
+const brandOptions = [
+  { title: 'Sony', value: 'sony' },
+  { title: 'Nintendo', value: 'nintendo' },
+  { title: 'Others', values: 'others' },
+];
 
-  const [uploading, setUploading] = useState(false);
+const categoryOptions = [
+  { title: 'PS4 console', value: 'ps4 console' },
+  { title: 'PS5 console', value: 'ps5 console' },
+  { title: 'Switch console', value: 'switch console' },
+  { title: 'PS4 games', value: 'ps4 games' },
+  { title: 'PS5 games', value: 'ps5 games' },
+  { title: 'Switch games', value: 'switch games' },
+  { title: 'Others', value: 'others' },
+];
+
+const ProductEdit = ({ history, match }) => {
+  const [prdocutFormValues, setProductFormValues] = useState(null);
+
   const dispatch = useDispatch();
   const productId = match.params.id;
 
@@ -29,71 +51,32 @@ const ProductEdit = ({ match }) => {
   );
   const { user } = useSelector((state) => state.auth);
 
-  const previewImage = useRef();
-
   useEffect(() => {
-    if (!product || productId !== product._id) {
-      dispatch(fetchProduct(productId));
+    if (!user || (user && !user.isAdmin)) {
+      history.replace('/login');
     } else {
-      setName(product.name);
-      setPrice(product.price);
-      setBrand(product.brand);
-      setCategory(product.category);
-      setCountInStock(product.countInStock);
-      setDescription(product.description);
+      if (!product || productId !== product._id) {
+        dispatch(fetchProduct(productId));
+      } else {
+        setProductFormValues({
+          ...product,
+          releaseDate: new Date(product.releaseDate)
+            .toISOString()
+            .split('T')[0],
+        });
+      }
     }
-  }, [
-    product,
-    productId,
-    dispatch,
-    setName,
-    setPrice,
-    setBrand,
-    setCategory,
-    setCountInStock,
-    setDescription,
-  ]);
+  }, [user, product, productId, dispatch, setProductFormValues, history]);
 
-  const onSubmitClick = (e) => {
-    e.preventDefault();
+  const onSubmitClick = (productFormValues) => {
+    const { releaseDate } = productFormValues;
 
     dispatch(
       updateProduct(productId, {
-        name,
-        price,
-        brand,
-        category,
-        countInStock,
-        description,
+        ...productFormValues,
+        releaseDate: new Date(releaseDate),
       })
     );
-  };
-
-  const onUploadFile = async (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    const reader = new FileReader();
-
-    if (file) {
-      reader.onload = function (e) {
-        previewImage.current.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-
-      formData.append('productImg', file);
-      setUploading(true);
-
-      try {
-        await axios.post(`/api/products/${productId}/image`, formData, {
-          headers: { Authorization: `Bearer ${user.token.id}` },
-          'Content-Type': 'multipart/form-data',
-        });
-
-        setUploading(false);
-      } catch (error) {
-        setUploading(false);
-      }
-    }
   };
 
   return (
@@ -101,93 +84,78 @@ const ProductEdit = ({ match }) => {
       <Link to='/admin/productList' className='btn btn-light my-3'>
         Go back
       </Link>
-
       <FormContainer>
-        <h1>Edit Product</h1>
         {loading ? (
           <Loader />
-        ) : error ? (
-          <Message vairant='danger'>{error}</Message>
         ) : (
-          <Form onSubmit={onSubmitClick}>
-            <Form.Group controlId='name'>
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter your name'
-                {...bindName}></Form.Control>
-            </Form.Group>
+          <>
+            <h1>Edit Product</h1>
+            {error && <Message variant='danger'>{error}</Message>}
+            {product && (
+              <Formik
+                initialValues={prdocutFormValues || initialValues}
+                validationSchema={productFormValidationSchema}
+                onSubmit={onSubmitClick}
+                enableReinitialize>
+                {({ values, isSubmitting }) => {
+                  return (
+                    <Form>
+                      <Input label='Name' name='name' type='text' />
+                      <Input label='Price' name='price' type='text' />
+                      <ImageInput
+                        label='Image'
+                        name='image'
+                        src={`/api/products/${productId}/image`}
+                      />
+                      <Input
+                        label='Brand'
+                        name='brand'
+                        type='select'
+                        options={brandOptions}
+                      />
+                      <Input
+                        label='Category'
+                        name='category'
+                        type='select'
+                        options={categoryOptions}
+                      />
 
-            <Form.Group controlId='price'>
-              <Form.Label>Price</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter price'
-                {...bindPrice}></Form.Control>
-            </Form.Group>
+                      <Input
+                        label='Count in stock'
+                        name='countInStock'
+                        type='text'
+                      />
+                      <Input
+                        label='Description'
+                        name='description'
+                        type='textarea'
+                      />
+                      <Input
+                        label='Release date'
+                        name='releaseDate'
+                        type='date'
+                      />
 
-            <Form.Group controlId='image'>
-              <Form.Label>
-                <div>Image</div>
-                <Image
-                  ref={previewImage}
-                  src={`/api/products/${productId}/image`}
-                  rounded
-                  fluid
-                />
-              </Form.Label>
-              <Form.File
-                id='image-file'
-                label='Choose file'
-                custom
-                onChange={onUploadFile}></Form.File>
-              {uploading && <Loader />}
-            </Form.Group>
+                      <Input
+                        label='Is Pre-order'
+                        name='isPreOrder'
+                        type='checkbox'
+                      />
 
-            <Form.Group controlId='brand'>
-              <Form.Label>Brand</Form.Label>
-
-              <Form.Control as='select' {...bindBrand}>
-                <option value='Sony'>Sony</option>
-                <option value='Nintendo'>Nintendo</option>
-                <option value='Others'>Others</option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='category'>
-              <Form.Label>Cateogry</Form.Label>
-              <Form.Control as='select' {...bindCategory}>
-                <option value='PS4 console'>PS4 console</option>
-                <option value='PS5 console'>PS5 console</option>
-                <option value='Switch'>Switch console</option>
-                <option value='PS4 games'>PS4 games</option>
-                <option value='PS5 games'>PS5 games</option>
-                <option value='Switch games'>Switch games</option>
-                <option value='Others'>Others</option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='countInStock'>
-              <Form.Label>Count InStock</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter count in stock'
-                {...bindCountInStock}></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='description'>
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as='textarea'
-                rows='5'
-                placeholder='Enter description'
-                {...bindDescription}></Form.Control>
-            </Form.Group>
-
-            <Button type='submit' variant='primary'>
-              Update
-            </Button>
-          </Form>
+                      <pre>{JSON.stringify(values, null, 2)}</pre>
+                      <Button
+                        type='submit'
+                        variant='primary'
+                        className='d-block ml-auto'
+                        disabled={isSubmitting}>
+                        Update
+                      </Button>
+                    </Form>
+                  );
+                }}
+              </Formik>
+            )}
+          </>
         )}
       </FormContainer>
     </>

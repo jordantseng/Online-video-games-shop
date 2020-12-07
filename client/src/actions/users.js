@@ -1,12 +1,15 @@
 import axios from '../axios';
 
 import {
-  FETCH_USERS_REQUEST,
-  FETCH_USERS_SUCCESS,
-  FETCH_USERS_FAIL,
   DELETE_USER_REQUEST,
   DELETE_USER_SUCCESS,
   DELETE_USER_FAIL,
+} from '../types/user';
+
+import {
+  FETCH_USERS_REQUEST,
+  FETCH_USERS_SUCCESS,
+  FETCH_USERS_FAIL,
 } from '../types/users';
 
 export const fetchUsers = (pageNumber) => async (dispatch, getState) => {

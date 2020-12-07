@@ -3,16 +3,22 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchPopularProducts } from '../actions/popularProducts';
 import { fetchLatestProducts } from '../actions/latestProducts';
+import { fetchEvents } from '../actions/events';
 
 import CardLoader from '../components/CardLoader';
 import Message from '../components/Message';
 import EventCarousel from '../components/EventCarousel';
-
 import ProductCards from '../components/ProductCards';
 import Meta from '../components/Meta';
 
 const Home = () => {
   const dispatch = useDispatch();
+
+  const {
+    loading: eventsLoading,
+    data: events,
+    error: eventsError,
+  } = useSelector((state) => state.events);
 
   const {
     loading: popularLoading,
@@ -27,20 +33,20 @@ const Home = () => {
   } = useSelector((state) => state.latestProducts);
 
   useEffect(() => {
-    if (!popularProducts) {
-      dispatch(fetchPopularProducts());
-    }
-
-    if (!latestProducts) {
-      dispatch(fetchLatestProducts());
-    }
-  }, [dispatch, popularProducts, latestProducts]);
+    dispatch(fetchEvents());
+    dispatch(fetchPopularProducts());
+    dispatch(fetchLatestProducts());
+  }, [dispatch]);
 
   return (
     <>
       <Meta title='Home' description='We sell the best products for cheap' />
 
-      <EventCarousel />
+      {eventsLoading ? null : eventsError ? (
+        <Message variant='danger'>{eventsError}</Message>
+      ) : (
+        <EventCarousel events={events} />
+      )}
 
       {latestLoading ? (
         <CardLoader />

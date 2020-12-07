@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { updateOrderToDelivered } from '../actions/orders';
 import Message from '../components/Message';
 
-const OrderTable = ({ orders, user }) => {
+const OrderTable = ({ orders, user, inProfilePage = false }) => {
   const dispatch = useDispatch();
 
   const onMarkAsDelivered = (id) => {
@@ -18,7 +18,7 @@ const OrderTable = ({ orders, user }) => {
       {orders.length === 0 ? (
         <Message>You don't have any order yet.</Message>
       ) : (
-        <Table striped bordered hover responsive className="table-sm">
+        <Table striped bordered hover responsive className='table-sm'>
           <thead>
             <tr>
               <th>ID</th>
@@ -35,36 +35,41 @@ const OrderTable = ({ orders, user }) => {
               <tr key={order._id}>
                 <td>{order._id}</td>
                 <td>{order.user.name}</td>
-                <td>{order.createdAt.substring(0, 10)}</td>
+                <td>{order.createdAt}</td>
                 <td>${order.totalPrice}</td>
                 <td>
                   {order.isPaid ? (
                     order.paidAt.substring(0, 10)
                   ) : (
-                    <i className="fas fa-times" style={{ color: 'red' }}></i>
+                    <i className='fas fa-times' style={{ color: 'red' }}></i>
                   )}
                 </td>
                 <td>
                   {order.isDelivered ? (
                     order.deliveredAt.substring(0, 10)
                   ) : (
-                    <i className="fas fa-times" style={{ color: 'red' }}></i>
+                    <i className='fas fa-times' style={{ color: 'red' }}></i>
                   )}
                 </td>
                 <td>
                   <Link to={`/orders/${order._id}`}>
-                    <Button variant="light" className="btn-sm">
+                    <Button variant='light' className='btn-sm'>
                       Details
                     </Button>
                   </Link>
-                  {user.isAdmin && order.isPaid && !order.isDelivered && (
-                    <Button
-                      type="button"
-                      className="btn-sm"
-                      onClick={() => onMarkAsDelivered(order._id)}>
-                      Mark as Delivered
-                    </Button>
-                  )}
+
+                  {!inProfilePage &&
+                    user.isAdmin &&
+                    order.isPaid &&
+                    !order.isDelivered && (
+                      <Button
+                        type='button'
+                        className='btn-sm'
+                        style={{ marginLeft: '0.5rem' }}
+                        onClick={() => onMarkAsDelivered(order._id)}>
+                        Mark as Delivered
+                      </Button>
+                    )}
                 </td>
               </tr>
             ))}

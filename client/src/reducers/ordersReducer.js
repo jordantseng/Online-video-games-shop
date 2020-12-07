@@ -2,10 +2,14 @@ import {
   FETCH_ORDERS_REQUEST,
   FETCH_ORDERS_SUCCESS,
   FETCH_ORDERS_FAIL,
+} from '../types/orders';
+
+import {
   UPDATE_ORDER_DELIVER_REQUEST,
   UPDATE_ORDER_DELIVER_SUCCESS,
   UPDATE_ORDER_DELIVER_FAIL,
-} from '../types/orders';
+} from '../types/order';
+
 import { RESET_MY_ORDERS } from '../types/myOrders';
 
 const initialState = { loading: true };

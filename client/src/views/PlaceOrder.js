@@ -3,11 +3,13 @@ import { Button, Row, Col, ListGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { createOrder } from '../actions/order';
+
 import CheckoutSteps from '../components/CheckoutSteps';
 import OrderSummary from '../components/OrderSummary';
 import ShippingDetails from '../components/ShippingDetails';
 import PaymentMethod from '../components/PaymentMethod';
 import OrderItems from '../components/OrderItems';
+import Meta from '../components/Meta';
 
 const PlaceOrder = () => {
   const cart = useSelector((state) => state.cart);
@@ -42,6 +44,7 @@ const PlaceOrder = () => {
 
   return (
     <div>
+      <Meta title='Place Order' />
       <CheckoutSteps step1 step2 step3 step4 />
       <Row>
         <Col md={8}>

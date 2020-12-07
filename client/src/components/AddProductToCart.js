@@ -36,6 +36,7 @@ const AddProductToCart = ({ product }) => {
                 <Form.Control
                   as='select'
                   value={qty}
+                  disabled={product.isPreOrder}
                   onChange={(e) => setQty(e.target.value)}>
                   {[...Array(product.countInStock).keys()].map((index) => (
                     <option key={index + 1} value={index + 1}>
@@ -45,6 +46,7 @@ const AddProductToCart = ({ product }) => {
                 </Form.Control>
               </Col>
             </Row>
+            {product.isPreOrder && <p>*Limit one item per person</p>}
           </ListGroup.Item>
         )}
         <ListGroup.Item>
@@ -53,7 +55,7 @@ const AddProductToCart = ({ product }) => {
             type='button'
             disabled={product.countInStock < 1}
             onClick={onAddToCartClick}>
-            Add To Cart
+            {!product.isPreOrder ? 'Add To Cart' : 'Pre-Order'}
           </Button>
         </ListGroup.Item>
       </ListGroup>

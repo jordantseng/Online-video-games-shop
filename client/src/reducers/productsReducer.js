@@ -2,14 +2,17 @@ import {
   FETCH_PRODUCTS_REQUEST,
   FETCH_PRODUCTS_SUCCESS,
   FETCH_PRODUCTS_FAIL,
+  RESET_PRODUCTS,
+} from '../types/products';
+
+import {
   CREATE_PRODUCT_REQUEST,
   CREATE_PRODUCT_SUCCESS,
   CREATE_PRODUCT_FAIL,
   DELETE_PRODUCT_REQUEST,
   DELETE_PRODUCT_SUCCESS,
   DELETE_PRODUCT_FAIL,
-  RESET_PRODUCTS,
-} from '../types/products';
+} from '../types/product';
 
 const initialState = {
   data: null,

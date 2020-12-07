@@ -24,10 +24,9 @@ const SearchResults = ({ match }) => {
     <div>
       {loading ? (
         <CardLoader count={12} />
-      ) : error ? (
-        <Message variant='danger'>{error}</Message>
       ) : (
         <>
+          {error && <Message variant='danger'>{error}</Message>}
           <h1>Search Results</h1>
           <div>Total items: {page.totalItems}</div>
           <ProductCards products={products} />

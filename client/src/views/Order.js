@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, ListGroup } from 'react-bootstrap';
+import { Row, Col, ListGroup, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { PayPalButton } from 'react-paypal-button-v2';
 import axios from 'axios';
 
 import { fetchMyOrder, updateOrderToPaid } from '../actions/order';
+
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import OrderSummary from '../components/OrderSummary';
 import ShippingDetails from '../components/ShippingDetails';
 import PaymentMethod from '../components/PaymentMethod';
 import OrderItems from '../components/OrderItems';
+import Meta from '../components/Meta';
 
 const Order = ({ match }) => {
   const dispatch = useDispatch();
@@ -45,27 +47,46 @@ const Order = ({ match }) => {
     }
   }, [order, dispatch, orderId]);
 
-  const onPayClick = (paymentResult) => {
-    dispatch(updateOrderToPaid(orderId, paymentResult));
-  };
+  const renderPaymentButton = () => {
+    switch (order.paymentMethod) {
+      case 'Free':
+        return (
+          <Button
+            className='d-block w-100'
+            onClick={() =>
+              dispatch(
+                updateOrderToPaid(orderId, { email_address: order.user.email })
+              )
+            }>
+            Free!
+          </Button>
+        );
 
-  const renderPaypalButton = () => {
-    if (!order.isPaid) {
-      return !sdkReady ? (
-        <Loader />
-      ) : (
-        <PayPalButton amount={order.totalPrice} onSuccess={onPayClick} />
-      );
+      case 'Paypal':
+        if (!order.isPaid) {
+          return !sdkReady ? (
+            <Loader />
+          ) : (
+            <PayPalButton
+              amount={order.totalPrice}
+              onSuccess={(paymentResult) =>
+                dispatch(updateOrderToPaid(orderId, paymentResult))
+              }
+            />
+          );
+        }
+
+      default:
+        return null;
     }
-    return null;
   };
 
   return loading || paying ? (
     <Loader />
-  ) : error ? (
-    <Message>{error}</Message>
   ) : (
     <>
+      <Meta title='Order' />
+      {error && <Message variant='danger'>{error}</Message>}
       <h1>Order {order._id}</h1>
       <Row>
         <Col md={8}>
@@ -80,7 +101,7 @@ const Order = ({ match }) => {
 
         <Col md={4}>
           <OrderSummary order={order} error={error}>
-            {renderPaypalButton()}
+            {renderPaymentButton()}
           </OrderSummary>
         </Col>
       </Row>

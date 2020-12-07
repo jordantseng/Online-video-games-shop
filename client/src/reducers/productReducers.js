@@ -32,7 +32,7 @@ const productReducer = (state = initialState, action) => {
       return { ...state, loading: true };
 
     case UPDATE_PRODUCT_SUCCESS:
-      return { ...state, loading: false, data: action.payload, updated: true };
+      return { ...state, loading: false, data: action.payload };
 
     case UPDATE_PRODUCT_FAIL:
       return { ...state, loading: false, error: action.payload };
@@ -61,7 +61,6 @@ const productReducer = (state = initialState, action) => {
         ...state,
         loadingReview: undefined,
         errorReview: undefined,
-        updated: undefined,
       };
 
     default:

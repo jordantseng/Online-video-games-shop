@@ -34,11 +34,6 @@ const OrderSummary = ({ order, error, children }) => {
             <Col>${order.totalPrice}</Col>
           </Row>
         </ListGroup.Item>
-        {error && (
-          <ListGroup.Item>
-            <Message variant='danger'>{error}</Message>
-          </ListGroup.Item>
-        )}
 
         <ListGroup.Item>{children}</ListGroup.Item>
       </ListGroup>

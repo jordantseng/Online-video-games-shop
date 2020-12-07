@@ -1,63 +1,74 @@
 import React from 'react';
-import { ListGroup, Form, Button } from 'react-bootstrap';
+import { ListGroup, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Formik, Form } from 'formik';
 
 import { createProductReview } from '../actions/product';
-import useInput from '../hooks/useInput';
 import Message from '../components/Message';
+import { reviewFormValidationSchema } from '../validations';
+import Input from './Input';
+
+const initialValues = {
+  rating: 1,
+  comment: '',
+};
+
+const commentOptions = [
+  { title: '1 - Poor', value: 1 },
+  { title: '2 - Fair', value: 2 },
+  { title: '3 - Good', value: 3 },
+  { title: '4 - Very Good', value: 4 },
+  { title: '5 - Excellent', value: 5 },
+];
 
 const CommentReview = () => {
-  const [rating, setRating, bindRating] = useInput(0);
-  const [comment, setComment, bindComment] = useInput('');
-
   const { user } = useSelector((state) => state.auth);
   const { data: product } = useSelector((state) => state.product);
   const dispatch = useDispatch();
 
-  const onReviewSubmitClick = (e) => {
-    e.preventDefault();
-
-    dispatch(createProductReview(product._id, { rating, comment }));
+  const onReviewSubmitClick = (reviewFormValues) => {
+    dispatch(createProductReview(product._id, reviewFormValues));
   };
 
   return (
     <>
       <h2>Write a Customer Review</h2>
-      {!user && (
+      {!user ? (
         <Message variant='primary'>
           Please <Link to='/login'>sign in</Link> to write a review
         </Message>
+      ) : (
+        <ListGroup variant='flush'>
+          <ListGroup.Item>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={reviewFormValidationSchema}
+              onSubmit={onReviewSubmitClick}>
+              {({ isSubmitting }) => {
+                return (
+                  <Form>
+                    <Input
+                      label='Rating'
+                      name='rating'
+                      type='select'
+                      options={commentOptions}
+                    />
+                    <Input label='Comment' name='comment' type='textarea' />
+                    <Button
+                      className='d-block ml-auto'
+                      type='submit'
+                      varaint='primary'
+                      disabled={isSubmitting}>
+                      Submit
+                    </Button>
+                  </Form>
+                );
+              }}
+            </Formik>
+          </ListGroup.Item>
+        </ListGroup>
       )}
-      <ListGroup variant='flush'>
-        <ListGroup.Item>
-          {user && (
-            <Form onSubmit={onReviewSubmitClick}>
-              <Form.Group controlId='rating'>
-                <Form.Label>Rating</Form.Label>
-                <Form.Control as='select' {...bindRating}>
-                  <option value=''>Select...</option>
-                  <option value='1'>1 - Poor</option>
-                  <option value='2'>2 - Fair</option>
-                  <option value='3'>3 - Good</option>
-                  <option value='4'>4 - Very Good</option>
-                  <option value='5'>5 - Excellent</option>
-                </Form.Control>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Comment</Form.Label>
-                <Form.Control
-                  as='textarea'
-                  row='3'
-                  {...bindComment}></Form.Control>
-              </Form.Group>
-              <Button type='submit' varaint='primary'>
-                Submit
-              </Button>
-            </Form>
-          )}
-        </ListGroup.Item>
-      </ListGroup>
     </>
   );
 };

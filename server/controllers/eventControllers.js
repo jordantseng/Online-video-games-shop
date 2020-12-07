@@ -6,7 +6,7 @@ import Event from '../models/event.js';
 // @route GET /api/events
 // @access PRIVATE (ADMIN ONLY)
 export const getEvents = asyncHandler(async (req, res) => {
-  const events = await Event.find({});
+  const events = await Event.find({}).select('-image');
 
   res.send(events);
 });
@@ -15,7 +15,7 @@ export const getEvents = asyncHandler(async (req, res) => {
 // @route GET /api/events/:id
 // @access PRIVATE (ADMIN ONLY)
 export const getEvent = asyncHandler(async (req, res) => {
-  const event = await Event.findById(req.params.id);
+  const event = await Event.findById(req.params.id).select('-image');
 
   if (!event) {
     res.status(404);
@@ -67,7 +67,7 @@ export const editEvent = asyncHandler(async (req, res) => {
 
   await event.save();
 
-  res.send(event);
+  res.send({ redirectUrl: event.redirectUrl });
 });
 
 // @desc delete product

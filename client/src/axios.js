@@ -12,8 +12,8 @@ instance.interceptors.request.use(
 
     return config;
   },
-  function (err) {
-    return Promise.reject(err);
+  function (error) {
+    return Promise.reject(error);
   }
 );
 

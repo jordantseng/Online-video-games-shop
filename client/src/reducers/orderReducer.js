@@ -1,8 +1,10 @@
-import { CREATE_ORDER_FAIL, CREATE_ORDER_SUCCESS } from '../types/cart';
 import {
   UPDATE_ORDER_PAY_REQUEST,
   UPDATE_ORDER_PAY_SUCCESS,
   UPDATE_ORDER_PAY_FAIL,
+  CREATE_ORDER_REQUEST,
+  CREATE_ORDER_SUCCESS,
+  CREATE_ORDER_FAIL,
   FETCH_MY_ORDER_REQUEST,
   FETCH_MY_ORDER_SUCCESS,
   FETCH_MY_ORDER_FAIL,
@@ -25,6 +27,9 @@ const orderReducer = (state = initialState, action) => {
     case FETCH_MY_ORDER_FAIL:
       return { ...state, loading: false, error: action.payload };
 
+    case CREATE_ORDER_REQUEST:
+      return { ...state, loading: true };
+
     case CREATE_ORDER_SUCCESS:
       return { ...state };
 
@@ -38,7 +43,7 @@ const orderReducer = (state = initialState, action) => {
       return { ...state, data: action.payload, paying: false };
 
     case UPDATE_ORDER_PAY_FAIL:
-      return { ...state, error: action.payload };
+      return { ...state, error: action.payload, paying: false };
 
     case RESET_ORDER:
       return initialState;

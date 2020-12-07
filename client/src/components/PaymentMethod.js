@@ -16,7 +16,9 @@ const PaymentMethod = ({ order }) => {
       </p>
       {urlParams === 'orders' ? (
         order.isPaid ? (
-          <Message variant='success'>Paid on {order.paidAt}</Message>
+          <Message variant='success'>
+            Paid on {order.paidAt.split('T')[0]}
+          </Message>
         ) : (
           <Message variant='danger'>Not paid</Message>
         )

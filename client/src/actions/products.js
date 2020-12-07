@@ -4,13 +4,16 @@ import {
   FETCH_PRODUCTS_REQUEST,
   FETCH_PRODUCTS_SUCCESS,
   FETCH_PRODUCTS_FAIL,
-  DELETE_PRODUCT_SUCCESS,
-  DELETE_PRODUCT_FAIL,
+} from '../types/products';
+
+import {
   CREATE_PRODUCT_REQUEST,
   CREATE_PRODUCT_SUCCESS,
   CREATE_PRODUCT_FAIL,
   DELETE_PRODUCT_REQUEST,
-} from '../types/products';
+  DELETE_PRODUCT_SUCCESS,
+  DELETE_PRODUCT_FAIL,
+} from '../types/product';
 
 export const fetchProducts = (
   keyword = '',

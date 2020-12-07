@@ -26,7 +26,7 @@ router.route('/latest').get(getLatestProducts);
 router
   .route('/:id')
   .get(getProduct)
-  .put(auth, admin, updateProduct)
+  .put(auth, admin, uploadImg.single('productImg'), updateProduct)
   .delete(auth, admin, deleteProduct);
 
 router.route('/:id/reviews').post(auth, createProductReview);

@@ -1,5 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import Order from '../models/order.js';
+import Product from '../models/product.js';
+import { sendOrderEmail } from '../email/sendgrid.js';
 
 // @desc Get all orders
 // @route GET /api/orders
@@ -48,8 +50,6 @@ export const updateOrderToDelivered = asyncHandler(async (req, res) => {
 // @route POST /api/orders
 // @access Private
 export const addOrderItems = asyncHandler(async (req, res) => {
-  console.log(req.body);
-
   const {
     orderItems,
     shippingAddress,
@@ -76,6 +76,7 @@ export const addOrderItems = asyncHandler(async (req, res) => {
     });
 
     await order.save();
+
     res.status(201).send(order);
   }
 });
@@ -84,7 +85,7 @@ export const addOrderItems = asyncHandler(async (req, res) => {
 // @route GET /api/orders/myorders
 // @access Private
 export const getMyOrders = asyncHandler(async (req, res) => {
-  const pageSize = 5;
+  const pageSize = 10;
   const current = +req.query.pageNumber || 1;
 
   const count = await Order.find({ user: req.user._id }).countDocuments();
@@ -131,21 +132,43 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
     'name email'
   );
 
-  if (order) {
-    order.isPaid = true;
-    order.paidAt = Date.now();
-    // provided by paypal
-    order.paymentResult = {
-      id: req.body.id,
-      status: req.body.status,
-      update_time: req.body.update_time,
-      email_address: req.body.payer.email_address,
-    };
-
-    await order.save();
-    res.send(order);
-  } else {
+  if (!order) {
     res.status(404);
-    throw new Error('order not found');
+    throw new Error('Order not found');
   }
+
+  // reduce product qty
+  for (let item of order.orderItems) {
+    let product = await Product.findById(item.product).select('countInStock');
+
+    if (!product) {
+      res.status(404);
+      throw new Error('Product not found');
+    }
+
+    if (product.countInStock === 0) {
+      res.status(400);
+      throw new Error('Out of Stock');
+    }
+
+    product.countInStock = product.countInStock - item.qty;
+
+    await product.save();
+  }
+
+  order.isPaid = true;
+  order.paidAt = Date.now();
+  // provided by paypal
+  order.paymentResult = {
+    id: req.body.id,
+    status: req.body.status,
+    update_time: req.body.update_time,
+    email_address: req.body.payer.email_address,
+  };
+
+  await order.save();
+
+  sendOrderEmail(order);
+
+  res.send(order);
 });

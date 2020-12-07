@@ -1,20 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { Col, Form, Row, Button } from 'react-bootstrap';
+import React, { useEffect } from 'react';
+import { Col, Row, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Formik, Form } from 'formik';
 
 import { login } from '../actions/auth';
+import { loginFormValidationSchema } from '../validations';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
-const Login = ({ history, location }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+import Input from '../components/Input';
 
+const initialValues = {
+  email: '',
+  password: '',
+};
+
+const Login = ({ history, location }) => {
   const { loading, user, error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
   const redirect = location.search ? location.search.split('=')[1] : '/';
 
   useEffect(() => {
@@ -23,38 +28,28 @@ const Login = ({ history, location }) => {
     }
   }, [history, user, redirect]);
 
-  const onSubmitClick = (e) => {
-    e.preventDefault();
-
+  const onLoginClick = ({ email, password }) =>
     dispatch(login(email, password));
-  };
 
   return (
     <FormContainer>
       <h1>Login</h1>
       {error ? <Message variant='danger'>{error}</Message> : null}
       {loading && <Loader />}
-      <Form onSubmit={onSubmitClick}>
-        <Form.Group controlId='email'>
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type='email'
-            placeholder='Enter email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}></Form.Control>
-        </Form.Group>
-        <Form.Group controlId='password'>
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type='password'
-            placeholder='Enter password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}></Form.Control>
-        </Form.Group>
-        <Button type='submit' variant='primary'>
-          Login
-        </Button>
-      </Form>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={loginFormValidationSchema}
+        onSubmit={onLoginClick}>
+        {({ isSubmitting }) => (
+          <Form>
+            <Input label='Email' name='email' type='email' />
+            <Input label='Password' name='password' type='password' />
+            <Button type='submit' variant='primary' disabled={isSubmitting}>
+              Login
+            </Button>
+          </Form>
+        )}
+      </Formik>
 
       <Row className='py-3'>
         <Col>

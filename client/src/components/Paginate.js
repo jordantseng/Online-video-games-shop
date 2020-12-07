@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Pagination } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -28,6 +29,14 @@ const Paginate = ({
       </Pagination>
     )
   );
+};
+
+Paginate.prototype = {
+  page: PropTypes.number.isRequired,
+  pages: PropTypes.number.isRequired,
+  isAdmin: PropTypes.bool,
+  path: PropTypes.string,
+  keyword: PropTypes.string,
 };
 
 export default Paginate;
