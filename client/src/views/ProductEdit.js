@@ -17,20 +17,22 @@ import ImageInput from '../components/ImageInput';
 const initialValues = {
   name: '',
   price: '',
-  brand: 'sony',
-  category: 'ps4 console',
+  brand: '',
+  category: '',
   countInStock: '',
   description: '',
   releaseDate: new Date().toISOString().split('T')[0],
 };
 
 const brandOptions = [
+  { title: '', value: '' },
   { title: 'Sony', value: 'sony' },
   { title: 'Nintendo', value: 'nintendo' },
   { title: 'Others', values: 'others' },
 ];
 
 const categoryOptions = [
+  { title: '', value: '' },
   { title: 'PS4 console', value: 'ps4 console' },
   { title: 'PS5 console', value: 'ps5 console' },
   { title: 'Switch console', value: 'switch console' },

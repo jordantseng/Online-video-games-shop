@@ -1,9 +1,7 @@
 import React from 'react';
 import { Row, Col, ListGroup, Card } from 'react-bootstrap';
 
-import Message from '../components/Message';
-
-const OrderSummary = ({ order, error, children }) => {
+const OrderSummary = ({ order, children }) => {
   return (
     <Card>
       <ListGroup variant='flush'>
@@ -35,7 +33,7 @@ const OrderSummary = ({ order, error, children }) => {
           </Row>
         </ListGroup.Item>
 
-        <ListGroup.Item>{children}</ListGroup.Item>
+        {children ? <ListGroup.Item>{children}</ListGroup.Item> : null}
       </ListGroup>
     </Card>
   );

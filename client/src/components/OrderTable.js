@@ -64,8 +64,7 @@ const OrderTable = ({ orders, user, inProfilePage = false }) => {
                     !order.isDelivered && (
                       <Button
                         type='button'
-                        className='btn-sm'
-                        style={{ marginLeft: '0.5rem' }}
+                        className='btn-sm ml-1'
                         onClick={() => onMarkAsDelivered(order._id)}>
                         Mark as Delivered
                       </Button>

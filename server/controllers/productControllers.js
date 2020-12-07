@@ -82,22 +82,18 @@ export const getProduct = asyncHandler(async (req, res) => {
 // @route POST /api/products
 // @access Private/Admin
 export const createProduct = asyncHandler(async (req, res) => {
-  console.log(Date());
-
   const product = new Product({
     name: 'sample',
     price: 0,
     user: req.user._id,
     image: '/image/sample.jpg',
-    brand: 'sample',
-    category: 'sample',
+    brand: '',
+    category: '',
     countInStock: 0,
     numReviews: 0,
     description: 'sample',
     releaseDate: new Date().toISOString(),
   });
-
-  console.log(product);
 
   await product.save();
   res.status(201).send(product);
@@ -142,16 +138,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
 
   await product.save();
 
-  res.send({
-    name,
-    price,
-    description,
-    brand,
-    category,
-    countInStock,
-    releaseDate,
-    isPreOrder,
-  });
+  res.send(product);
 });
 
 // @desc Delete product

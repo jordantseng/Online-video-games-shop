@@ -10,7 +10,7 @@ const Reviews = ({ product, errorReview, loadingReview }) => {
     <>
       <h2>Reviews</h2>
       {errorReview && <Message variant='danger'>{errorReview}</Message>}
-      {!loadingReview && product.reviews.length === 0 && (
+      {!loadingReview && product.reviews && product.reviews.length === 0 && (
         <Message variant='primary'>No Reviews</Message>
       )}
       <ListGroup variant='flush'>

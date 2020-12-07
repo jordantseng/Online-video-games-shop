@@ -1,4 +1,3 @@
-// import axios from 'axios';
 import axios from '../axios';
 import {
   LOGIN_REQUEST,
@@ -11,7 +10,7 @@ import {
 } from '../types/auth';
 import history from '../history';
 import { RESET_ORDER } from '../types/order';
-import { RESET_MY_ORDERS } from '../types/myOrders';
+
 import { RESET_PROFILE } from '../types/profile';
 
 export const login = (email, password) => async (dispatch) => {
@@ -44,7 +43,6 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   localStorage.removeItem('auth');
 
-  dispatch({ type: RESET_MY_ORDERS });
   dispatch({ type: RESET_ORDER });
   dispatch({ type: RESET_PROFILE });
   dispatch({ type: LOGOUT_SUCCESS });

@@ -44,7 +44,11 @@ const Login = ({ history, location }) => {
           <Form>
             <Input label='Email' name='email' type='email' />
             <Input label='Password' name='password' type='password' />
-            <Button type='submit' variant='primary' disabled={isSubmitting}>
+            <Button
+              className='d-block ml-auto'
+              type='submit'
+              variant='primary'
+              disabled={isSubmitting}>
               Login
             </Button>
           </Form>

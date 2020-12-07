@@ -3,6 +3,9 @@ import {
   FETCH_ORDERS_REQUEST,
   FETCH_ORDERS_SUCCESS,
   FETCH_ORDERS_FAIL,
+  FETCH_MY_ORDERS_REQUEST,
+  FETCH_MY_ORDERS_SUCCESS,
+  FETCH_MY_ORDERS_FAIL,
 } from '../types/orders';
 
 import {
@@ -26,6 +29,28 @@ export const fetchOrders = (pageNumber) => async (dispatch, getState) => {
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
+          : error.response,
+    });
+  }
+};
+
+// fetch my orders
+export const fetchMyOrders = (pageNumber) => async (dispatch, getState) => {
+  dispatch({ type: FETCH_MY_ORDERS_REQUEST });
+  try {
+    const { data } = await axios.get(`/api/orders/myorders`, {
+      params: { pageNumber },
+    });
+
+    console.log(data);
+
+    dispatch({ type: FETCH_MY_ORDERS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: FETCH_MY_ORDERS_FAIL,
+      payload:
+        error.response && error.response.message
+          ? error.response.message
           : error.response,
     });
   }

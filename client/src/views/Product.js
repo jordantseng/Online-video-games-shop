@@ -44,6 +44,15 @@ const Product = ({ match }) => {
             description='We sell the best products for cheap'
             keywords='electronics'
           />
+
+          {/* banner */}
+          {/* <div
+            style={{
+              backgroundImage: `url(/api/products/5fcdd25ce92bda1c0abb0fae/image)`,
+              width: '100%',
+              height: '300px',
+            }}></div> */}
+
           {error && <Message variant='danger'>{error}</Message>}
           <Row>
             <Button

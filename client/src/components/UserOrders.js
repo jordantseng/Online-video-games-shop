@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { fetchMyOrders } from '../actions/myOrders';
+import { fetchMyOrders } from '../actions/orders';
 
 import Paginate from './Paginate';
 import OrderTable from './OrderTable';
@@ -10,12 +10,9 @@ import Message from './Message';
 
 const UserOrders = ({ location }) => {
   const dispatch = useDispatch();
-  const {
-    loading: loadingMyOrders,
-    data: myOrders,
-    page,
-    error: errorOrders,
-  } = useSelector((state) => state.myOrders);
+  const { loading, data: orders, page, error } = useSelector(
+    (state) => state.orders
+  );
   const { user } = useSelector((state) => state.auth);
 
   const pageNumber = location.pathname.split('page/')[1] || 1;
@@ -26,13 +23,13 @@ const UserOrders = ({ location }) => {
 
   return (
     <>
-      {loadingMyOrders ? (
+      {loading ? (
         <Loader />
       ) : (
         <>
-          {errorOrders && <Message variant='danger'>{errorOrders}</Message>}
+          {error && <Message variant='danger'>{error}</Message>}
           <h1>My orders</h1>
-          <OrderTable orders={myOrders} user={user} inProfilePage={true} />
+          <OrderTable orders={orders} user={user} inProfilePage={true} />
           <Paginate
             path='/profile/orders'
             pages={page.total}

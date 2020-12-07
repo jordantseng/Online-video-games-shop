@@ -11,7 +11,6 @@ import userReducer from './userReducers';
 import usersReducer from './usersReducer';
 import orderReducer from './orderReducer';
 import ordersReducer from './ordersReducer';
-import myOrdersReducer from './myOrdersReducer';
 import eventReducer from './eventReducer';
 import eventsReducer from './eventsReducer';
 
@@ -27,7 +26,6 @@ const reducers = combineReducers({
   users: usersReducer,
   order: orderReducer,
   orders: ordersReducer,
-  myOrders: myOrdersReducer,
   event: eventReducer,
   events: eventsReducer,
 });

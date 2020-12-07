@@ -31,18 +31,17 @@ const Profile = ({ history }) => {
           </Nav.Item>
         </Nav>
       </Row>
-      <Row>
-        <Router history={history}>
-          <Switch>
-            <Route
-              path='/profile/orders/page/:pageNumber'
-              component={UserOrders}
-            />
-            <Route path='/profile/orders' component={UserOrders} />
-            <UserProfile />
-          </Switch>
-        </Router>
-      </Row>
+
+      <Router history={history}>
+        <Switch>
+          <Route
+            path='/profile/orders/page/:pageNumber'
+            component={UserOrders}
+          />
+          <Route path='/profile/orders' component={UserOrders} />
+          <UserProfile />
+        </Switch>
+      </Router>
     </>
   );
 };

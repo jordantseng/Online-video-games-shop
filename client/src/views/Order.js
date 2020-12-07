@@ -74,6 +74,8 @@ const Order = ({ match }) => {
               }
             />
           );
+        } else {
+          return null;
         }
 
       default:

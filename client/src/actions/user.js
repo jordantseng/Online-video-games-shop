@@ -8,7 +8,6 @@ import {
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAIL,
 } from '../types/user';
-import { RESET_USERS } from '../types/users';
 
 export const fetchUser = (id) => async (dispatch, getState) => {
   dispatch({ type: FETCH_USER_REQUEST });
