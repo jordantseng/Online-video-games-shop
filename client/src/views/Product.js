@@ -45,14 +45,6 @@ const Product = ({ match }) => {
             keywords='electronics'
           />
 
-          {/* banner */}
-          {/* <div
-            style={{
-              backgroundImage: `url(/api/products/5fcdd25ce92bda1c0abb0fae/image)`,
-              width: '100%',
-              height: '300px',
-            }}></div> */}
-
           {error && <Message variant='danger'>{error}</Message>}
           <Row>
             <Button
@@ -65,10 +57,11 @@ const Product = ({ match }) => {
           <Row>
             <Col md={6}>
               <Image
+                className='m-auto'
                 src={`/api/products/${product._id}/image`}
                 alt={product.name}
                 fluid
-                style={{ margin: 'auto', height: '25rem' }}
+                style={{ height: '25rem' }}
               />
             </Col>
             <Col md={3}>

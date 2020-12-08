@@ -12,7 +12,6 @@ const EventCarousel = ({ events }) => {
               src={`/api/events/${event._id}/image`}
               alt={event.name}
               fluid
-              style={{ objectFit: 'cover' }}
             />
             <Carousel.Caption className='carousel-caption'>
               <h2>{event.title}</h2>

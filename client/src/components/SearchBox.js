@@ -17,13 +17,14 @@ const SearchBox = () => {
   };
 
   return (
-    <Form onSubmit={onSearchClick} inline style={{ marginBottom: '1rem' }}>
+    <Form className='mb-2' onSubmit={onSearchClick} inline>
       <Form.Control
+        className='flex-grow-1'
         type='text'
         name='q'
         onChange={(e) => setKeyword(e.target.value)}
         placeholder='Search Products...'
-        style={{ flex: 1 }}></Form.Control>
+      />
       <Button type='submit' variant='secondary' size='sm'>
         Search
       </Button>
