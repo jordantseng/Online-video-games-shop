@@ -99,7 +99,7 @@ const ProductEdit = ({ history, match }) => {
                 validationSchema={productFormValidationSchema}
                 onSubmit={onSubmitClick}
                 enableReinitialize>
-                {({ values, isSubmitting }) => {
+                {({ isSubmitting }) => {
                   return (
                     <Form>
                       <Input label='Name' name='name' type='text' />
@@ -144,7 +144,6 @@ const ProductEdit = ({ history, match }) => {
                         type='checkbox'
                       />
 
-                      <pre>{JSON.stringify(values, null, 2)}</pre>
                       <Button
                         type='submit'
                         variant='primary'
