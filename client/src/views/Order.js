@@ -20,7 +20,10 @@ const Order = ({ match }) => {
     (state) => state.order
   );
   const [sdkReady, setSdkReady] = useState(false);
+
   const orderId = match.params.id;
+
+  console.log(sdkReady);
 
   useEffect(() => {
     const addPayPalScript = async () => {
@@ -37,6 +40,7 @@ const Order = ({ match }) => {
     };
 
     if (!order || orderId !== order._id) {
+      console.log('fetch');
       dispatch(fetchMyOrder(orderId));
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -48,6 +52,10 @@ const Order = ({ match }) => {
   }, [order, dispatch, orderId]);
 
   const renderPaymentButton = () => {
+    if (order.isPaid) {
+      return null;
+    }
+
     switch (order.paymentMethod) {
       case 'Free':
         return (
@@ -55,7 +63,9 @@ const Order = ({ match }) => {
             className='d-block w-100'
             onClick={() =>
               dispatch(
-                updateOrderToPaid(orderId, { email_address: order.user.email })
+                updateOrderToPaid(orderId, {
+                  email_address: order.user.email,
+                })
               )
             }>
             Free!
@@ -63,20 +73,16 @@ const Order = ({ match }) => {
         );
 
       case 'Paypal':
-        if (!order.isPaid) {
-          return !sdkReady ? (
-            <Loader />
-          ) : (
-            <PayPalButton
-              amount={order.totalPrice}
-              onSuccess={(paymentResult) =>
-                dispatch(updateOrderToPaid(orderId, paymentResult))
-              }
-            />
-          );
-        } else {
-          return null;
-        }
+        return !sdkReady ? (
+          <Loader />
+        ) : (
+          <PayPalButton
+            amount={order.totalPrice}
+            onSuccess={(paymentResult) =>
+              dispatch(updateOrderToPaid(orderId, paymentResult))
+            }
+          />
+        );
 
       default:
         return null;

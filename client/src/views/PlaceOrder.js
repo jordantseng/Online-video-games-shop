@@ -26,7 +26,11 @@ const PlaceOrder = () => {
 
   cart.taxPrice = +(0.15 * cart.itemsPrice).toFixed(2);
 
-  cart.totalPrice = +(cart.itemsPrice + cart.shippingPrice + cart.taxPrice);
+  cart.totalPrice = +(
+    cart.itemsPrice +
+    cart.shippingPrice +
+    cart.taxPrice
+  ).toFixed(2);
 
   const onPlaceOrderClick = () => {
     dispatch(

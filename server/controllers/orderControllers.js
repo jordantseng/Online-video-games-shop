@@ -158,13 +158,18 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
 
   order.isPaid = true;
   order.paidAt = Date.now();
-  // provided by paypal
-  order.paymentResult = {
-    id: req.body.id,
-    status: req.body.status,
-    update_time: req.body.update_time,
-    email_address: req.body.payer.email_address,
-  };
+
+  if (order.paymentMethod === 'Free') {
+    order.paymentResult = null;
+  } else {
+    // provided by paypal
+    order.paymentResult = {
+      id: req.body.id,
+      status: req.body.status,
+      update_time: req.body.update_time,
+      email_address: req.body.payer.email_address,
+    };
+  }
 
   await order.save();
 
