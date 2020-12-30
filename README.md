@@ -1,5 +1,5 @@
 # Online video games shop
-Online video games shop using MERN stack, including admin dashboard.
+Online video games shop using MERN stack, including admin dashboard.  
 url: https://e-commerce-20201123.herokuapp.com/
 
 ## Table of contents
