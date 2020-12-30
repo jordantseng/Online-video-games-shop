@@ -23,7 +23,7 @@ Admin page
 <img width="1254" alt="Screen Shot 2020-12-08 at 9 47 15 AM" src="https://user-images.githubusercontent.com/53250186/101427734-63c9fb80-393a-11eb-85ad-cff4b1df6dec.png">
 
 ## Features
-- Login / Signup (auto send successful registration email)
+- Login / signup (auto send successful registration email)
 - Auto login / logout in 1hr (JWT expires in 1hr)
 - Show latest products depending on released date 
 - Show popular products depending on rating
