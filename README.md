@@ -48,14 +48,13 @@ Server
 
 ## Usage
 
-In the client and server directory, you should respectively run:
+In the client and server directory, to install all the dependencies, you should respectively run:
 
 #### `npm install`
 
-to install all the dependencies.
-
-Then in the root directory, you can run:
+In the root directory, you can run:
 
 #### `npm run dev`
 
-
+Runs the app in the development mode.<br />
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
