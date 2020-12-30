@@ -8,20 +8,15 @@ import Message from '../components/Message';
 import { createEvent, deleteEvent } from '../actions/event';
 import { fetchEvents } from '../actions/events';
 
-const EventList = ({ history }) => {
+const EventList = () => {
   const dispatch = useDispatch();
   const { loading, data: events, error } = useSelector((state) => state.events);
-  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!user && !user.isAdmin) {
-      history.replace('/login');
-    }
-
     if (!events) {
       dispatch(fetchEvents());
     }
-  }, [dispatch, history, user, events]);
+  }, [dispatch, events]);
 
   const onDeleteClick = (id) => {
     dispatch(deleteEvent(id));
@@ -30,6 +25,28 @@ const EventList = ({ history }) => {
   const onCreateClick = () => {
     dispatch(createEvent());
   };
+
+  const renderEvents =
+    !loading &&
+    events.map((event) => (
+      <tr key={event._id}>
+        <td>{event._id}</td>
+        <td>{event.redirectUrl}</td>
+        <td>
+          <Link to={`/admin/eventList/${event._id}/edit`}>
+            <Button variant='light' className='mr-2 btn-sm'>
+              <i className='fas fa-edit'></i>
+            </Button>
+          </Link>
+          <Button
+            variant='danger'
+            className='btn-sm'
+            onClick={() => onDeleteClick(event._id)}>
+            <i className='fas fa-trash'></i>
+          </Button>
+        </td>
+      </tr>
+    ));
 
   return (
     <>
@@ -56,27 +73,7 @@ const EventList = ({ history }) => {
                 <th>ACTIONS</th>
               </tr>
             </thead>
-            <tbody>
-              {events.map((event) => (
-                <tr key={event._id}>
-                  <td>{event._id}</td>
-                  <td>{event.redirectUrl}</td>
-                  <td>
-                    <Link to={`/admin/eventList/${event._id}/edit`}>
-                      <Button variant='light' className='mr-2 btn-sm'>
-                        <i className='fas fa-edit'></i>
-                      </Button>
-                    </Link>
-                    <Button
-                      variant='danger'
-                      className='btn-sm'
-                      onClick={() => onDeleteClick(event._id)}>
-                      <i className='fas fa-trash'></i>
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+            <tbody>{renderEvents}</tbody>
           </Table>
         </>
       )}

@@ -22,8 +22,6 @@ const initialValues = {
 const Shipping = () => {
   const { shippingAddress } = useSelector((state) => state.cart);
 
-  console.log(shippingAddress);
-
   const dispatch = useDispatch();
 
   const onFormSubmit = (addressFormValues) => {

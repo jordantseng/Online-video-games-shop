@@ -9,26 +9,49 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Paginate from '../components/Paginate';
 
-const UserList = ({ history, match }) => {
+const UserList = ({ match }) => {
   const dispatch = useDispatch();
   const { loading, data: users, page, error } = useSelector(
     (state) => state.users
   );
 
-  const { user } = useSelector((state) => state.auth);
   const pageNumber = match.params.pageNumber;
 
   useEffect(() => {
-    if (!user || (user && !user.isAdmin)) {
-      history.replace('/login');
-    } else {
-      dispatch(fetchUsers(pageNumber));
-    }
-  }, [dispatch, history, user, pageNumber]);
+    dispatch(fetchUsers(pageNumber));
+  }, [dispatch, pageNumber]);
 
-  const onDeleteClick = (userId) => {
-    dispatch(deleteUser(userId));
-  };
+  const renderUsersTable =
+    !loading &&
+    users.map((user) => (
+      <tr key={user._id}>
+        <td>{user._id}</td>
+        <td>{user.name}</td>
+        <td>
+          <a href={`emailto:${user.email}`}>{user.email}</a>
+        </td>
+        <td>
+          {user.isAdmin ? (
+            <i className='fas fa-check' style={{ color: 'green' }}></i>
+          ) : (
+            <i className='fas fa-times' style={{ color: 'red' }}></i>
+          )}
+        </td>
+        <td>
+          <Link to={`/admin/users/${user._id}/edit`}>
+            <Button variant='light' className='btn-sm'>
+              <i className='fas fa-edit'></i>
+            </Button>
+          </Link>
+          <Button
+            variant='danger'
+            className='btn-sm'
+            onClick={() => dispatch(deleteUser(user._id))}>
+            <i className='fas fa-trash'></i>
+          </Button>
+        </td>
+      </tr>
+    ));
 
   return (
     <>
@@ -48,39 +71,7 @@ const UserList = ({ history, match }) => {
                 <th>ACTIONS</th>
               </tr>
             </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user._id}>
-                  <td>{user._id}</td>
-                  <td>{user.name}</td>
-                  <td>
-                    <a href={`emailto:${user.email}`}>{user.email}</a>
-                  </td>
-                  <td>
-                    {user.isAdmin ? (
-                      <i
-                        className='fas fa-check'
-                        style={{ color: 'green' }}></i>
-                    ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
-                    )}
-                  </td>
-                  <td>
-                    <Link to={`/admin/users/${user._id}/edit`}>
-                      <Button variant='light' className='btn-sm'>
-                        <i className='fas fa-edit'></i>
-                      </Button>
-                    </Link>
-                    <Button
-                      variant='danger'
-                      className='btn-sm'
-                      onClick={() => onDeleteClick(user._id)}>
-                      <i className='fas fa-trash'></i>
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+            <tbody>{renderUsersTable}</tbody>
           </Table>
 
           <Paginate

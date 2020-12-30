@@ -7,20 +7,17 @@ import Loader from '../components/Loader';
 import Paginate from '../components/Paginate';
 import OrderTable from '../components/OrderTable';
 
-const OrderList = ({ history, match }) => {
+const OrderList = ({ match }) => {
   const dispatch = useDispatch();
   const { loading, data: orders, page, error } = useSelector(
     (state) => state.orders
   );
   const { user } = useSelector((state) => state.auth);
   const pageNumber = match.params.pageNumber;
+
   useEffect(() => {
-    if (!user || (user && !user.isAdmin)) {
-      history.replace('/login');
-    } else {
-      dispatch(fetchOrders(pageNumber));
-    }
-  }, [dispatch, history, user, pageNumber]);
+    dispatch(fetchOrders(pageNumber));
+  }, [dispatch, pageNumber]);
 
   return (
     <>

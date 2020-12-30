@@ -10,15 +10,17 @@ const BootstrapTextArea = (props) => (
   <Form.Control as='textarea' row='5' {...props} />
 );
 
-const BootstrapSelect = (props) => (
-  <Form.Control as='select' {...props}>
-    {props.options.map((option) => (
-      <option key={option.title} value={option.value}>
-        {option.title}
-      </option>
-    ))}
-  </Form.Control>
-);
+const BootstrapSelect = (props) => {
+  return (
+    <Form.Control as='select' {...props}>
+      {props.options.map((option) => (
+        <option key={option.title} value={option.value}>
+          {option.title}
+        </option>
+      ))}
+    </Form.Control>
+  );
+};
 
 const BootstrapDate = (props) => <Form.Control type='date' {...props} />;
 

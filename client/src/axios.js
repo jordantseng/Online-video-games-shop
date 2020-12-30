@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const instance = axios.create();
 
+// instance.CancelToken = axios.CancelToken;
+
 instance.interceptors.request.use(
   function (config) {
     const auth = JSON.parse(localStorage.getItem('auth'));

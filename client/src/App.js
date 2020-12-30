@@ -28,6 +28,7 @@ import Products from './views/Products';
 import EventList from './views/EventList';
 import EventEdit from './views/EventEdit';
 import SearchResults from './views/SearchResults';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -61,35 +62,37 @@ const App = () => {
       <main className='py-3'>
         <Container>
           <Switch>
-            <Route
+            <ProtectedRoute
               path='/admin/orderList/page/:pageNumber'
               component={OrderList}
             />
-            <Route path='/admin/orderList' component={OrderList} />
-
-            <Route path='/admin/products/:id/edit' component={ProductEdit} />
-            <Route
+            <ProtectedRoute path='/admin/orderList' component={OrderList} />
+            <ProtectedRoute
+              path='/admin/products/:id/edit'
+              component={ProductEdit}
+            />
+            <ProtectedRoute
               path='/admin/productList/page/:pageNumber'
               component={ProductList}
             />
-            <Route path='/admin/productList' component={ProductList} />
+            <ProtectedRoute path='/admin/productList' component={ProductList} />
 
-            <Route path='/admin/users/:id/edit' component={UserEdit} />
-            <Route
+            <ProtectedRoute path='/admin/users/:id/edit' component={UserEdit} />
+            <ProtectedRoute
               path='/admin/userList/page/:pageNumber'
               component={UserList}
             />
-            <Route path='/admin/userList' component={UserList} />
+            <ProtectedRoute path='/admin/userList' component={UserList} />
 
-            <Route path='/admin/eventList/:id' component={EventEdit} />
-            <Route path='/admin/eventList' component={EventList} />
+            <ProtectedRoute path='/admin/eventList/:id' component={EventEdit} />
+            <ProtectedRoute path='/admin/eventList' component={EventList} />
 
-            <Route path='/orders/:id' component={Order} />
-            <Route path='/placeorder' component={PlaceOrder} />
-            <Route path='/payment' component={Payment} />
-            <Route path='/shipping' component={Shipping} />
+            <ProtectedRoute path='/orders/:id' component={Order} />
+            <ProtectedRoute path='/placeorder' component={PlaceOrder} />
+            <ProtectedRoute path='/payment' component={Payment} />
+            <ProtectedRoute path='/shipping' component={Shipping} />
+            <ProtectedRoute path='/profile' component={Profile} />
             <Route path='/cart/:id?' component={Cart} />
-            <Route path='/profile' component={Profile} />
             <Route path='/login' component={Login} />
             <Route path='/signup' component={Signup} />
             <Route

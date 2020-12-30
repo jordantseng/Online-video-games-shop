@@ -63,7 +63,6 @@ const UserEdit = ({ match }) => {
                       <Input label='Name' name='name' type='text' />
                       <Input label='Email' name='email' type='email' />
                       <Input label='Is Admin' name='isAdmin' type='checkbox' />
-                      <Input label='Is Admin' name='isAdmin' type='checkbox' />
                       <Button
                         className='d-block ml-auto'
                         type='submit'

@@ -23,8 +23,6 @@ const Order = ({ match }) => {
 
   const orderId = match.params.id;
 
-  console.log(sdkReady);
-
   useEffect(() => {
     const addPayPalScript = async () => {
       // to add a script tag that paypal needed
@@ -40,7 +38,6 @@ const Order = ({ match }) => {
     };
 
     if (!order || orderId !== order._id) {
-      console.log('fetch');
       dispatch(fetchMyOrder(orderId));
     } else if (!order.isPaid) {
       if (!window.paypal) {

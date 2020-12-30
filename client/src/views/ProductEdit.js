@@ -28,7 +28,7 @@ const brandOptions = [
   { title: '', value: '' },
   { title: 'Sony', value: 'sony' },
   { title: 'Nintendo', value: 'nintendo' },
-  { title: 'Others', values: 'others' },
+  { title: 'Others', value: 'others' },
 ];
 
 const categoryOptions = [
@@ -42,8 +42,8 @@ const categoryOptions = [
   { title: 'Others', value: 'others' },
 ];
 
-const ProductEdit = ({ history, match }) => {
-  const [prdocutFormValues, setProductFormValues] = useState(null);
+const ProductEdit = ({ match }) => {
+  const [productFormValues, setProductFormValues] = useState(null);
 
   const dispatch = useDispatch();
   const productId = match.params.id;
@@ -51,24 +51,17 @@ const ProductEdit = ({ history, match }) => {
   const { loading, data: product, error } = useSelector(
     (state) => state.product
   );
-  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!user || (user && !user.isAdmin)) {
-      history.replace('/login');
+    if (!product || productId !== product._id) {
+      dispatch(fetchProduct(productId));
     } else {
-      if (!product || productId !== product._id) {
-        dispatch(fetchProduct(productId));
-      } else {
-        setProductFormValues({
-          ...product,
-          releaseDate: new Date(product.releaseDate)
-            .toISOString()
-            .split('T')[0],
-        });
-      }
+      setProductFormValues({
+        ...product,
+        releaseDate: new Date(product.releaseDate).toISOString().split('T')[0],
+      });
     }
-  }, [user, product, productId, dispatch, setProductFormValues, history]);
+  }, [product, productId, dispatch, setProductFormValues]);
 
   const onSubmitClick = (productFormValues) => {
     const { releaseDate } = productFormValues;
@@ -95,7 +88,7 @@ const ProductEdit = ({ history, match }) => {
             {error && <Message variant='danger'>{error}</Message>}
             {product && (
               <Formik
-                initialValues={prdocutFormValues || initialValues}
+                initialValues={productFormValues || initialValues}
                 validationSchema={productFormValidationSchema}
                 onSubmit={onSubmitClick}
                 enableReinitialize>
@@ -121,7 +114,6 @@ const ProductEdit = ({ history, match }) => {
                         type='select'
                         options={categoryOptions}
                       />
-
                       <Input
                         label='Count in stock'
                         name='countInStock'
@@ -137,7 +129,6 @@ const ProductEdit = ({ history, match }) => {
                         name='releaseDate'
                         type='date'
                       />
-
                       <Input
                         label='Is Pre-order'
                         name='isPreOrder'

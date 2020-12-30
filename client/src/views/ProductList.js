@@ -8,18 +8,20 @@ import {
   deleteProduct,
   createProduct,
 } from '../actions/products';
-
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Paginate from '../components/Paginate';
 
-const ProductList = ({ history, match }) => {
+const ProductList = ({ match }) => {
   const dispatch = useDispatch();
   const { loading, data: products, page, error } = useSelector(
     (state) => state.products
   );
-  const { user } = useSelector((state) => state.auth);
   const pageNumber = match.params.pageNumber;
+
+  useEffect(() => {
+    dispatch(fetchProducts(undefined, undefined, pageNumber));
+  }, [dispatch, pageNumber]);
 
   const onDeleteClick = (id) => {
     dispatch(deleteProduct(id));
@@ -29,13 +31,31 @@ const ProductList = ({ history, match }) => {
     dispatch(createProduct());
   };
 
-  useEffect(() => {
-    if (!user || (user && !user.isAdmin)) {
-      history.replace('/login');
-    } else {
-      dispatch(fetchProducts(undefined, undefined, pageNumber));
-    }
-  }, [dispatch, history, user, pageNumber]);
+  const renderProducts =
+    !loading &&
+    products.map((product) => (
+      <tr key={product._id}>
+        <td>{product._id}</td>
+        <td>{product.name}</td>
+        <td>${product.price}</td>
+        <td>{product.category}</td>
+        <td>{product.brand}</td>
+        <td>{product.releaseDate.split('T')[0]}</td>
+        <td>
+          <Link to={`/admin/products/${product._id}/edit`}>
+            <Button variant='light' className='btn-sm'>
+              <i className='fas fa-edit'></i>
+            </Button>
+          </Link>
+          <Button
+            variant='danger'
+            className='btn-sm'
+            onClick={() => onDeleteClick(product._id)}>
+            <i className='fas fa-trash'></i>
+          </Button>
+        </td>
+      </tr>
+    ));
 
   return (
     <>
@@ -66,31 +86,7 @@ const ProductList = ({ history, match }) => {
                 <th>ACTIONS</th>
               </tr>
             </thead>
-            <tbody>
-              {products.map((product) => (
-                <tr key={product._id}>
-                  <td>{product._id}</td>
-                  <td>{product.name}</td>
-                  <td>${product.price}</td>
-                  <td>{product.category}</td>
-                  <td>{product.brand}</td>
-                  <td>{product.releaseDate.split('T')[0]}</td>
-                  <td>
-                    <Link to={`/admin/products/${product._id}/edit`}>
-                      <Button variant='light' className='btn-sm'>
-                        <i className='fas fa-edit'></i>
-                      </Button>
-                    </Link>
-                    <Button
-                      variant='danger'
-                      className='btn-sm'
-                      onClick={() => onDeleteClick(product._id)}>
-                      <i className='fas fa-trash'></i>
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+            <tbody>{renderProducts}</tbody>
           </Table>
           <Paginate
             isAdmin={true}
