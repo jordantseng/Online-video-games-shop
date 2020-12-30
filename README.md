@@ -1,12 +1,12 @@
 # Online video games shop
 Online video games shop using MERN stack, including admin dashboard.  
-url: https://e-commerce-20201123.herokuapp.com/
+demo: https://e-commerce-20201123.herokuapp.com/
 
 ## Table of contents
 * [Screenshot](#screenshot)
 * [Technologies](#technologies)
 * [Features](#features)
-
+* [Usage](#usage)
 ## Screenshot:
 
 <img width="1306" alt="Screen Shot 2020-12-08 at 9 44 44 AM" src="https://user-images.githubusercontent.com/53250186/101427542-0a61cc80-393a-11eb-9c47-c273c153f61e.png">
@@ -20,7 +20,7 @@ url: https://e-commerce-20201123.herokuapp.com/
 <img width="1254" alt="Screen Shot 2020-12-08 at 9 47 15 AM" src="https://user-images.githubusercontent.com/53250186/101427734-63c9fb80-393a-11eb-85ad-cff4b1df6dec.png">
 
 ## Features
-- Material Design
+- login / signup 
 - Emoji support
 - User @mentioning
 - Private messaging
@@ -32,7 +32,7 @@ url: https://e-commerce-20201123.herokuapp.com/
 #### TODO:
 
 ## Technologies
-Project is created with:
+Project is built with:
 
 Client
 - react
@@ -45,3 +45,17 @@ Server
 - express
 - mongodb + mongoose
 - sendgrid
+
+## Usage
+
+In the client and server directory, you should respectively run:
+
+#### `npm install`
+
+to install all the dependencies.
+
+Then in the root directory, you can run:
+
+#### `npm run dev`
+
+
