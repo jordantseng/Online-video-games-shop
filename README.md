@@ -1,5 +1,11 @@
-# e-commerce
+# Online video games shop
 Online video games shop using MERN stack, including admin dashboard.
+url: https://e-commerce-20201123.herokuapp.com/
+
+## Table of contents
+* [Screenshot](#screenshot)
+* [Technologies](#technologies)
+* [Features](#features)
 
 ## Screenshot:
 
@@ -13,7 +19,20 @@ Online video games shop using MERN stack, including admin dashboard.
 
 <img width="1254" alt="Screen Shot 2020-12-08 at 9 47 15 AM" src="https://user-images.githubusercontent.com/53250186/101427734-63c9fb80-393a-11eb-85ad-cff4b1df6dec.png">
 
-## Notes
+## Features
+- Material Design
+- Emoji support
+- User @mentioning
+- Private messaging
+- Message deleting (for admins)
+- Ability to kick/ban users (for admins)
+- See other user's IPs (for admins)
+- Other awesome features yet to be implemented
+
+#### TODO:
+
+## Technologies
+Project is created with:
 
 Client
 - react
