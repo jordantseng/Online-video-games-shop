@@ -34,12 +34,13 @@ Admin page
 - Payment 
 
 (for admin)
-- Carousel management 
+- Event management (create event, edit event including upload image, delete event)
 - Account management (edit user profile, delete user)
 - Product management (create prodcut, edit product including upload image, delete product)
 - Order management (update order as delivered)
 
 #### TODO:
+- Cancel request while component unmounted
 
 ## Technologies
 
