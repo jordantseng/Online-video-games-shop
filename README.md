@@ -6,6 +6,7 @@ demo: https://e-commerce-20201123.herokuapp.com/
 * [Screenshot](#screenshot)
 * [Technologies](#technologies)
 * [Features](#features)
+* [Obstacles](#obstacles)
 * [Usage](#usage)
 ## Screenshot:
 Home page
@@ -33,13 +34,14 @@ Admin page
 - Shopping cart
 - Payment 
 
-(for admin)
+#### Admin
 - Carousel management 
 - Account management (edit user profile, delete user)
 - Product management (create prodcut, edit product including upload image, delete product)
 - Order management (update order as delivered)
 
 #### TODO:
+- Cancelle api requests while the component is unmounted
 
 ## Technologies
 
@@ -54,6 +56,11 @@ Server
 - express
 - mongodb + mongoose
 - sendgrid
+
+## Obstacles
+Q: Cancelle api requests while the component is unmounted
+A: There are several ways to address this problem, such as redux middleware, redux-thunk or redux-observable. As I already applied redux-thunk in my project, I prefer to use redux-thunk as my solution. However this issue is still unsolved :(
+
 
 ## Usage
 
