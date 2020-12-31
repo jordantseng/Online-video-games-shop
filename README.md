@@ -40,7 +40,7 @@ Admin page
 - Product management (create prodcut, edit product including upload image, delete product)
 - Order management (update order as delivered)
 
-#### TODO:
+#### TODO
 - Cancell api requests while the component is unmounted
 
 ## Technologies
