@@ -41,7 +41,7 @@ Admin page
 - Order management (update order as delivered)
 
 #### TODO
-- Cancell api requests while the component is unmounted
+- Cancel api requests while the component is unmounted
 
 ## Technologies
 
@@ -58,7 +58,7 @@ Server
 - sendgrid
 
 ## Obstacles
-#### Q: Cancell api requests while the component is unmounted    
+#### Q: Cancel api requests while the component is unmounted    
 A: There are several ways to address this problem, such as redux middleware, redux-thunk or redux-observable. As I already applied redux-thunk in my project, I prefer to use redux-thunk as my solution. However this issue is still unsolved :(
 
 
