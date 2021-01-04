@@ -16,5 +16,5 @@ export const sendOrderEmail = async (order) => {
     `,
   });
 
-  console.log('email sent');
+  // console.log('email sent');
 };

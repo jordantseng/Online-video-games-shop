@@ -23,8 +23,6 @@ export const getLatestProducts = asyncHandler(async (req, res) => {
     .sort({ releaseDate: -1 })
     .limit(4);
 
-  console.log(products);
-
   if (!products) {
     res.status(404);
     throw new Error('Latest products not found');
