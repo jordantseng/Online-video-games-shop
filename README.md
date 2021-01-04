@@ -32,7 +32,9 @@ Admin page
 - Search products by name
 - Comment product
 - Shopping cart
-- Payment 
+- Payment
+- Error and exception handling
+- Form Validation
 
 #### Admin
 - Carousel management 
@@ -59,7 +61,7 @@ Server
 
 ## Obstacles
 #### Q: Cancel api requests while the component is unmounted    
-A: There are several ways to address this problem, such as redux middleware, redux-thunk or redux-observable. As I already applied redux-thunk in my project, I prefer to use redux-thunk as my solution. However this issue is still unsolved :(
+A: There are several ways to address this problem, such as redux middleware, redux-thunk or redux-observable and more. However, to address this problem, my first thought is that I need to cancel api requests in the cleanup function of useEffect life cycle hook. In this project, redux is used, meaning that api is called in the action creators instead of component. For now, I just pick the most straightforward but cluttered way. I pass the cancel token as an argument to action creators and invoke cancel method in cleanup function of useEffect. This implementation definitely can be improved. I'm  still researching :)
 
 
 ## Usage
