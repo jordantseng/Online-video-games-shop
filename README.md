@@ -1,8 +1,8 @@
 # Online video games shop
 Online video games shop using MERN stack, including admin dashboard.  
-demo: https://e-commerce-20201123.herokuapp.com/
-admin account: admin@gmail.com
-admin password: 123456
+demo: https://e-commerce-20201123.herokuapp.com/   
+admin account: admin@gmail.com    
+admin password: 123456   
 
 ## Table of contents
 * [Screenshot](#screenshot)
