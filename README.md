@@ -47,6 +47,7 @@ Admin page
 #### TODO
 - Wishlist
 - Delete order
+- Delete comment
 
 ## Technologies
 
