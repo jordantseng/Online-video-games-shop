@@ -45,6 +45,7 @@ Admin page
 - Order management (update order as delivered)
 
 #### TODO
+- Test (frontend)
 - Wishlist
 - Delete order
 - Delete comment
