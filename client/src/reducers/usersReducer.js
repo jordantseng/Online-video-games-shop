@@ -7,6 +7,7 @@ import {
   FETCH_USERS_REQUEST,
   FETCH_USERS_SUCCESS,
   FETCH_USERS_FAIL,
+  FETCH_USERS_CANCELLED,
   RESET_USERS,
 } from '../types/users';
 
@@ -27,6 +28,9 @@ const usersReducer = (state = initialState, action) => {
 
     case FETCH_USERS_FAIL:
       return { ...state, loading: false, error: action.payload };
+
+    case FETCH_USERS_CANCELLED:
+      return { ...state, loading: false };
 
     case DELETE_USER_REQUEST:
       return {

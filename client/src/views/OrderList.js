@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import axios from '../axios';
 import { fetchOrders } from '../actions/orders';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -16,7 +17,13 @@ const OrderList = ({ match }) => {
   const pageNumber = match.params.pageNumber;
 
   useEffect(() => {
-    dispatch(fetchOrders(pageNumber));
+    const source = axios.CancelToken.source();
+
+    dispatch(fetchOrders(pageNumber, source.token));
+
+    return () => {
+      source.cancel();
+    };
   }, [dispatch, pageNumber]);
 
   return (

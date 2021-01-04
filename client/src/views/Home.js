@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import axios from '../axios';
 import { fetchPopularProducts } from '../actions/popularProducts';
 import { fetchLatestProducts } from '../actions/latestProducts';
 import { fetchEvents } from '../actions/events';
@@ -33,9 +34,15 @@ const Home = () => {
   } = useSelector((state) => state.latestProducts);
 
   useEffect(() => {
-    dispatch(fetchEvents());
-    dispatch(fetchPopularProducts());
-    dispatch(fetchLatestProducts());
+    const source = axios.CancelToken.source();
+
+    dispatch(fetchEvents(source.token));
+    dispatch(fetchPopularProducts(source.token));
+    dispatch(fetchLatestProducts(source.token));
+
+    return () => {
+      source.cancel();
+    };
   }, [dispatch]);
 
   return (

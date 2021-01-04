@@ -5,6 +5,7 @@ import {
   FETCH_MY_ORDER_REQUEST,
   FETCH_MY_ORDER_SUCCESS,
   FETCH_MY_ORDER_FAIL,
+  FETCH_MY_ORDER_CANCELLED,
   CREATE_ORDER_REQUEST,
   CREATE_ORDER_SUCCESS,
   CREATE_ORDER_FAIL,
@@ -13,25 +14,29 @@ import {
   UPDATE_ORDER_PAY_FAIL,
 } from '../types/order';
 
-export const fetchMyOrder = (id) => async (dispatch, getState) => {
+export const fetchMyOrder = (id, cancelToken) => async (dispatch) => {
   dispatch({ type: FETCH_MY_ORDER_REQUEST });
 
   try {
-    const { data } = await axios.get(`/api/orders/${id}`);
+    const { data } = await axios.get(`/api/orders/${id}`, { cancelToken });
 
     dispatch({ type: FETCH_MY_ORDER_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({
-      type: FETCH_MY_ORDER_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.response,
-    });
+    if (axios.isCancel(error)) {
+      dispatch({ type: FETCH_MY_ORDER_CANCELLED });
+    } else {
+      dispatch({
+        type: FETCH_MY_ORDER_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.response,
+      });
+    }
   }
 };
 
-export const createOrder = (order) => async (dispatch, getState) => {
+export const createOrder = (order) => async (dispatch) => {
   dispatch({ type: CREATE_ORDER_REQUEST });
   try {
     const { data } = await axios.post('/api/orders', order);
@@ -53,10 +58,7 @@ export const createOrder = (order) => async (dispatch, getState) => {
   }
 };
 
-export const updateOrderToPaid = (id, paymentResult) => async (
-  dispatch,
-  getState
-) => {
+export const updateOrderToPaid = (id, paymentResult) => async (dispatch) => {
   dispatch({ type: UPDATE_ORDER_PAY_REQUEST });
 
   try {

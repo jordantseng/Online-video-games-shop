@@ -1,7 +1,8 @@
 import {
   FETCH_USER_PROFILE_REQUEST,
-  FETCH_USER_PROFILE_FAIL,
   FETCH_USER_PROFILE_SUCCESS,
+  FETCH_USER_PROFILE_FAIL,
+  FETCH_USER_PROFILE_CANCELLED,
   UPDATE_USER_PROFILE_REQUEST,
   UPDATE_USER_PROFILE_SUCCESS,
   UPDATE_USER_PROFILE_FAIL,
@@ -21,6 +22,9 @@ const profileReducer = (state = initialState, action) => {
 
     case FETCH_USER_PROFILE_FAIL:
       return { ...state, loading: false, error: action.payload };
+
+    case FETCH_USER_PROFILE_CANCELLED:
+      return { ...state, loading: false };
 
     case UPDATE_USER_PROFILE_REQUEST:
       return { ...state, loading: true };

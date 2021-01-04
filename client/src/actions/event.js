@@ -12,25 +12,32 @@ import {
   DELETE_EVENT_REQUEST,
   DELETE_EVENT_SUCCESS,
   DELETE_EVENT_FAIL,
+  FETCH_EVENT_CANCELLED,
 } from '../types/event';
 import { RESET_EVENTS } from '../types/events';
 import history from '../history';
 
-export const fetchEvent = (id) => async (dispatch, getState) => {
+export const fetchEvent = (id, cancelToken) => async (dispatch, getState) => {
   dispatch({ type: FETCH_EVENT_REQUEST });
 
   try {
-    const { data } = await axios.get(`/api/events/${id}`);
+    const { data } = await axios.get(`/api/events/${id}`, { cancelToken });
 
     dispatch({ type: FETCH_EVENT_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({
-      type: FETCH_EVENT_FAIL,
-      payload:
-        error.response && error.response.message
-          ? error.response.message
-          : error.response.data.message,
-    });
+    if (axios.isCancel(error)) {
+      dispatch({
+        type: FETCH_EVENT_CANCELLED,
+      });
+    } else {
+      dispatch({
+        type: FETCH_EVENT_FAIL,
+        payload:
+          error.response && error.response.message
+            ? error.response.message
+            : error.response.data.message,
+      });
+    }
   }
 };
 

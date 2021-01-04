@@ -10,25 +10,34 @@ import {
   FETCH_USERS_REQUEST,
   FETCH_USERS_SUCCESS,
   FETCH_USERS_FAIL,
+  FETCH_USERS_CANCELLED,
 } from '../types/users';
 
-export const fetchUsers = (pageNumber) => async (dispatch, getState) => {
+export const fetchUsers = (pageNumber, cancelToken) => async (
+  dispatch,
+  getState
+) => {
   dispatch({ type: FETCH_USERS_REQUEST });
 
   try {
     const { data } = await axios.get(`/api/users`, {
       params: { pageNumber },
+      cancelToken,
     });
 
     dispatch({ type: FETCH_USERS_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({
-      type: FETCH_USERS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.response,
-    });
+    if (axios.isCancel(error)) {
+      dispatch({ type: FETCH_USERS_CANCELLED });
+    } else {
+      dispatch({
+        type: FETCH_USERS_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.response,
+      });
+    }
   }
 };
 

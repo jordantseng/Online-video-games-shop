@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import axios from '../axios';
 import { fetchMyOrders } from '../actions/orders';
 
 import Paginate from './Paginate';
@@ -18,7 +19,13 @@ const UserOrders = ({ location }) => {
   const pageNumber = location.pathname.split('page/')[1] || 1;
 
   useEffect(() => {
-    dispatch(fetchMyOrders(pageNumber));
+    const source = axios.CancelToken.source();
+
+    dispatch(fetchMyOrders(pageNumber, source.token));
+
+    return () => {
+      source.cancel();
+    };
   }, [dispatch, pageNumber]);
 
   return (

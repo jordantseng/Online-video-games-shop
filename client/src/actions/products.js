@@ -4,6 +4,7 @@ import {
   FETCH_PRODUCTS_REQUEST,
   FETCH_PRODUCTS_SUCCESS,
   FETCH_PRODUCTS_FAIL,
+  FETCH_PRODUCTS_CANCELLED,
 } from '../types/products';
 
 import {
@@ -18,24 +19,30 @@ import {
 export const fetchProducts = (
   keyword = '',
   category = '',
-  pageNumber = 1
+  pageNumber = 1,
+  cancelToken
 ) => async (dispatch) => {
   dispatch({ type: FETCH_PRODUCTS_REQUEST });
 
   try {
     const { data } = await axios.get(`/api/products`, {
       params: { keyword, category, pageNumber },
+      cancelToken,
     });
 
     dispatch({ type: FETCH_PRODUCTS_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({
-      type: FETCH_PRODUCTS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
+    if (axios.isCancel(error)) {
+      dispatch({ type: FETCH_PRODUCTS_CANCELLED });
+    } else {
+      dispatch({
+        type: FETCH_PRODUCTS_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
   }
 };
 

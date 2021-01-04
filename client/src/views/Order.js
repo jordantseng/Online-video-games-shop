@@ -24,6 +24,8 @@ const Order = ({ match }) => {
   const orderId = match.params.id;
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     const addPayPalScript = async () => {
       // to add a script tag that paypal needed
       const { data: clientId } = await axios.get('/api/config/paypal');
@@ -38,7 +40,7 @@ const Order = ({ match }) => {
     };
 
     if (!order || orderId !== order._id) {
-      dispatch(fetchMyOrder(orderId));
+      dispatch(fetchMyOrder(orderId, source.token));
     } else if (!order.isPaid) {
       if (!window.paypal) {
         addPayPalScript();
@@ -46,6 +48,10 @@ const Order = ({ match }) => {
         setSdkReady(true);
       }
     }
+
+    return () => {
+      source.cancel();
+    };
   }, [order, dispatch, orderId]);
 
   const renderPaymentButton = () => {

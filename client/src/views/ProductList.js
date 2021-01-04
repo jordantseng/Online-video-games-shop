@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Table, Button, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
+import axios from '../axios';
 import {
   fetchProducts,
   deleteProduct,
@@ -20,7 +21,12 @@ const ProductList = ({ match }) => {
   const pageNumber = match.params.pageNumber;
 
   useEffect(() => {
-    dispatch(fetchProducts(undefined, undefined, pageNumber));
+    const source = axios.CancelToken.source();
+    dispatch(fetchProducts(undefined, undefined, pageNumber, source.token));
+
+    return () => {
+      source.cancel();
+    };
   }, [dispatch, pageNumber]);
 
   const onDeleteClick = (id) => {

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-
 import { useDispatch, useSelector } from 'react-redux';
 
+import axios from '../axios';
 import { fetchUserProfile, updateUserProfile } from '../actions/profile';
 
 import ProfileForm from '../components/ProfileForm';
@@ -17,12 +17,18 @@ const UserProfile = () => {
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     if (!profile) {
-      dispatch(fetchUserProfile());
+      dispatch(fetchUserProfile(source.token));
     }
+
+    return () => {
+      source.cancel();
+    };
   }, [dispatch, profile]);
 
-  const onUpdateProfileClick = (name, email, password) => {
+  const onUpdateProfileClick = (name, password) => {
     dispatch(updateUserProfile({ name, password }));
   };
 

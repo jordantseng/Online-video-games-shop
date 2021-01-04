@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Table, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
+import axios from '../axios';
 import { fetchUsers, deleteUser } from '../actions/users';
 
 import Message from '../components/Message';
@@ -18,7 +19,13 @@ const UserList = ({ match }) => {
   const pageNumber = match.params.pageNumber;
 
   useEffect(() => {
-    dispatch(fetchUsers(pageNumber));
+    const source = axios.CancelToken.source();
+
+    dispatch(fetchUsers(pageNumber, source.token));
+
+    return () => {
+      source.cancel();
+    };
   }, [dispatch, pageNumber]);
 
   const renderUsersTable =

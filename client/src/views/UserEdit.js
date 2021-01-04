@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 
+import axios from '../axios';
 import { fetchUser, updateUser } from '../actions/user';
 import { userFormValidationSchema } from '../validations';
 
@@ -26,13 +27,19 @@ const UserEdit = ({ match }) => {
   const userId = match.params.id;
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     if (!user || userId !== user._id) {
-      dispatch(fetchUser(userId));
+      dispatch(fetchUser(userId, source.token));
     } else {
       const { name, email, isAdmin } = user;
 
       setUserFormValues({ name, email, isAdmin });
     }
+
+    return () => {
+      source.cancel();
+    };
   }, [dispatch, userId, user]);
 
   const onSubmitClick = (userFormValues) => {

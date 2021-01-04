@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 
+import axios from '../axios';
 import { fetchEvent, updateEvent } from '../actions/event';
 import { eventFormValidationSchema } from '../validations';
 
@@ -26,11 +27,17 @@ const EventEdit = ({ match }) => {
   const eventId = match.params.id;
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     if (!event || event._id !== eventId) {
-      dispatch(fetchEvent(eventId));
+      dispatch(fetchEvent(eventId, source.token));
     } else {
       setEventFormValues({ redirectUrl: event.redirectUrl });
     }
+
+    return () => {
+      source.cancel();
+    };
   }, [dispatch, event, eventId, setEventFormValues]);
 
   const onSubmit = (eventFormValues) => {

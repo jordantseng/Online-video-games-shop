@@ -2,6 +2,7 @@ import {
   FETCH_EVENT_REQUEST,
   FETCH_EVENT_SUCCESS,
   FETCH_EVENT_FAIL,
+  FETCH_EVENT_CANCELLED,
   CREATE_EVENT_REQUEST,
   CREATE_EVENT_SUCCESS,
   CREATE_EVENT_FAIL,
@@ -28,6 +29,9 @@ const eventReducer = (state = initialState, action) => {
 
     case FETCH_EVENT_FAIL:
       return { ...state, loading: false, error: action.payload };
+
+    case FETCH_EVENT_CANCELLED:
+      return { ...state, loading: false };
 
     case CREATE_EVENT_REQUEST:
       return { ...state, loading: true };

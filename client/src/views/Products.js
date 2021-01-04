@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import axios from '../axios';
 import { fetchProducts } from '../actions/products';
 
 import CardLoader from '../components/CardLoader';
@@ -19,7 +20,13 @@ const Products = ({ match }) => {
   const category = match.params.category;
 
   useEffect(() => {
-    dispatch(fetchProducts(undefined, category, pageNumber));
+    const source = axios.CancelToken.source();
+
+    dispatch(fetchProducts(undefined, category, pageNumber, source.token));
+
+    return () => {
+      source.cancel();
+    };
   }, [dispatch, category, pageNumber]);
 
   return (

@@ -2,7 +2,8 @@ import axios from 'axios';
 
 const instance = axios.create();
 
-// instance.CancelToken = axios.CancelToken;
+instance.CancelToken = axios.CancelToken;
+instance.isCancel = axios.isCancel;
 
 instance.interceptors.request.use(
   function (config) {

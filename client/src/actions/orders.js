@@ -3,9 +3,11 @@ import {
   FETCH_ORDERS_REQUEST,
   FETCH_ORDERS_SUCCESS,
   FETCH_ORDERS_FAIL,
+  FETCH_ORDERS_CANCELLED,
   FETCH_MY_ORDERS_REQUEST,
   FETCH_MY_ORDERS_SUCCESS,
   FETCH_MY_ORDERS_FAIL,
+  FETCH_MY_ORDERS_CANCELLED,
 } from '../types/orders';
 
 import {
@@ -14,45 +16,59 @@ import {
   UPDATE_ORDER_DELIVER_FAIL,
 } from '../types/order';
 
-export const fetchOrders = (pageNumber) => async (dispatch, getState) => {
+export const fetchOrders = (pageNumber, cancelToken) => async (
+  dispatch,
+  getState
+) => {
   dispatch({ type: FETCH_ORDERS_REQUEST });
 
   try {
     const { data } = await axios.get(`/api/orders`, {
       params: { pageNumber },
+      cancelToken,
     });
 
     dispatch({ type: FETCH_ORDERS_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({
-      type: FETCH_ORDERS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.response,
-    });
+    if (axios.isCancel(error)) {
+      dispatch({ type: FETCH_ORDERS_CANCELLED });
+    } else {
+      dispatch({
+        type: FETCH_ORDERS_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.response,
+      });
+    }
   }
 };
 
 // fetch my orders
-export const fetchMyOrders = (pageNumber) => async (dispatch, getState) => {
+export const fetchMyOrders = (pageNumber, cancelToken) => async (
+  dispatch,
+  getState
+) => {
   dispatch({ type: FETCH_MY_ORDERS_REQUEST });
   try {
     const { data } = await axios.get(`/api/orders/myorders`, {
       params: { pageNumber },
+      cancelToken,
     });
-
-    console.log(data);
 
     dispatch({ type: FETCH_MY_ORDERS_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({
-      type: FETCH_MY_ORDERS_FAIL,
-      payload:
-        error.response && error.response.message
-          ? error.response.message
-          : error.response,
-    });
+    if (axios.isCancel(error)) {
+      dispatch({ type: FETCH_MY_ORDERS_CANCELLED });
+    } else {
+      dispatch({
+        type: FETCH_MY_ORDERS_FAIL,
+        payload:
+          error.response && error.response.message
+            ? error.response.message
+            : error.response,
+      });
+    }
   }
 };
 

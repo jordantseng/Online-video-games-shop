@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Row, Col, Table, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
+import axios from '../axios';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { createEvent, deleteEvent } from '../actions/event';
@@ -13,9 +14,15 @@ const EventList = () => {
   const { loading, data: events, error } = useSelector((state) => state.events);
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     if (!events) {
-      dispatch(fetchEvents());
+      dispatch(fetchEvents(source.token));
     }
+
+    return () => {
+      source.cancel();
+    };
   }, [dispatch, events]);
 
   const onDeleteClick = (id) => {

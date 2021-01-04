@@ -6,25 +6,30 @@ import {
   UPDATE_USER_PROFILE_REQUEST,
   UPDATE_USER_PROFILE_SUCCESS,
   UPDATE_USER_PROFILE_FAIL,
+  FETCH_USER_PROFILE_CANCELLED,
   RESET_UPDATE_USER_PROFILE,
 } from '../types/profile';
 import { LOGIN_SUCCESS } from '../types/auth';
 
-export const fetchUserProfile = () => async (dispatch, getState) => {
+export const fetchUserProfile = (cancelToken) => async (dispatch, getState) => {
   dispatch({ type: FETCH_USER_PROFILE_REQUEST });
 
   try {
-    const { data } = await axios.get(`/api/users/profile`, {});
+    const { data } = await axios.get(`/api/users/profile`, { cancelToken });
 
     dispatch({ type: FETCH_USER_PROFILE_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({
-      type: FETCH_USER_PROFILE_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.response,
-    });
+    if (axios.isCancel(error)) {
+      dispatch({ type: FETCH_USER_PROFILE_CANCELLED });
+    } else {
+      dispatch({
+        type: FETCH_USER_PROFILE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.response,
+      });
+    }
   }
 };
 

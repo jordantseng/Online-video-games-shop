@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-
 import { Formik, Form } from 'formik';
-import { productFormValidationSchema } from '../validations';
 
+import axios from '../axios';
+import { productFormValidationSchema } from '../validations';
 import { fetchProduct, updateProduct } from '../actions/product';
 
 import FormContainer from '../components/FormContainer';
@@ -53,14 +53,20 @@ const ProductEdit = ({ match }) => {
   );
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     if (!product || productId !== product._id) {
-      dispatch(fetchProduct(productId));
+      dispatch(fetchProduct(productId, source.token));
     } else {
       setProductFormValues({
         ...product,
         releaseDate: new Date(product.releaseDate).toISOString().split('T')[0],
       });
     }
+
+    return () => {
+      source.cancel();
+    };
   }, [product, productId, dispatch, setProductFormValues]);
 
   const onSubmitClick = (productFormValues) => {
