@@ -43,7 +43,7 @@ Admin page
 - Order management (update order as delivered)
 
 #### TODO
-- Cancel api requests while the component is unmounted
+- 
 
 ## Technologies
 
