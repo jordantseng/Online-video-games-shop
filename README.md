@@ -1,8 +1,8 @@
 # Online video games shop
 Online video games shop using MERN stack, including admin dashboard.  
 demo: https://e-commerce-20201123.herokuapp.com/
-admin account: admin@gmail.com
-admin password: 123456
+admin account: admin@gmail.com   
+admin password: 123456  
 
 ## Table of contents
 * [Screenshot](#screenshot)
@@ -66,7 +66,7 @@ Server
 
 ## Obstacles
 #### Q: Cancel api requests while the component is unmounted    
-A: There are several ways to handle async actions for redux, such as redux-thunk or redux-observable, and more. To address this problem, my first thought is that I need to cancel api requests in the cleanup function of useEffect life cycle hook. As redux-thunk was already used as redux middleware in this project, now I just pick the most straightforward but cluttered way, which is passing the cancel token as an argument to action creators and invoke cancel method in cleanup function of useEffect. However this implementation definitely can be improved, this issue might be resolved more elegantly.
+A: There are several ways to handle async actions for redux, such as redux-thunk or redux-observable, and more. To address this problem, my first thought is that I need to cancel api requests in the cleanup function of useEffect life cycle hook. As redux-thunk was already used as redux middleware in this project, now I just pick the most straightforward but cluttered way, which is passing the cancel token as an argument to action creators and invoke cancel method in cleanup function of useEffect. However this implementation definitely can be improved.
 
 ## Usage
 
