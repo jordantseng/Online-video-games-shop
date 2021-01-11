@@ -6,6 +6,7 @@ import {
   SIGNUP_SUCCESS,
   SIGNUP_FAIL,
   LOGOUT_SUCCESS,
+  RESET_AUTH_ERROR,
 } from '../types/auth';
 
 const userInfoFromStorage = localStorage.getItem('auth')
@@ -42,6 +43,9 @@ const authReducer = (state = initialState, action) => {
 
     case LOGOUT_SUCCESS:
       return { user: null };
+
+    case RESET_AUTH_ERROR:
+      return { ...state, error: null };
 
     default:
       return state;

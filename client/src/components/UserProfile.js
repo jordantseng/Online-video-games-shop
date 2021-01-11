@@ -28,8 +28,8 @@ const UserProfile = () => {
     };
   }, [dispatch, profile]);
 
-  const onUpdateProfileClick = (name, password) => {
-    dispatch(updateUserProfile({ name, password }));
+  const onUpdateProfileClick = (name, email, password) => {
+    dispatch(updateUserProfile({ name, email, password }));
   };
 
   return (

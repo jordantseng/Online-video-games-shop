@@ -84,7 +84,11 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 export const updateUserProfile = asyncHandler(async (req, res) => {
   const { name, password } = req.body;
 
+  console.log(name, password);
+
   const user = await User.findById(req.user._id);
+
+  console.log(user);
 
   if (user) {
     user.name = name || user.name;
@@ -175,7 +179,6 @@ export const updateUser = asyncHandler(async (req, res) => {
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
     });
-    
   } else {
     res.status(404);
     throw new Error('User not found');

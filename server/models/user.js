@@ -34,7 +34,7 @@ userSchema.methods.matchPassword = async function (password) {
   return await bcrypt.compare(password, user.password);
 };
 
-// Delete user tasks when user is deleted
+// Delete user orders when user is deleted
 userSchema.pre('remove', async function (next) {
   const user = this;
 

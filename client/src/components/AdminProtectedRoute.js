@@ -4,16 +4,18 @@ import { Route } from 'react-router-dom';
 
 import history from '../history';
 
-const ProtectedRoute = ({ component, path }) => {
+const AdminProtectedRoute = ({ component, ...rest }) => {
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (!user) {
       history.replace('/login');
+    } else if (user && !user.isAdmin) {
+      history.goBack();
     }
-  }, []);
+  }, [user]);
 
-  return <Route path={path} component={component} />;
+  return <Route {...rest} component={component} />;
 };
 
-export default ProtectedRoute;
+export default AdminProtectedRoute;

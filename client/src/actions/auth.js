@@ -7,10 +7,10 @@ import {
   SIGNUP_SUCCESS,
   SIGNUP_FAIL,
   LOGOUT_SUCCESS,
+  RESET_AUTH_ERROR,
 } from '../types/auth';
 import history from '../history';
 import { RESET_ORDER } from '../types/order';
-
 import { RESET_PROFILE } from '../types/profile';
 
 export const login = (email, password) => async (dispatch) => {
@@ -37,17 +37,11 @@ export const login = (email, password) => async (dispatch) => {
           ? error.response.data.message
           : error.message,
     });
+
+    setTimeout(() => {
+      dispatch({ type: RESET_AUTH_ERROR });
+    }, 1500);
   }
-};
-
-export const logout = () => (dispatch) => {
-  localStorage.removeItem('auth');
-
-  dispatch({ type: RESET_ORDER });
-  dispatch({ type: RESET_PROFILE });
-  dispatch({ type: LOGOUT_SUCCESS });
-
-  history.push('/login');
 };
 
 export const signup = (name, email, password) => async (dispatch) => {
@@ -74,5 +68,19 @@ export const signup = (name, email, password) => async (dispatch) => {
           ? error.response.data.message
           : error.response,
     });
+
+    setTimeout(() => {
+      dispatch({ type: RESET_AUTH_ERROR });
+    }, 1500);
   }
+};
+
+export const logout = () => (dispatch) => {
+  localStorage.removeItem('auth');
+
+  dispatch({ type: RESET_ORDER });
+  dispatch({ type: RESET_PROFILE });
+  dispatch({ type: LOGOUT_SUCCESS });
+
+  history.push('/login');
 };
