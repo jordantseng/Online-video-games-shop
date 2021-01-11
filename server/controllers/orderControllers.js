@@ -49,7 +49,7 @@ export const updateOrderToDelivered = asyncHandler(async (req, res) => {
 // @desc create new order
 // @route POST /api/orders
 // @access Private
-export const addOrderItems = asyncHandler(async (req, res) => {
+export const createOrder = asyncHandler(async (req, res) => {
   const {
     orderItems,
     shippingAddress,
@@ -124,7 +124,7 @@ export const getOrder = asyncHandler(async (req, res) => {
 });
 
 // @desc Update order to paid
-// @route GET /api/orders/:id/pay
+// @route PUT /api/orders/:id/pay
 // @access Private
 export const updateOrderToPaid = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id).populate(
@@ -173,7 +173,7 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
 
   await order.save();
 
-  sendOrderEmail(order);
+  // sendOrderEmail(order);
 
   res.send(order);
 });

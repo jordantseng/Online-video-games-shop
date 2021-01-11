@@ -84,11 +84,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 export const updateUserProfile = asyncHandler(async (req, res) => {
   const { name, password } = req.body;
 
-  console.log(name, password);
-
   const user = await User.findById(req.user._id);
-
-  console.log(user);
 
   if (user) {
     user.name = name || user.name;

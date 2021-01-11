@@ -28,10 +28,8 @@ const Product = ({ match }) => {
   const productId = match.params.id;
 
   useEffect(() => {
-    if (!product || productId !== product._id) {
-      dispatch(fetchProduct(productId));
-    }
-  }, [dispatch, product, productId]);
+    dispatch(fetchProduct(productId));
+  }, [dispatch, productId]);
 
   return (
     <>

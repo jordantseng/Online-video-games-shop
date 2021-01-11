@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-  addOrderItems,
+  createOrder,
   getOrder,
   updateOrderToPaid,
   getMyOrders,
@@ -12,7 +12,7 @@ import admin from '../middleware/admin.js';
 
 const router = express.Router();
 
-router.route('').get(auth, admin, getOrders).post(auth, addOrderItems);
+router.route('').get(auth, admin, getOrders).post(auth, createOrder);
 router.route('/myorders').get(auth, getMyOrders);
 router.route('/:id').get(auth, getOrder);
 router.route('/:id/pay').put(auth, updateOrderToPaid);
