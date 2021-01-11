@@ -41,7 +41,9 @@ const ProductList = ({ match }) => {
     !loading &&
     products.map((product) => (
       <tr key={product._id}>
-        <td>{product._id}</td>
+        <td>
+          <Link to={`/admin/products/${product._id}/edit`}>{product._id}</Link>
+        </td>
         <td>{product.name}</td>
         <td>${product.price}</td>
         <td>{product.category}</td>

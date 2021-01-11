@@ -32,7 +32,9 @@ const UserList = ({ match }) => {
     !loading &&
     users.map((user) => (
       <tr key={user._id}>
-        <td>{user._id}</td>
+        <td>
+          <Link to={`/admin/users/${user._id}/edit`}>{user._id}</Link>
+        </td>
         <td>{user.name}</td>
         <td>
           <a href={`emailto:${user.email}`}>{user.email}</a>

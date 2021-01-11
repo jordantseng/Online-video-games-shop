@@ -11,9 +11,11 @@ const OrderTable = ({ orders, user, inProfilePage = false }) => {
 
   const renderOrders = orders.map((order) => (
     <tr key={order._id}>
-      <td>{order._id}</td>
+      <td>
+        <Link to={`/orders/${order._id}`}>{order._id}</Link>
+      </td>
       <td>{order.user.name}</td>
-      <td>{order.createdAt}</td>
+      <td>{order.createdAt.split('T')[0]}</td>
       <td>${order.totalPrice}</td>
       <td>
         {order.isPaid ? (
@@ -30,12 +32,6 @@ const OrderTable = ({ orders, user, inProfilePage = false }) => {
         )}
       </td>
       <td>
-        <Link to={`/orders/${order._id}`}>
-          <Button variant='light' className='btn-sm'>
-            Details
-          </Button>
-        </Link>
-
         {!inProfilePage && user.isAdmin && order.isPaid && !order.isDelivered && (
           <Button
             type='button'

@@ -25,19 +25,16 @@ const EventList = () => {
     };
   }, [dispatch, events]);
 
-  const onDeleteClick = (id) => {
-    dispatch(deleteEvent(id));
-  };
-
-  const onCreateClick = () => {
-    dispatch(createEvent());
-  };
+  const onDeleteClick = (id) => dispatch(deleteEvent(id));
+  const onCreateClick = () => dispatch(createEvent());
 
   const renderEvents =
     !loading &&
     events.map((event) => (
       <tr key={event._id}>
-        <td>{event._id}</td>
+        <td>
+          <Link to={`/admin/eventList/${event._id}/edit`}>{event._id}</Link>
+        </td>
         <td>{event.redirectUrl}</td>
         <td>
           <Link to={`/admin/eventList/${event._id}/edit`}>

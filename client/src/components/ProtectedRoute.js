@@ -11,7 +11,7 @@ const ProtectedRoute = ({ component, path }) => {
     if (!user) {
       history.replace('/login');
     }
-  }, []);
+  }, [user]);
 
   return <Route path={path} component={component} />;
 };
