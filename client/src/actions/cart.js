@@ -10,7 +10,6 @@ import {
 export const addToCart = (id, qty) => async (dispatch, getState) => {
   const { data } = await axios.get(`/api/products/${id}`);
 
-  // TODO: selected qty should not greater than db qty
   dispatch({
     type: ADD_CART_ITEM,
     payload: {

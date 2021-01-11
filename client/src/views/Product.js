@@ -44,22 +44,22 @@ const Product = ({ match }) => {
           />
 
           {error && <Message variant='danger'>{error}</Message>}
-          <Row>
+          <Row className='m-auto'>
             <Button
-              className='my-3'
+              className='mr-auto my-3'
               variant='secondary'
               onClick={() => history.goBack()}>
               Go back
             </Button>
           </Row>
           <Row>
-            <Col md={6}>
+            <Col className='m-auto' md={6}>
               <Image
                 className='m-auto'
                 src={`/api/products/${product._id}/image`}
                 alt={product.name}
                 fluid
-                style={{ height: '25rem' }}
+                height='25rem'
               />
             </Col>
             <Col md={3}>

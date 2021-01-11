@@ -7,7 +7,6 @@ import {
   updateProduct,
   createProductReview,
   getTopProducts,
-  uploadProductImage,
   getProductImage,
   getLatestProducts,
 } from '../controllers/productControllers.js';
@@ -31,9 +30,6 @@ router
 
 router.route('/:id/reviews').post(auth, createProductReview);
 
-router
-  .route('/:id/image')
-  .get(getProductImage)
-  .post(auth, uploadImg.single('productImg'), uploadProductImage);
+router.route('/:id/image').get(getProductImage);
 
 export default router;

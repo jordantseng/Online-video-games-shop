@@ -193,19 +193,6 @@ export const createProductReview = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc upload product image
-// @route POST /api/products/:id/image
-// access Private
-export const uploadProductImage = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
-
-  product.image = req.file.buffer;
-
-  await product.save();
-
-  res.send();
-});
-
 // @desc get product image
 // @route GET /api/products/:id/image
 // @desc Public
