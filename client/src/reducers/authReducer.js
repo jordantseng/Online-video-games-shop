@@ -7,6 +7,9 @@ import {
   SIGNUP_FAIL,
   LOGOUT_SUCCESS,
   RESET_AUTH_ERROR,
+  UPDATE_LIKELIST_REQUEST,
+  UPDATE_LIKELIST_SUCCESS,
+  UPDATE_LIKELIST_FAIL,
 } from '../types/auth';
 
 const userInfoFromStorage = localStorage.getItem('auth')
@@ -46,6 +49,25 @@ const authReducer = (state = initialState, action) => {
 
     case RESET_AUTH_ERROR:
       return { ...state, error: null };
+
+    case UPDATE_LIKELIST_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        user: {
+          ...state.user,
+          wishList: [...state.user.wishList, { _id: action.payload }],
+        },
+      };
+
+    case UPDATE_LIKELIST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+
+    case UPDATE_LIKELIST_FAIL:
+      return { ...state, loading: false, error: action.payload };
 
     default:
       return state;

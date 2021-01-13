@@ -12,9 +12,10 @@ const userSchema = Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     isAdmin: { type: Boolean, required: true, default: false },
+    wishList: { type: [{ type: Schema.Types.ObjectId, ref: 'Product' }] },
   },
   {
-    timestamps: true, // createdAt & updatedAt
+    timestamps: true,
   }
 );
 

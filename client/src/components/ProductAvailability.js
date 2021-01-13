@@ -1,14 +1,30 @@
 import React, { useState } from 'react';
 import { Row, Col, ListGroup, Card, Form, Button } from 'react-bootstrap';
-import history from '../history';
+import { useDispatch, useSelector } from 'react-redux';
 
-const AddProductToCart = ({ product }) => {
+import history from '../history';
+import { updateListList } from '../actions/auth';
+
+const ProductAvailability = ({ product }) => {
+  const dispatch = useDispatch();
   const [qty, setQty] = useState(1);
+  const { wishList } = useSelector((state) => state.auth.user);
+
+  console.log(wishList);
+  console.log(product._id);
 
   const onAddToCartClick = () => {
     // store the product id and qty in url
     history.push(`/cart/${product._id}?qty=${qty}`);
   };
+
+  const onAddToWishListClick = () => {
+    dispatch(updateListList(product._id));
+  };
+
+  const renderWishlistText = wishList.find((wish) => wish._id === product._id)
+    ? 'Remove From Wishlist'
+    : 'Add To Wishlist';
 
   return (
     <Card>
@@ -57,10 +73,16 @@ const AddProductToCart = ({ product }) => {
             onClick={onAddToCartClick}>
             {!product.isPreOrder ? 'Add To Cart' : 'Pre-Order'}
           </Button>
+          <Button
+            className='btn-block'
+            type='button'
+            onClick={onAddToWishListClick}>
+            {renderWishlistText}
+          </Button>
         </ListGroup.Item>
       </ListGroup>
     </Card>
   );
 };
 
-export default AddProductToCart;
+export default ProductAvailability;

@@ -8,6 +8,9 @@ import {
   SIGNUP_FAIL,
   LOGOUT_SUCCESS,
   RESET_AUTH_ERROR,
+  UPDATE_LIKELIST_REQUEST,
+  UPDATE_LIKELIST_SUCCESS,
+  UPDATE_LIKELIST_FAIL,
 } from '../types/auth';
 import history from '../history';
 import { RESET_ORDER } from '../types/order';
@@ -83,4 +86,22 @@ export const logout = () => (dispatch) => {
   dispatch({ type: LOGOUT_SUCCESS });
 
   history.push('/login');
+};
+
+export const updateListList = (productId) => async (dispatch) => {
+  // TODO
+  dispatch({ type: UPDATE_LIKELIST_REQUEST, payload: productId });
+
+  try {
+    const { data } = await axios.put('/api/users/wishlist', { productId });
+    dispatch({ type: UPDATE_LIKELIST_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_LIKELIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.response,
+    });
+  }
 };

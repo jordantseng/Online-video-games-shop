@@ -37,7 +37,7 @@ export const createUser = asyncHandler(async (req, res) => {
 export const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).populate('wishList', '-image');
 
   if (!user) {
     res.status(404);
@@ -55,6 +55,7 @@ export const authUser = asyncHandler(async (req, res) => {
     name: user.name,
     email: user.email,
     isAdmin: user.isAdmin,
+    wishList: user.wishList,
     token: { id: user.generateToken(), expiresIn: 3600 },
   });
 });
@@ -71,6 +72,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      wishList: user.wishList,
     });
   } else {
     res.status(404);
@@ -99,6 +101,38 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
       isAdmin: updatedUser.isAdmin,
       token: { id: user.generateToken(), expiresIn: 3600 },
     });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+// @desc update single user wishlist
+// @route PUT /api/users/wishlist
+// @access PRIVATE
+export const updateWishlist = asyncHandler(async (req, res) => {
+  const { productId } = req.body;
+
+  const user = await User.findById(req.user._id)
+    .select('-password')
+    .populate('wishList', '-image');
+
+  if (user) {
+    const alreadyExisted = user.wishList.find(
+      (wish) => wish._id.toString() === productId
+    );
+
+    if (!alreadyExisted) {
+      user.wishList.push(productId);
+    } else {
+      user.wishList = user.wishList.filter((wish) => {
+        return wish._id.toString() !== productId;
+      });
+    }
+
+    await user.save();
+
+    res.send(user.wishList);
   } else {
     res.status(404);
     throw new Error('User not found');

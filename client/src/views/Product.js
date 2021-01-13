@@ -12,7 +12,7 @@ import Meta from '../components/Meta';
 import Reviews from '../components/Reviews';
 import CommentReview from '../components/CommentReview';
 import ProductDetails from '../components/ProductDetails';
-import AddProductToCart from '../components/AddProductToCart';
+import ProductAvailability from '../components/ProductAvailability';
 
 const Product = ({ match }) => {
   const {
@@ -66,7 +66,7 @@ const Product = ({ match }) => {
               <ProductDetails product={product} />
             </Col>
             <Col md={3}>
-              <AddProductToCart product={product} />
+              <ProductAvailability product={product} />
             </Col>
           </Row>
           <Row>
