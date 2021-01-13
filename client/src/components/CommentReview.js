@@ -23,7 +23,7 @@ const commentOptions = [
 ];
 
 const CommentReview = () => {
-  const { user } = useSelector((state) => state.auth);
+  const { data: user } = useSelector((state) => state.auth);
   const { data: product } = useSelector((state) => state.product);
   const dispatch = useDispatch();
 

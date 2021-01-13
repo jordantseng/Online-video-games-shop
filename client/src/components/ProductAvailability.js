@@ -8,10 +8,7 @@ import { updateListList } from '../actions/auth';
 const ProductAvailability = ({ product }) => {
   const dispatch = useDispatch();
   const [qty, setQty] = useState(1);
-  const { wishList } = useSelector((state) => state.auth.user);
-
-  console.log(wishList);
-  console.log(product._id);
+  const { wishList } = useSelector((state) => state.auth.data);
 
   const onAddToCartClick = () => {
     // store the product id and qty in url

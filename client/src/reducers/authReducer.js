@@ -17,7 +17,7 @@ const userInfoFromStorage = localStorage.getItem('auth')
   : null;
 
 const initialState = {
-  user: userInfoFromStorage,
+  data: userInfoFromStorage,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -26,7 +26,7 @@ const authReducer = (state = initialState, action) => {
       return { ...state, loading: true };
 
     case LOGIN_SUCCESS:
-      return { ...state, loading: false, user: action.payload };
+      return { ...state, loading: false, data: action.payload };
 
     case LOGIN_FAIL:
       return {
@@ -39,13 +39,13 @@ const authReducer = (state = initialState, action) => {
       return { ...state, loading: true };
 
     case SIGNUP_SUCCESS:
-      return { ...state, loading: false, user: action.payload };
+      return { ...state, loading: false, data: action.payload };
 
     case SIGNUP_FAIL:
       return { ...state, loading: false, error: action.payload };
 
     case LOGOUT_SUCCESS:
-      return { user: null };
+      return { data: null };
 
     case RESET_AUTH_ERROR:
       return { ...state, error: null };
@@ -54,16 +54,16 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-        user: {
-          ...state.user,
-          wishList: [...state.user.wishList, { _id: action.payload }],
-        },
       };
 
     case UPDATE_LIKELIST_SUCCESS:
       return {
         ...state,
         loading: false,
+        data: {
+          ...state.data,
+          wishList: [...action.payload],
+        },
       };
 
     case UPDATE_LIKELIST_FAIL:

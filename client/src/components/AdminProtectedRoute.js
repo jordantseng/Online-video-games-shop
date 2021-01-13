@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom';
 import history from '../history';
 
 const AdminProtectedRoute = ({ component, ...rest }) => {
-  const { user } = useSelector((state) => state.auth);
+  const { data: user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (!user) {

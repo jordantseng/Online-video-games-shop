@@ -12,7 +12,7 @@ import Routes from './components/Routes';
 
 const App = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const { data: user } = useSelector((state) => state.auth);
 
   const tokenTimer = useRef();
 

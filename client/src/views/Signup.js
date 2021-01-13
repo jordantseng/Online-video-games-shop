@@ -12,7 +12,7 @@ import Loader from '../components/Loader';
 
 const Signup = ({ history, location }) => {
   const dispatch = useDispatch();
-  const { loading, user, error } = useSelector((state) => state.auth);
+  const { loading, data: user, error } = useSelector((state) => state.auth);
   const redirect = location.search ? location.search.split('=')[1] : '/';
 
   useEffect(() => {

@@ -13,7 +13,7 @@ const OrderList = ({ match }) => {
   const { loading, data: orders, page, error } = useSelector(
     (state) => state.orders
   );
-  const { user } = useSelector((state) => state.auth);
+  const { data: user } = useSelector((state) => state.auth);
   const pageNumber = match.params.pageNumber;
 
   useEffect(() => {

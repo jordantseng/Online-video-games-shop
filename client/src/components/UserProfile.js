@@ -14,7 +14,7 @@ const UserProfile = () => {
   const { loading, data: profile, error, success } = useSelector(
     (state) => state.profile
   );
-  const { user } = useSelector((state) => state.auth);
+  const { data: user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const source = axios.CancelToken.source();

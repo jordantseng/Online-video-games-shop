@@ -8,7 +8,7 @@ import SearchBox from '../components/SearchBox';
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const { data: user } = useSelector((state) => state.auth);
 
   const onLogoutClick = () => {
     dispatch(logout());

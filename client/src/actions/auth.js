@@ -88,12 +88,13 @@ export const logout = () => (dispatch) => {
   history.push('/login');
 };
 
+// optimistic update
 export const updateListList = (productId) => async (dispatch) => {
-  // TODO
-  dispatch({ type: UPDATE_LIKELIST_REQUEST, payload: productId });
+  dispatch({ type: UPDATE_LIKELIST_REQUEST });
 
   try {
     const { data } = await axios.put('/api/users/wishlist', { productId });
+
     dispatch({ type: UPDATE_LIKELIST_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
