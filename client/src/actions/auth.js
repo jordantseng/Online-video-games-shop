@@ -22,12 +22,7 @@ export const login = (email, password) => async (dispatch) => {
   try {
     const { data } = await axios.post('/api/users/login', { email, password });
 
-    const expiresInSec = +data.token.expiresIn;
-
-    const now = new Date();
-    const expirationDate = new Date(now.getTime() + expiresInSec * 1000);
-
-    data.token.expirationDate = expirationDate.toISOString();
+    data.token.expirationDate = expirationDate(data);
 
     dispatch({ type: LOGIN_SUCCESS, payload: data });
 
@@ -53,12 +48,7 @@ export const signup = (name, email, password) => async (dispatch) => {
   try {
     const { data } = await axios.post('/api/users', { name, email, password });
 
-    const expiresInSec = +data.token.expiresIn;
-
-    const now = new Date();
-    const expirationDate = new Date(now.getTime() + expiresInSec * 1000);
-
-    data.token.expirationDate = expirationDate.toISOString();
+    data.token.expirationDate = expirationDate(data);
 
     dispatch({ type: SIGNUP_SUCCESS, payload: data });
 
@@ -89,20 +79,50 @@ export const logout = () => (dispatch) => {
 };
 
 // optimistic update
-export const updateListList = (productId) => async (dispatch) => {
-  dispatch({ type: UPDATE_LIKELIST_REQUEST });
+export const updateWishList = (productId) => async (dispatch, getState) => {
+  const prevAuth = getState().auth.data;
+
+  dispatch({ type: UPDATE_LIKELIST_REQUEST, payload: productId });
 
   try {
     const { data } = await axios.put('/api/users/wishlist', { productId });
 
     dispatch({ type: UPDATE_LIKELIST_SUCCESS, payload: data });
+
+    handleWishListInLocalStorage(productId, data);
   } catch (error) {
     dispatch({
       type: UPDATE_LIKELIST_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.response,
+      payload: {
+        error:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.response,
+        prevAuth,
+      },
     });
   }
+};
+
+const expirationDate = (data) => {
+  const expiresInSec = +data.token.expiresIn;
+  const now = new Date();
+
+  return new Date(now.getTime() + expiresInSec * 1000).toISOString();
+};
+
+const handleWishListInLocalStorage = (productId, newWishList) => {
+  const authFromStorage = JSON.parse(localStorage.getItem('auth'));
+  const alreadyExisted = authFromStorage.wishList.find(
+    (wish) => wish._id === productId
+  );
+
+  if (alreadyExisted) {
+    authFromStorage.wishList = authFromStorage.wishList.filter((wish) => {
+      return wish._id !== productId;
+    });
+  } else {
+    authFromStorage.wishList = [...newWishList];
+  }
+  localStorage.setItem('auth', JSON.stringify(authFromStorage));
 };

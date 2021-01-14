@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 
 import User from '../models/user.js';
+import Product from '../models/product.js';
 
 // @desc signup
 // @route POST /api/users
@@ -37,7 +38,10 @@ export const createUser = asyncHandler(async (req, res) => {
 export const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email }).populate('wishList', '-image');
+  const user = await User.findOne({ email }).populate(
+    'wishList',
+    'name rating price'
+  );
 
   if (!user) {
     res.status(404);
@@ -115,7 +119,7 @@ export const updateWishlist = asyncHandler(async (req, res) => {
 
   const user = await User.findById(req.user._id)
     .select('-password')
-    .populate('wishList', '-image');
+    .populate('wishList', 'name rating price');
 
   if (user) {
     const alreadyExisted = user.wishList.find(
@@ -123,7 +127,10 @@ export const updateWishlist = asyncHandler(async (req, res) => {
     );
 
     if (!alreadyExisted) {
-      user.wishList.push(productId);
+      const prodcut = await Product.findById(productId).select(
+        'name rating price'
+      );
+      user.wishList.push(prodcut);
     } else {
       user.wishList = user.wishList.filter((wish) => {
         return wish._id.toString() !== productId;
@@ -131,6 +138,8 @@ export const updateWishlist = asyncHandler(async (req, res) => {
     }
 
     await user.save();
+
+    console.log(user.wishList);
 
     res.send(user.wishList);
   } else {

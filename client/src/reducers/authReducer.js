@@ -51,9 +51,20 @@ const authReducer = (state = initialState, action) => {
       return { ...state, error: null };
 
     case UPDATE_LIKELIST_REQUEST:
+      const alreadyExisted = state.data.wishList.find(
+        (wish) => wish._id === action.payload
+      );
+      
+      const result = alreadyExisted
+        ? state.data.wishList.filter((wish) => wish._id !== action.payload)
+        : [...state.data.wishList, { _id: action.payload }];
+
       return {
         ...state,
-        loading: true,
+        data: {
+          ...state.data,
+          wishList: result,
+        },
       };
 
     case UPDATE_LIKELIST_SUCCESS:
@@ -67,7 +78,12 @@ const authReducer = (state = initialState, action) => {
       };
 
     case UPDATE_LIKELIST_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        data: action.payload.prevAuth,
+      };
 
     default:
       return state;

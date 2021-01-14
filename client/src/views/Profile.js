@@ -4,6 +4,7 @@ import { Router, Route, Switch, NavLink } from 'react-router-dom';
 
 import UserProfile from '../components/UserProfile';
 import UserOrders from '../components/UserOrders';
+import WishList from './WishList';
 
 const Profile = ({ history }) => {
   return (
@@ -20,6 +21,11 @@ const Profile = ({ history }) => {
               Orders
             </Nav.Link>
           </Nav.Item>
+          <Nav.Item>
+            <Nav.Link to='/profile/wishlist' as={NavLink}>
+              Wish
+            </Nav.Link>
+          </Nav.Item>
         </Nav>
       </Row>
 
@@ -30,6 +36,7 @@ const Profile = ({ history }) => {
             component={UserOrders}
           />
           <Route path='/profile/orders' component={UserOrders} />
+          <Route path='/profile/wishlist' component={WishList} />
           <UserProfile />
         </Switch>
       </Router>

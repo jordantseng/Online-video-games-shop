@@ -68,6 +68,9 @@ Server
 #### Q: Cancel api requests while the component is unmounted    
 A: There are several ways to handle async actions for redux, such as redux-thunk or redux-observable, and more. To address this problem, my first thought is that I need to cancel api requests in the cleanup function of useEffect life cycle hook. As redux-thunk was already used as redux middleware in this project, now I just pick the most straightforward but cluttered way, which is passing the cancel token as an argument to action creators and invoke cancel method in cleanup function of useEffect. However this implementation definitely can be improved.
 
+#### Q: Should I put the logic in action creator or reducer?
+A: According to redux documentation, "trying to put as much of the logic for calculating a new state into the appropriate reducer, rather than in the code that prepares and dispatches the action" is recommended.
+
 ## Usage
 
 In the client and server directory, to install all the dependencies, you should respectively run:

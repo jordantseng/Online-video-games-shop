@@ -3,12 +3,12 @@ import { Row, Col, ListGroup, Card, Form, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import history from '../history';
-import { updateListList } from '../actions/auth';
+import { updateWishList } from '../actions/auth';
 
 const ProductAvailability = ({ product }) => {
   const dispatch = useDispatch();
   const [qty, setQty] = useState(1);
-  const { wishList } = useSelector((state) => state.auth.data);
+  const { data: user } = useSelector((state) => state.auth);
 
   const onAddToCartClick = () => {
     // store the product id and qty in url
@@ -16,12 +16,20 @@ const ProductAvailability = ({ product }) => {
   };
 
   const onAddToWishListClick = () => {
-    dispatch(updateListList(product._id));
+    if (user) {
+      dispatch(updateWishList(product._id));
+      return;
+    }
+
+    history.push(
+      `/login?redirect=products/5f87c92e05fdcd12f78e2b32/${product._id}`
+    );
   };
 
-  const renderWishlistText = wishList.find((wish) => wish._id === product._id)
-    ? 'Remove From Wishlist'
-    : 'Add To Wishlist';
+  const renderWishlistText =
+    user && user.wishList.find((wish) => wish._id === product._id)
+      ? 'Remove From Wishlist'
+      : 'Add To Wishlist';
 
   return (
     <Card>
