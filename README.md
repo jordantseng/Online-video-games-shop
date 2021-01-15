@@ -40,7 +40,6 @@ Admin page
 - Form Validation
 - WishList
 
-
 #### Admin
 - Carousel management 
 - Account management (edit user profile, delete user)
@@ -61,9 +60,8 @@ Client
 - formik + yup
 
 Server
-- nodejs
-- express
-- mongodb + mongoose
+- nodejs (express)
+- mongodb (mongoose)
 
 ## Obstacles
 #### Q: Cancel api requests while the component is unmounted    
