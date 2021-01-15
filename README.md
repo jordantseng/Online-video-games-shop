@@ -13,7 +13,12 @@ admin password: 123456
 ## Screenshot:
 Home page
 
-<img width="1306" alt="Screen Shot 2020-12-08 at 9 44 44 AM" src="https://user-images.githubusercontent.com/53250186/101427542-0a61cc80-393a-11eb-9c47-c273c153f61e.png">
+<img width="1258" alt="Screen Shot 2021-01-15 at 10 01 12 AM" src="https://user-images.githubusercontent.com/53250186/104671370-a12f5f00-5718-11eb-9046-8b9877d8b2be.png">
+
+---
+Profile page
+
+<img width="1296" alt="Screen Shot 2021-01-15 at 9 57 43 AM" src="https://user-images.githubusercontent.com/53250186/104671251-662d2b80-5718-11eb-8f5a-70a3359c4f24.png">
 
 ---
 Product page
@@ -23,7 +28,7 @@ Product page
 ---
 Admin page
 
-<img width="1254" alt="Screen Shot 2020-12-08 at 9 47 15 AM" src="https://user-images.githubusercontent.com/53250186/101427734-63c9fb80-393a-11eb-85ad-cff4b1df6dec.png">
+<img width="1307" alt="Screen Shot 2021-01-15 at 9 59 27 AM" src="https://user-images.githubusercontent.com/53250186/104671242-61687780-5718-11eb-8886-3412b37ec2b7.png">
 
 ## Features
 - RWD
