@@ -18,7 +18,7 @@ Home page
 ---
 Product page
 
-<img width="1284" alt="Screen Shot 2020-12-08 at 9 45 46 AM" src="https://user-images.githubusercontent.com/53250186/101427612-31200300-393a-11eb-874c-2a6ae9b8ce99.png">
+<img width="1339" alt="Screen Shot 2021-01-15 at 9 53 50 AM" src="https://user-images.githubusercontent.com/53250186/104670872-9f18d080-5717-11eb-9f5d-05f226e0eb2a.png">
 
 ---
 Admin page
@@ -26,6 +26,7 @@ Admin page
 <img width="1254" alt="Screen Shot 2020-12-08 at 9 47 15 AM" src="https://user-images.githubusercontent.com/53250186/101427734-63c9fb80-393a-11eb-85ad-cff4b1df6dec.png">
 
 ## Features
+- RWD
 - Login / signup (auto send successful registration email)
 - Auto login / logout in 1hr (JWT expires in 1hr)
 - Show latest products depending on released date 
@@ -37,6 +38,8 @@ Admin page
 - Payment
 - Error and exception handling
 - Form Validation
+- WishList
+
 
 #### Admin
 - Carousel management 
@@ -46,7 +49,6 @@ Admin page
 
 #### TODO
 - Test (frontend)
-- Wishlist
 - Delete order
 - Delete comment
 
@@ -62,7 +64,6 @@ Server
 - nodejs
 - express
 - mongodb + mongoose
-- sendgrid
 
 ## Obstacles
 #### Q: Cancel api requests while the component is unmounted    
