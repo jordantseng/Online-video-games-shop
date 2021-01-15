@@ -3,7 +3,7 @@ import { Row, Col, ListGroup, Card, Form, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import history from '../history';
-import { updateWishList } from '../actions/auth';
+import { updateWishProduct } from '../actions/auth';
 
 const ProductAvailability = ({ product }) => {
   const dispatch = useDispatch();
@@ -17,12 +17,12 @@ const ProductAvailability = ({ product }) => {
 
   const onAddToWishListClick = () => {
     if (user) {
-      dispatch(updateWishList(product._id));
+      dispatch(updateWishProduct(product._id));
       return;
     }
 
     history.push(
-      `/login?redirect=products/5f87c92e05fdcd12f78e2b32/${product._id}`
+      `/login?redirect=products/${product._id}`
     );
   };
 

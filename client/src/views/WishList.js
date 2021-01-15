@@ -3,15 +3,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 
 import Product from '../components/Product';
+import Message from '../components/Message';
 import { HeartFill } from 'react-bootstrap-icons';
-import { updateWishList } from '../actions/auth';
+import { deleteWishProduct } from '../actions/auth';
 
 const WishList = () => {
   const { data: user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const onRemoveProduct = (productId) => {
-    dispatch(updateWishList(productId));
+    dispatch(deleteWishProduct(productId));
   };
 
   const renderLikeIcon = (productId) => {
@@ -31,22 +32,28 @@ const WishList = () => {
   };
 
   return (
-    <Row>
-      {user.wishList.map((wish) => {
-        return (
-          <Col
-            key={wish._id}
-            sm={12}
-            md={6}
-            lg={4}
-            xl={3}
-            style={{ position: 'relatvie' }}>
-            {renderLikeIcon(wish._id)}
-            <Product product={wish} />
-          </Col>
-        );
-      })}
-    </Row>
+    <>
+      <h1>Wish List</h1>
+
+      <Row>
+        {user.wishList.length === 0 ? (
+          <Message>You don't have any order yet.</Message>
+        ) : (
+          user.wishList.map((wish) => (
+            <Col
+              key={wish._id}
+              sm={12}
+              md={6}
+              lg={4}
+              xl={3}
+              style={{ position: 'relatvie' }}>
+              {renderLikeIcon(wish._id)}
+              <Product product={wish} />
+            </Col>
+          ))
+        )}
+      </Row>
+    </>
   );
 };
 

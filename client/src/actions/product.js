@@ -1,5 +1,4 @@
 import axios from '../axios';
-
 import history from '../history';
 import {
   FETCH_PRODUCT_REQUEST,
@@ -20,6 +19,7 @@ export const fetchProduct = (id, cancelToken) => async (dispatch) => {
 
   try {
     const { data } = await axios.get(`/api/products/${id}`, { cancelToken });
+
     dispatch({ type: FETCH_PRODUCT_SUCCESS, payload: data });
   } catch (error) {
     if (axios.isCancel(error)) {
@@ -36,7 +36,7 @@ export const fetchProduct = (id, cancelToken) => async (dispatch) => {
   }
 };
 
-export const updateProduct = (id, formValues) => async (dispatch, getState) => {
+export const updateProduct = (id, formValues) => async (dispatch) => {
   dispatch({ type: UPDATE_PRODUCT_REQUEST });
 
   try {

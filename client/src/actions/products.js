@@ -1,12 +1,10 @@
 import axios from '../axios';
-
 import {
   FETCH_PRODUCTS_REQUEST,
   FETCH_PRODUCTS_SUCCESS,
   FETCH_PRODUCTS_FAIL,
   FETCH_PRODUCTS_CANCELLED,
 } from '../types/products';
-
 import {
   CREATE_PRODUCT_REQUEST,
   CREATE_PRODUCT_SUCCESS,
@@ -46,7 +44,7 @@ export const fetchProducts = (
   }
 };
 
-export const createProduct = () => async (dispatch, getState) => {
+export const createProduct = () => async (dispatch) => {
   dispatch({ type: CREATE_PRODUCT_REQUEST });
 
   try {

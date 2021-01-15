@@ -139,9 +139,32 @@ export const updateWishlist = asyncHandler(async (req, res) => {
 
     await user.save();
 
-    console.log(user.wishList);
-
     res.send(user.wishList);
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+// @desc delete single user wish product
+// @route DELETE /api/users/wishlist
+// @access PRIVATE
+export const deleteWishProduct = asyncHandler(async (req, res) => {
+  const productId = req.params.id;
+
+  const user = await User.findById(req.user._id)
+    .select('-password')
+    .populate('wishList', 'name rating price');
+
+  if (user) {
+    user.wishList = user.wishList.filter(
+      (wish) => wish.id.toString() !== productId
+    );
+
+    console.log(user);
+
+    await user.save();
+    res.send();
   } else {
     res.status(404);
     throw new Error('User not found');

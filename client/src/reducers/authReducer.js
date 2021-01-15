@@ -7,9 +7,12 @@ import {
   SIGNUP_FAIL,
   LOGOUT_SUCCESS,
   RESET_AUTH_ERROR,
-  UPDATE_LIKELIST_REQUEST,
-  UPDATE_LIKELIST_SUCCESS,
-  UPDATE_LIKELIST_FAIL,
+  UPDATE_WISH_PRODUCT_REQUEST,
+  UPDATE_WISH_PRODUCT_SUCCESS,
+  UPDATE_WISH_PRODUCT_FAIL,
+  DELETE_WISH_PRODUCT_REQUEST,
+  DELETE_WISH_PRODUCT_SUCCESS,
+  DELETE_WISH_PRODUCT_FAIL,
 } from '../types/auth';
 
 const userInfoFromStorage = localStorage.getItem('auth')
@@ -50,11 +53,11 @@ const authReducer = (state = initialState, action) => {
     case RESET_AUTH_ERROR:
       return { ...state, error: null };
 
-    case UPDATE_LIKELIST_REQUEST:
+    case UPDATE_WISH_PRODUCT_REQUEST:
       const alreadyExisted = state.data.wishList.find(
         (wish) => wish._id === action.payload
       );
-      
+
       const result = alreadyExisted
         ? state.data.wishList.filter((wish) => wish._id !== action.payload)
         : [...state.data.wishList, { _id: action.payload }];
@@ -67,17 +70,37 @@ const authReducer = (state = initialState, action) => {
         },
       };
 
-    case UPDATE_LIKELIST_SUCCESS:
+    case UPDATE_WISH_PRODUCT_SUCCESS:
       return {
         ...state,
-        loading: false,
         data: {
           ...state.data,
           wishList: [...action.payload],
         },
       };
 
-    case UPDATE_LIKELIST_FAIL:
+    case UPDATE_WISH_PRODUCT_FAIL:
+      return {
+        ...state,
+        error: action.payload.error,
+        data: action.payload.prevAuth,
+      };
+
+    case DELETE_WISH_PRODUCT_REQUEST:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          wishList: state.data.wishList.filter(
+            (wish) => wish._id !== action.payload
+          ),
+        },
+      };
+
+    case DELETE_WISH_PRODUCT_SUCCESS:
+      return { ...state };
+
+    case DELETE_WISH_PRODUCT_FAIL:
       return {
         ...state,
         loading: false,
