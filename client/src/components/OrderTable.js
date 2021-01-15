@@ -37,7 +37,7 @@ const OrderTable = ({ orders, user, inProfilePage = false }) => {
             type='button'
             className='btn-sm ml-1'
             onClick={() => onMarkAsDelivered(order._id)}>
-            Mark as Delivered
+            Delivered
           </Button>
         )}
       </td>
