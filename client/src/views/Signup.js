@@ -32,7 +32,11 @@ const Signup = ({ history, location }) => {
         <h1>Signup</h1>
         {error ? <Message variant='danger'>{error}</Message> : null}
         {loading && <Loader />}
-        <ProfileForm userInfo={user} onSubmitClick={onSignupClick} />
+        <ProfileForm
+          userInfo={user}
+          onSubmitClick={onSignupClick}
+          error={error}
+        />
         <Row className='py-3'>
           <Col>
             Have an Account?

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
 import PropTypes from 'prop-types';
@@ -7,7 +7,6 @@ import {
   signupFormValidationSchema,
   profileFormValidationSchema,
 } from '../validations';
-
 import Input from '../components/Input';
 
 const initialValues = {
@@ -25,12 +24,9 @@ const validate = ({ password, confirmPassword }) => {
   return errors;
 };
 
-const ProfileForm = ({ user, userInfo, onSubmitClick }) => {
+const ProfileForm = ({ user, userInfo, onSubmitClick, error }) => {
   const [savedFormValues, setSavedFormValues] = useState(null);
-
-  const validationSchema = userInfo
-    ? profileFormValidationSchema
-    : signupFormValidationSchema;
+  const formikRef = useRef();
 
   useEffect(() => {
     if (userInfo) {
@@ -42,10 +38,20 @@ const ProfileForm = ({ user, userInfo, onSubmitClick }) => {
     onSubmitClick(name, email, password);
   };
 
+  // while error occurred (such as user existed), reset the status of button
+  useEffect(() => {
+    if (error) {
+      formikRef.current.setSubmitting(false);
+    }
+  }, [error]);
+
   return (
     <Formik
+      innerRef={formikRef}
       initialValues={savedFormValues || initialValues}
-      validationSchema={validationSchema}
+      validationSchema={
+        userInfo ? profileFormValidationSchema : signupFormValidationSchema
+      }
       validate={validate}
       onSubmit={onSubmit}
       enableReinitialize>
