@@ -32,6 +32,8 @@ const UserProfile = () => {
     dispatch(updateUserProfile({ name, email, password }));
   };
 
+  console.log(error);
+
   return (
     <FormContainer>
       {loading ? (

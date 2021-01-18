@@ -9,7 +9,7 @@ import WishList from './WishList';
 const Profile = ({ history }) => {
   return (
     <>
-      <Row>
+      <Row className='mb-3'>
         <Nav variant='tabs'>
           <Nav.Item>
             <Nav.Link to='/profile' as={NavLink} exact>

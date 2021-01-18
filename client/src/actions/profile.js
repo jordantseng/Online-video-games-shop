@@ -41,11 +41,12 @@ export const updateUserProfile = (formValues) => async (dispatch, getState) => {
 
     dispatch({ type: UPDATE_USER_PROFILE_SUCCESS, payload: data });
 
+    // update the previous user profile to updated one
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: { ...getState().auth.user, name: data.name },
+      payload: { ...getState().auth.data, name: data.name },
     });
-    localStorage.setItem('auth', JSON.stringify(getState().auth.user));
+    localStorage.setItem('auth', JSON.stringify(getState().auth.data));
 
     setTimeout(() => {
       dispatch({ type: RESET_UPDATE_USER_PROFILE });
