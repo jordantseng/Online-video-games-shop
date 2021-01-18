@@ -9,7 +9,7 @@ import { updateUserProfile } from '../actions/auth';
 
 const UserProfile = () => {
   const dispatch = useDispatch();
-  const { loading, data: user, error, success } = useSelector(
+  const { loading, data: authUser, error, success } = useSelector(
     (state) => state.auth
   );
 
@@ -26,7 +26,7 @@ const UserProfile = () => {
           {error ? <Message variant='danger'>{error}</Message> : null}
           {success && <Message variant='success'>Update successfully</Message>}
           <h1>My Profile</h1>
-          <ProfileForm user={user} onSubmitClick={onUpdateUserClick} />
+          <ProfileForm user={authUser} onSubmitClick={onUpdateUserClick} />
         </>
       )}
     </FormContainer>

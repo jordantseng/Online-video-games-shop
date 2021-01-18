@@ -18,7 +18,9 @@ const ShippingDetails = ({ order }) => {
 
       {urlParams === 'orders' ? (
         order.isDelivered ? (
-          <Message variant='success'>Paid on {order.deliveredAt}</Message>
+          <Message variant='success'>
+            Delivered at {order.deliveredAt.split('T')[0]}
+          </Message>
         ) : (
           <Message variant='danger'>Not delivered</Message>
         )

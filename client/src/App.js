@@ -12,15 +12,15 @@ import Routes from './components/Routes';
 
 const App = () => {
   const dispatch = useDispatch();
-  const { data: user } = useSelector((state) => state.auth);
+  const { data: authUser } = useSelector((state) => state.auth);
 
   const tokenTimer = useRef();
 
   useEffect(() => {
     const now = new Date();
-    if (user) {
+    if (authUser) {
       const tokenExpiresIn =
-        new Date(user.token.expirationDate).getTime() - new Date(now).getTime();
+        new Date(authUser.token.expirationDate).getTime() - new Date(now).getTime();
 
       if (tokenExpiresIn > 0) {
         tokenTimer.current = setTimeout(() => {
@@ -34,7 +34,7 @@ const App = () => {
     return () => {
       clearTimeout(tokenTimer.current);
     };
-  }, [dispatch, tokenTimer, user]);
+  }, [dispatch, tokenTimer, authUser]);
 
   return (
     <Router history={history}>
