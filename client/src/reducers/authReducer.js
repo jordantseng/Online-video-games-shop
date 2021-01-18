@@ -7,6 +7,10 @@ import {
   SIGNUP_FAIL,
   LOGOUT_SUCCESS,
   RESET_AUTH_ERROR,
+  UPDATE_USER_PROFILE_REQUEST,
+  UPDATE_USER_PROFILE_SUCCESS,
+  UPDATE_USER_PROFILE_FAIL,
+  RESET_UPDATE_USER_PROFILE_SUCCESS,
   UPDATE_WISH_PRODUCT_REQUEST,
   UPDATE_WISH_PRODUCT_SUCCESS,
   UPDATE_WISH_PRODUCT_FAIL,
@@ -50,6 +54,24 @@ const authReducer = (state = initialState, action) => {
     case LOGOUT_SUCCESS:
       return { data: null };
 
+    case UPDATE_USER_PROFILE_REQUEST:
+      return { ...state, loading: true };
+
+    case UPDATE_USER_PROFILE_SUCCESS:
+      return {
+        ...state,
+        data: { ...state.data, ...action.payload },
+        loading: false,
+        success: true,
+      };
+
+    case UPDATE_USER_PROFILE_FAIL:
+      return { ...state, loading: false, error: action.payload };
+
+    case RESET_UPDATE_USER_PROFILE_SUCCESS:
+      return { ...state, success: undefined };
+
+    // clean up error message after 1.5 sec
     case RESET_AUTH_ERROR:
       return { ...state, error: null };
 

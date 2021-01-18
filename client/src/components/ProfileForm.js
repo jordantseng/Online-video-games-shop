@@ -24,15 +24,15 @@ const validate = ({ password, confirmPassword }) => {
   return errors;
 };
 
-const ProfileForm = ({ user, userInfo, onSubmitClick, error }) => {
+const ProfileForm = ({ user, onSubmitClick, error }) => {
   const [savedFormValues, setSavedFormValues] = useState(null);
   const formikRef = useRef();
 
   useEffect(() => {
-    if (userInfo) {
-      setSavedFormValues({ ...userInfo, password: '', confirmPassword: '' });
+    if (user) {
+      setSavedFormValues({ ...user, password: '', confirmPassword: '' });
     }
-  }, [userInfo, setSavedFormValues]);
+  }, [user, setSavedFormValues]);
 
   const onSubmit = ({ name, email, password }) => {
     onSubmitClick(name, email, password);
@@ -50,7 +50,7 @@ const ProfileForm = ({ user, userInfo, onSubmitClick, error }) => {
       innerRef={formikRef}
       initialValues={savedFormValues || initialValues}
       validationSchema={
-        userInfo ? profileFormValidationSchema : signupFormValidationSchema
+        user ? profileFormValidationSchema : signupFormValidationSchema
       }
       validate={validate}
       onSubmit={onSubmit}
@@ -62,7 +62,7 @@ const ProfileForm = ({ user, userInfo, onSubmitClick, error }) => {
             label='Email'
             name='email'
             type='email'
-            disabled={userInfo && values.email}
+            disabled={user && values.email}
           />
           <Input label='Password' name='password' type='password' />
           <Input

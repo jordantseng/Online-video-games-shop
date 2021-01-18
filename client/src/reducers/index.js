@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 
 import authReducer from './authReducer';
-import profileReducer from './profileReducer';
 import cartReducer from './cartReducers';
 import productReducer from './productReducers';
 import productsReducer from './productsReducer';
@@ -16,7 +15,6 @@ import eventsReducer from './eventsReducer';
 
 const reducers = combineReducers({
   auth: authReducer,
-  profile: profileReducer,
   cart: cartReducer,
   product: productReducer,
   products: productsReducer,

@@ -65,28 +65,8 @@ export const authUser = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc get single user profile
-// @route POST /api/users/profile
-// @access PRIVATE
-export const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-
-  if (user) {
-    res.send({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      wishList: user.wishList,
-    });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
-});
-
 // @desc update single user profile
-// @route PUT /api/users/profile
+// @route PUT /api/users
 // @access PRIVATE
 export const updateUserProfile = asyncHandler(async (req, res) => {
   const { name, password } = req.body;
@@ -100,11 +80,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
     const updatedUser = await user.save();
 
     res.send({
-      _id: updatedUser._id,
       name: updatedUser.name,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
-      token: { id: user.generateToken(), expiresIn: 3600 },
     });
   } else {
     res.status(404);
