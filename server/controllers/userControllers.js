@@ -24,6 +24,7 @@ export const createUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      wishList: user.wishList,
       token: { id: user.generateToken(), expiresIn: 3600 }, // for client saving
     });
   } else {

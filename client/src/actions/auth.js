@@ -26,7 +26,7 @@ export const login = (email, password) => async (dispatch) => {
     const { data } = await axios.post('/api/users/login', { email, password });
 
     data.token.expirationDate = expirationDate(data);
-
+    console.log('login', data);
     dispatch({ type: LOGIN_SUCCESS, payload: data });
 
     localStorage.setItem('auth', JSON.stringify(data));
@@ -52,6 +52,7 @@ export const signup = (name, email, password) => async (dispatch) => {
     const { data } = await axios.post('/api/users', { name, email, password });
 
     data.token.expirationDate = expirationDate(data);
+    console.log('signup', data);
 
     dispatch({ type: SIGNUP_SUCCESS, payload: data });
 

@@ -9,8 +9,8 @@ import { loginFormValidationSchema } from '../validations';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-
 import Input from '../components/Input';
+import Meta from '../components/Meta';
 
 const initialValues = {
   email: '',
@@ -32,38 +32,41 @@ const Login = ({ history, location }) => {
     dispatch(login(email, password));
 
   return (
-    <FormContainer>
-      <h1>Login</h1>
-      {error ? <Message variant='danger'>{error}</Message> : null}
-      {loading && <Loader />}
-      <Formik
-        initialValues={initialValues}
-        validationSchema={loginFormValidationSchema}
-        onSubmit={onLoginClick}>
-        {({ isSubmitting }) => (
-          <Form>
-            <Input label='Email' name='email' type='email' />
-            <Input label='Password' name='password' type='password' />
-            <Button
-              className='d-block ml-auto'
-              type='submit'
-              variant='primary'
-              disabled={isSubmitting}>
-              Login
-            </Button>
-          </Form>
-        )}
-      </Formik>
+    <>
+      <Meta title='Login' />
+      <FormContainer>
+        <h1>Login</h1>
+        {error ? <Message variant='danger'>{error}</Message> : null}
+        {loading && <Loader />}
+        <Formik
+          initialValues={initialValues}
+          validationSchema={loginFormValidationSchema}
+          onSubmit={onLoginClick}>
+          {({ isSubmitting }) => (
+            <Form>
+              <Input label='Email' name='email' type='email' />
+              <Input label='Password' name='password' type='password' />
+              <Button
+                className='d-block ml-auto'
+                type='submit'
+                variant='primary'
+                disabled={isSubmitting}>
+                Login
+              </Button>
+            </Form>
+          )}
+        </Formik>
 
-      <Row className='py-3'>
-        <Col>
-          New Customer?
-          <Link to={redirect ? `/signup?redirect=${redirect}` : '/signup'}>
-            Register
-          </Link>
-        </Col>
-      </Row>
-    </FormContainer>
+        <Row className='py-3'>
+          <Col>
+            New Customer?
+            <Link to={redirect ? `/signup?redirect=${redirect}` : '/signup'}>
+              Register
+            </Link>
+          </Col>
+        </Row>
+      </FormContainer>
+    </>
   );
 };
 

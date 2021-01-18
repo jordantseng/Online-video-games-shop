@@ -4,11 +4,11 @@ import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { signup } from '../actions/auth';
-
 import FormContainer from '../components/FormContainer';
 import ProfileForm from '../components/ProfileForm';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import Meta from '../components/Meta';
 
 const Signup = ({ history, location }) => {
   const dispatch = useDispatch();
@@ -26,20 +26,23 @@ const Signup = ({ history, location }) => {
   };
 
   return (
-    <FormContainer>
-      <h1>Signup</h1>
-      {error ? <Message variant='danger'>{error}</Message> : null}
-      {loading && <Loader />}
-      <ProfileForm userInfo={user} onSubmitClick={onSignupClick} />
-      <Row className='py-3'>
-        <Col>
-          Have an Account?
-          <Link to={redirect ? `/login?redirect=${redirect}` : '/login'}>
-            Login
-          </Link>
-        </Col>
-      </Row>
-    </FormContainer>
+    <>
+      <Meta title='Signup' />
+      <FormContainer>
+        <h1>Signup</h1>
+        {error ? <Message variant='danger'>{error}</Message> : null}
+        {loading && <Loader />}
+        <ProfileForm userInfo={user} onSubmitClick={onSignupClick} />
+        <Row className='py-3'>
+          <Col>
+            Have an Account?
+            <Link to={redirect ? `/login?redirect=${redirect}` : '/login'}>
+              Login
+            </Link>
+          </Col>
+        </Row>
+      </FormContainer>
+    </>
   );
 };
 

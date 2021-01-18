@@ -47,7 +47,7 @@ const Home = () => {
 
   return (
     <>
-      <Meta title='Home' description='We sell the best products for cheap' />
+      <Meta title='Home' />
 
       {eventsLoading ? null : eventsError ? (
         <Message variant='danger'>{eventsError}</Message>
