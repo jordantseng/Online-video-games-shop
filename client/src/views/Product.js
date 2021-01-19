@@ -76,7 +76,7 @@ const Product = ({ match }) => {
                 errorReview={errorReview}
                 loadingReview={loadingReview}
               />
-              <CommentReview />
+              <CommentReview redirect={match.url} />
             </Col>
           </Row>
         </>

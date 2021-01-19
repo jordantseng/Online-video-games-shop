@@ -22,7 +22,7 @@ const commentOptions = [
   { title: '5 - Excellent', value: 5 },
 ];
 
-const CommentReview = () => {
+const CommentReview = ({ redirect }) => {
   const { data: user } = useSelector((state) => state.auth);
   const { data: product } = useSelector((state) => state.product);
   const dispatch = useDispatch();
@@ -36,7 +36,8 @@ const CommentReview = () => {
       <h2>Write a Customer Review</h2>
       {!user ? (
         <Message variant='primary'>
-          Please <Link to='/login'>sign in</Link> to write a review
+          Please <Link to={`/login?redirect=${redirect}`}>sign in</Link> to
+          write a review
         </Message>
       ) : (
         <ListGroup variant='flush'>
