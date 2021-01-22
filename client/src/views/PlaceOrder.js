@@ -24,13 +24,7 @@ const PlaceOrder = () => {
 
   cart.shippingPrice = cart.itemsPrice > 100 ? 0 : 100;
 
-  cart.taxPrice = +(0.15 * cart.itemsPrice).toFixed(2);
-
-  cart.totalPrice = +(
-    cart.itemsPrice +
-    cart.shippingPrice +
-    cart.taxPrice
-  ).toFixed(2);
+  cart.totalPrice = +(cart.itemsPrice + cart.shippingPrice).toFixed(2);
 
   const onPlaceOrderClick = () => {
     dispatch(
@@ -39,7 +33,7 @@ const PlaceOrder = () => {
         shippingAddress: cart.shippingAddress,
         paymentMethod: JSON.parse(localStorage.getItem('paymentMethod')),
         itemsPrice: cart.itemsPrice,
-        taxPrice: cart.taxPrice,
+        // taxPrice: cart.taxPrice,
         shippingPrice: cart.shippingPrice,
         totalPrice: cart.totalPrice,
       })
