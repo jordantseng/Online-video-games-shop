@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Rating = ({ value, text, color }) => {
+const Rating = ({ value, color }) => {
   return (
-    <div className="rating">
+    <div className='rating'>
       <span>
         <i
           style={{ color }}
@@ -59,7 +59,6 @@ const Rating = ({ value, text, color }) => {
               : 'far fa-star'
           }></i>
       </span>
-      {text}
     </div>
   );
 };

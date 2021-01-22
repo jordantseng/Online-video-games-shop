@@ -6,8 +6,7 @@ import { Link } from 'react-router-dom';
 import axios from '../axios';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { createEvent, deleteEvent } from '../actions/event';
-import { fetchEvents } from '../actions/events';
+import { fetchEvents, createEvent, deleteEvent } from '../actions/events';
 
 const EventList = () => {
   const dispatch = useDispatch();
