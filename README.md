@@ -52,10 +52,10 @@ Admin page
 - Order management (update order as delivered)
 
 #### TODO
-- Add react-virtualized and intersection observer to comment section
-- Test (frontend)
-- Delete order
-- Delete comment
+- [ ] Add react-virtualized and intersection observer to comment section
+- [ ] Test (frontend)
+- [ ] Delete order
+- [ ] Delete comment
 
 ## Technologies
 
