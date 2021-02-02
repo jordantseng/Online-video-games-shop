@@ -12,6 +12,7 @@ import orderReducer from './orderReducer';
 import ordersReducer from './ordersReducer';
 import eventReducer from './eventReducer';
 import eventsReducer from './eventsReducer';
+import reviewsReducer from './reviewsReducer';
 
 const reducers = combineReducers({
   auth: authReducer,
@@ -26,6 +27,7 @@ const reducers = combineReducers({
   orders: ordersReducer,
   event: eventReducer,
   events: eventsReducer,
+  reviews: reviewsReducer,
 });
 
 export default reducers;

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ListGroup, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
+import { useFormik } from 'formik';
 
-import { createProductReview } from '../actions/product';
+// import { createProductReview } from '../actions/product';
+import { createReview } from '../actions/reviews';
 import Message from '../components/Message';
 import { reviewFormValidationSchema } from '../validations';
 import Input from './Input';
@@ -25,11 +27,22 @@ const commentOptions = [
 const CommentReview = ({ redirect }) => {
   const { data: user } = useSelector((state) => state.auth);
   const { data: product } = useSelector((state) => state.product);
+  const { success } = useSelector((state) => state.reviews);
+  const formik = useRef();
+
   const dispatch = useDispatch();
 
   const onReviewSubmitClick = (reviewFormValues) => {
-    dispatch(createProductReview(product._id, reviewFormValues));
+    // dispatch(createProductReview(product._id, reviewFormValues));
+    dispatch(createReview(product._id, reviewFormValues));
   };
+
+  // reset submit button after submit
+  useEffect(() => {
+    if (success) {
+      formik.current.resetForm();
+    }
+  }, [success]);
 
   return (
     <>
@@ -43,6 +56,7 @@ const CommentReview = ({ redirect }) => {
         <ListGroup variant='flush'>
           <ListGroup.Item>
             <Formik
+              innerRef={formik}
               initialValues={initialValues}
               validationSchema={reviewFormValidationSchema}
               onSubmit={onReviewSubmitClick}>

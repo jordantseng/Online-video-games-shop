@@ -5,6 +5,7 @@ import { Row, Col, Button, Image } from 'react-bootstrap';
 import history from '../history';
 
 import { fetchProduct } from '../actions/product';
+import { fetchReviews } from '../actions/reviews';
 
 import Loader from '../components/Loader';
 import Message from '../components/Message';
@@ -13,11 +14,12 @@ import Reviews from '../components/Reviews';
 import CommentReview from '../components/CommentReview';
 import ProductDetails from '../components/ProductDetails';
 import ProductAvailability from '../components/ProductAvailability';
+import ReviewList from '../components/ReviewList';
 
 const Product = ({ match }) => {
   const {
     loading,
-    loadingReview,
+    // loadingReview,
     data: product,
     error,
     errorReview,
@@ -29,6 +31,7 @@ const Product = ({ match }) => {
 
   useEffect(() => {
     dispatch(fetchProduct(productId));
+    dispatch(fetchReviews(productId, 1));
   }, [dispatch, productId]);
 
   return (
@@ -53,7 +56,7 @@ const Product = ({ match }) => {
             </Button>
           </Row>
           <Row>
-            <Col className='m-auto' md={6}>
+            <Col className='m-auto' md={4}>
               <Image
                 className='m-auto'
                 src={`/api/products/${product._id}/image`}
@@ -62,7 +65,7 @@ const Product = ({ match }) => {
                 height='25rem'
               />
             </Col>
-            <Col md={3}>
+            <Col md={5}>
               <ProductDetails product={product} />
             </Col>
             <Col md={3}>
@@ -70,13 +73,15 @@ const Product = ({ match }) => {
             </Col>
           </Row>
           <Row>
-            <Col md={6}>
-              <Reviews
+            <Col>
+              <CommentReview redirect={match.url} />
+              <ReviewList productId={productId} />
+
+              {/* <Reviews
                 product={product}
                 errorReview={errorReview}
                 loadingReview={loadingReview}
-              />
-              <CommentReview redirect={match.url} />
+              /> */}
             </Col>
           </Row>
         </>

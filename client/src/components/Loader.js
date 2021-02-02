@@ -1,16 +1,16 @@
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
 
-const Loader = () => {
+const Loader = ({ width = '100px', height = '100px' }) => {
   return (
     <Spinner
       animation='border'
       role='status'
-      className='d-block m-auto'
       style={{
-        width: '100px',
-        height: '100px',
-      }}>
+        width,
+        height,
+      }}
+      className='d-block m-auto'>
       <span className='sr-only'>Loading...</span>
     </Spinner>
   );
