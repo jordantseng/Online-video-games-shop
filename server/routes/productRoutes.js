@@ -5,7 +5,6 @@ import {
   getProduct,
   getProducts,
   updateProduct,
-  createProductReview,
   getTopProducts,
   getProductImage,
   getLatestProducts,
@@ -27,8 +26,6 @@ router
   .get(getProduct)
   .put(auth, admin, uploadImg.single('productImg'), updateProduct)
   .delete(auth, admin, deleteProduct);
-
-router.route('/:id/reviews').post(auth, createProductReview);
 
 router.route('/:id/image').get(getProductImage);
 

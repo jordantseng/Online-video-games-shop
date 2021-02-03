@@ -10,20 +10,15 @@ import { fetchReviews } from '../actions/reviews';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Meta from '../components/Meta';
-import Reviews from '../components/Reviews';
 import CommentReview from '../components/CommentReview';
 import ProductDetails from '../components/ProductDetails';
 import ProductAvailability from '../components/ProductAvailability';
 import ReviewList from '../components/ReviewList';
 
 const Product = ({ match }) => {
-  const {
-    loading,
-    // loadingReview,
-    data: product,
-    error,
-    errorReview,
-  } = useSelector((state) => state.product);
+  const { loading, data: product, error } = useSelector(
+    (state) => state.product
+  );
 
   const dispatch = useDispatch();
 
@@ -76,12 +71,6 @@ const Product = ({ match }) => {
             <Col>
               <CommentReview redirect={match.url} />
               <ReviewList productId={productId} />
-
-              {/* <Reviews
-                product={product}
-                errorReview={errorReview}
-                loadingReview={loadingReview}
-              /> */}
             </Col>
           </Row>
         </>

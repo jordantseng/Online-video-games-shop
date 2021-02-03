@@ -138,8 +138,6 @@ export const deleteWishProduct = asyncHandler(async (req, res) => {
       (wish) => wish.id.toString() !== productId
     );
 
-    console.log(user);
-
     await user.save();
     res.send();
   } else {

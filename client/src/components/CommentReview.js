@@ -3,9 +3,7 @@ import { ListGroup, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
-import { useFormik } from 'formik';
 
-// import { createProductReview } from '../actions/product';
 import { createReview } from '../actions/reviews';
 import Message from '../components/Message';
 import { reviewFormValidationSchema } from '../validations';
@@ -33,7 +31,6 @@ const CommentReview = ({ redirect }) => {
   const dispatch = useDispatch();
 
   const onReviewSubmitClick = (reviewFormValues) => {
-    // dispatch(createProductReview(product._id, reviewFormValues));
     dispatch(createReview(product._id, reviewFormValues));
   };
 

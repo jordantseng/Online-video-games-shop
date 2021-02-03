@@ -8,10 +8,6 @@ import {
   UPDATE_PRODUCT_REQUEST,
   UPDATE_PRODUCT_SUCCESS,
   UPDATE_PRODUCT_FAIL,
-  // CREATE_PRODUCT_REVIEW_REQUEST,
-  // CREATE_PRODUCT_REVIEW_SUCCESS,
-  // CREATE_PRODUCT_REVIEW_FAIL,
-  // RESET_PRODUCT,
 } from '../types/product';
 
 export const fetchProduct = (id, cancelToken) => async (dispatch) => {
@@ -81,31 +77,3 @@ export const updateProduct = (id, formValues) => async (dispatch) => {
     });
   }
 };
-
-// export const createProductReview = (id, formValues) => async (
-//   dispatch,
-//   getState
-// ) => {
-//   dispatch({ type: CREATE_PRODUCT_REVIEW_REQUEST });
-
-//   try {
-//     const { data } = await axios.post(
-//       `/api/products/${id}/reviews`,
-//       formValues
-//     );
-
-//     dispatch({ type: CREATE_PRODUCT_REVIEW_SUCCESS, payload: data });
-//   } catch (error) {
-//     dispatch({
-//       type: CREATE_PRODUCT_REVIEW_FAIL,
-//       payload:
-//         error.response && error.response.data.message
-//           ? error.response.data.message
-//           : error.response,
-//     });
-
-//     setTimeout(() => {
-//       dispatch({ type: RESET_PRODUCT });
-//     }, 1500);
-//   }
-// };

@@ -22,6 +22,7 @@ const ReviewList = ({ productId }) => {
     hasMore,
     creating: creatingReview,
     success: createReviewSuccess,
+    error: createReviewError,
   } = useSelector((state) => state.reviews);
   const dispatch = useDispatch();
   const observer = useRef();
@@ -89,7 +90,7 @@ const ReviewList = ({ productId }) => {
   };
 
   // force update react-virtaulized list
-  // as row height not dynamic update
+  // to make row height update dynamically
   useEffect(() => {
     if (createReviewSuccess) {
       cache.current.clearAll();
@@ -100,12 +101,17 @@ const ReviewList = ({ productId }) => {
 
   return (
     <>
-      <h2>Reviews</h2>
+      {productReview.page && <h2>Reviews</h2>}
       {!loadingReview &&
+        !createReviewError &&
         productReview.reviews &&
         productReview.reviews.length === 0 && (
           <Message variant='primary'>No Reviews</Message>
         )}
+      {createReviewError && (
+        <Message variant='danger'>{createReviewError}</Message>
+      )}
+
       {creatingReview ? <Loader width='30px' height='30px' /> : null}
       <WindowScroller>
         {({ height, isScrolling, onChildScroll, scrollTop }) => {

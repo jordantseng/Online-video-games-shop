@@ -59,8 +59,10 @@ const reviewsReducer = (state = initialState, action) => {
         loading: false,
         data: {
           ...state.data,
-          reviews: [{ ...action.payload }, ...state.data.reviews],
+          reviews: [{ ...action.payload.review }, ...state.data.reviews],
+          page: { ...action.payload.page },
         },
+
         success: true,
         creating: false,
       };
@@ -69,7 +71,12 @@ const reviewsReducer = (state = initialState, action) => {
       return { ...state, success: undefined, creating: undefined };
 
     case CREATE_REVIEW_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+        creating: undefined,
+      };
 
     default:
       return state;

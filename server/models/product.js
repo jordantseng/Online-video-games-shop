@@ -40,9 +40,9 @@ const productSchema = Schema(
       required: true,
       default: 0,
     },
-    reviews: {
-      type: [reviewSchema],
-    },
+    // reviews: {
+    //   type: [reviewSchema],
+    // },
     numReviews: {
       type: Number,
       required: true,
