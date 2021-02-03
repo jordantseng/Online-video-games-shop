@@ -23,7 +23,8 @@ Profile page
 ---
 Product page
 
-<img width="720" alt="Screen Shot 2021-02-03 at 10 53 53 AM" src="https://user-images.githubusercontent.com/53250186/106691299-3cc43900-660e-11eb-93c9-f68b4ee894f6.png">
+![Screen Shot 2021-02-03 at 10 57 22 AM](https://user-images.githubusercontent.com/53250186/106691542-a5abb100-660e-11eb-8370-743a4e29a3fe.png)
+
 
 ---
 Admin page
