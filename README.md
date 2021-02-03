@@ -52,7 +52,7 @@ Admin page
 - Order management (update order as delivered)
 
 #### TODO
-- [ ] Add react-virtualized and intersection observer to comment section
+- [X] Add react-virtualized and intersection observer to comment section
 - [ ] Test (frontend)
 - [ ] Delete order
 - [ ] Delete comment
@@ -75,6 +75,9 @@ A: There are several ways to handle async actions for redux, such as redux-thunk
 
 #### Q: Should I put the logic in action creator or reducer?
 A: According to redux documentation, "trying to put as much of the logic for calculating a new state into the appropriate reducer, rather than in the code that prepares and dispatches the action" is recommended.
+
+#### Q: Implement react-virtualized and intersection observer
+A: This two packages are perfect for optimizing performance issue. There is a strange issue of react-virtualized, while scrolling in some point of time, the rows on the top will disappear.
 
 ## Usage
 
