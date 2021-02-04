@@ -82,7 +82,7 @@ A: There are several ways to handle async actions for redux, such as redux-thunk
 A: According to redux documentation, "trying to put as much of the logic for calculating a new state into the appropriate reducer, rather than in the code that prepares and dispatches the action" is recommended.
 
 #### Q: Implement react-virtualized and intersection observer
-A: This two packages are perfect for optimizing performance issue. There is a strange issue of react-virtualized, while scrolling in some point of time, the rows on the top will disappear.
+A: This two packages are perfect for optimizing performance issue. At firs, there is a strange issue of react-virtualized, while scrolling to some location, the rows on the top will disappear. The reason is the layout is affected by product img when it is loaded. Therefore, I add a image placeholder to prevent this kind of behavior.
 
 ## Usage
 
