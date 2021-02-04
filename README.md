@@ -55,6 +55,7 @@ Admin page
 #### Optimization
 - Add react-virtualized and intersection observer to comment section
 - Cancel the request while component is unmounted
+- Lazy loading depending on routes
 
 #### TODO
 - [ ] Test (frontend)
