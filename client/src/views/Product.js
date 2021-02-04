@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Button, Image } from 'react-bootstrap';
+import Skeleton from 'react-loading-skeleton';
 
 import history from '../history';
 
@@ -19,6 +20,7 @@ const Product = ({ match }) => {
   const { loading, data: product, error } = useSelector(
     (state) => state.product
   );
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -51,13 +53,20 @@ const Product = ({ match }) => {
             </Button>
           </Row>
           <Row>
-            <Col className='m-auto' md={4}>
+            <Col md={4} className='d-flex align-items-center'>
+              {!imgLoaded && (
+                <div style={{ width: '100%' }}>
+                  <Skeleton height={300} width={`100%`} />
+                </div>
+              )}
+
               <Image
                 className='m-auto'
                 src={`/api/products/${product._id}/image`}
-                alt={product.name}
+                style={{ objectFit: 'contain', height: '300px' }}
                 fluid
-                height='25rem'
+                alt={product.name}
+                onLoad={() => setImgLoaded(true)}
               />
             </Col>
             <Col md={5}>
