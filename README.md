@@ -23,7 +23,8 @@ Profile page
 ---
 Product page
 
-<img width="1339" alt="Screen Shot 2021-01-15 at 9 53 50 AM" src="https://user-images.githubusercontent.com/53250186/104670872-9f18d080-5717-11eb-9f5d-05f226e0eb2a.png">
+![Screen Shot 2021-02-03 at 10 57 22 AM](https://user-images.githubusercontent.com/53250186/106691542-a5abb100-660e-11eb-8370-743a4e29a3fe.png)
+
 
 ---
 Admin page
@@ -51,8 +52,12 @@ Admin page
 - Product management (create prodcut, edit product including upload image, delete product)
 - Order management (update order as delivered)
 
+#### Optimization
+- Add react-virtualized and intersection observer to comment section
+- Cancel the request while component is unmounted
+- Lazy loading depending on routes
+
 #### TODO
-- [X] Add react-virtualized and intersection observer to comment section
 - [ ] Test (frontend)
 - [ ] Delete order
 - [ ] Delete comment
